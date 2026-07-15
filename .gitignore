@@ -1,0 +1,13 @@
+# Private / local-only files — never publish to GitHub
+.claude/
+CLAUDE.md
+.tmp/
+.env
+credentials.json
+token.json
+
+# Local dev server & backups — not needed in production
+server.ps1
+index.backup.html
+css/styles.backup.css
+liveblocks.io_.png

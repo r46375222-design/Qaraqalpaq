@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qaraqalpaq Tili — Learn Karakalpak Online</title>
+<meta name="description" content="Learn the Karakalpak language with an interactive dictionary, flashcards, and quizzes. 1,461 words across 48 categories.">
+<link rel="icon" type="image/png" href="public/assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css?v=104">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body class="page-home">
+
+<header class="nav nav-pill">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <img src="public/assets/logo.png" alt="Qaraqalpaq Tili logo" class="brand-mark">
+      <span class="brand-name">QARAQALPAQ <strong>TILI</strong></span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link" data-page="index">Home</a>
+      <a href="dictionary.html" class="nav-link" data-page="dictionary">Dictionary</a>
+      <a href="flashcards.html" class="nav-link" data-page="flashcards">Flashcards</a>
+      <a href="quiz.html" class="nav-link" data-page="quiz">Quiz</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-bg" aria-hidden="true">
+    <div id="heroCanvas" class="hero-canvas"></div>
+    <span class="hero-glow hero-glow-1"></span>
+    <span class="hero-glow hero-glow-2"></span>
+    <span class="hero-vignette"></span>
+  </div>
+  <div class="hero-content">
+    <span class="hero-tag">✺ Tili — your gateway to Karakalpak</span>
+    <h1 class="hero-title">Learn <span class="hero-accent">Qaraqalpaq</span> the modern way.</h1>
+    <p class="hero-sub">An interactive dictionary, flashcards and quizzes built for a new generation of learners — fast, bold, and actually fun.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="dictionary.html">Start Learning <span class="btn-arrow" aria-hidden="true">→</span></a>
+      <a class="btn btn-outline" href="quiz.html">Take a Quiz</a>
+    </div>
+  </div>
+
+  <div class="stats-bar" id="statsBar">
+    <div class="stat">
+      <span class="stat-icon" aria-hidden="true">📚</span>
+      <span class="stat-num" data-count="1461">0</span>
+      <span class="stat-label">Words</span>
+    </div>
+    <div class="stat">
+      <span class="stat-icon" aria-hidden="true">🗂️</span>
+      <span class="stat-num" data-count="48">0</span>
+      <span class="stat-label">Categories</span>
+    </div>
+    <div class="stat">
+      <span class="stat-icon" aria-hidden="true">🌐</span>
+      <span class="stat-num" data-count="3">0</span>
+      <span class="stat-label">Languages</span>
+    </div>
+  </div>
+</section>
+
+<main>
+
+  <div class="progress-widget container" id="progressWidget"></div>
+
+  <!-- SOCIAL PROOF / COMMUNITY SECTION -->
+  <section class="social-proof container">
+    <div class="avatar-row">
+      <div class="avatars">
+        <img src="https://i.pravatar.cc/40?img=1" alt="" loading="lazy">
+        <img src="https://i.pravatar.cc/40?img=2" alt="" loading="lazy">
+        <img src="https://i.pravatar.cc/40?img=3" alt="" loading="lazy">
+        <img src="https://i.pravatar.cc/40?img=4" alt="" loading="lazy">
+        <img src="https://i.pravatar.cc/40?img=5" alt="" loading="lazy">
+        <img src="https://i.pravatar.cc/40?img=6" alt="" loading="lazy">
+      </div>
+      <p class="avatar-caption">Join <strong>2,400+</strong> learners already studying Qaraqalpaq</p>
+    </div>
+    <div class="proof-stats">
+      <div class="proof-stat">
+        <span class="stat-num proof-num" data-count="2400" data-suffix="+">0</span>
+        <span class="proof-label">Learners joined this month</span>
+      </div>
+      <div class="proof-stat">
+        <span class="stat-num proof-num" data-count="94" data-suffix="%">0</span>
+        <span class="proof-label">Say it helped them learn faster</span>
+      </div>
+      <div class="proof-stat">
+        <span class="proof-num proof-rating">4.8<span class="proof-rating-max">/5</span></span>
+        <span class="proof-label">Rating from early users</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHOWCASE SECTION -->
+  <section class="showcase-section container">
+    <div class="section-head">
+      <h2>See it in action</h2>
+      <p>A quick look at the dictionary, flashcards and quiz.</p>
+    </div>
+    <div class="showcase-grid">
+
+      <div class="showcase-card showcase-glow-teal">
+        <div class="showcase-mini-search">
+          <span class="sm-icon">🔍</span>
+          <span class="sm-word">Sálem</span>
+          <span class="sm-arrow">→</span>
+          <span class="sm-result">Hello</span>
+        </div>
+        <div class="showcase-pill-row">
+          <span class="showcase-pill">Raxmet</span>
+          <span class="showcase-pill">Awa</span>
+          <span class="showcase-pill">Xosh</span>
+        </div>
+        <div class="showcase-foot">
+          <h3>Dictionary</h3>
+          <p>1,461 words across 48 categories</p>
+        </div>
+      </div>
+
+      <div class="showcase-card showcase-glow-purple">
+        <div class="showcase-flip-wrap">
+          <div class="showcase-flip">
+            <div class="showcase-flip-face showcase-flip-front">Júrek</div>
+            <div class="showcase-flip-face showcase-flip-back">
+              <span class="sf-en">Heart ❤️</span>
+              <span class="sf-ru">Жүрек</span>
+            </div>
+          </div>
+        </div>
+        <div class="showcase-foot">
+          <h3>Flashcards</h3>
+          <p>Flip to memorize faster</p>
+        </div>
+      </div>
+
+      <div class="showcase-card showcase-glow-blue">
+        <div class="showcase-mini-quiz">
+          <p class="sq-question">What is <strong>Suw</strong>?</p>
+          <div class="sq-options">
+            <span class="sq-opt sq-correct">Water ✓</span>
+            <span class="sq-opt">Fire</span>
+            <span class="sq-opt">Earth</span>
+            <span class="sq-opt">Air</span>
+          </div>
+        </div>
+        <div class="showcase-foot">
+          <h3>Quiz</h3>
+          <p>Test yourself instantly</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PHONE MOCKUP SECTION -->
+  <section class="phone-section container">
+    <div class="phone-section-inner">
+      <div class="phone-text phone-text-left">
+        <h3>Master words with smart Flashcards</h3>
+        <p>Flip through real Karakalpak vocabulary and build recall with instant English &amp; Russian translations.</p>
+      </div>
+
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+
+          <div class="phone-preview phone-preview-dictionary active">
+            <div class="pp-search">🔍 Search a word…</div>
+            <div class="pp-chip-row">
+              <span class="pp-chip">All</span>
+              <span class="pp-chip">Animals</span>
+              <span class="pp-chip">Food</span>
+            </div>
+            <div class="pp-word-card">
+              <span class="pp-kk">Aspan</span>
+              <span class="pp-en">sky</span>
+            </div>
+            <div class="pp-word-card">
+              <span class="pp-kk">Gül</span>
+              <span class="pp-en">flower</span>
+            </div>
+          </div>
+
+          <div class="phone-preview phone-preview-flashcard">
+            <div class="pp-flashcard">
+              <span class="pp-badge">Animal World</span>
+              <span class="pp-word">Jılqı</span>
+              <span class="pp-sub">Tap to reveal</span>
+            </div>
+          </div>
+
+          <div class="phone-preview phone-preview-quiz">
+            <div class="pp-quiz-q">
+              <span class="pp-q-label">What does this mean?</span>
+              <span class="pp-q-word">Kün</span>
+            </div>
+            <div class="pp-quiz-options">
+              <span class="pp-quiz-opt pp-correct">Sun</span>
+              <span class="pp-quiz-opt">Moon</span>
+              <span class="pp-quiz-opt">Star</span>
+              <span class="pp-quiz-opt">Sky</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="phone-text phone-text-right">
+        <h3>Test yourself with instant Quiz</h3>
+        <p>Four options, one right answer. Track your streak and score as you grow from beginner to fluent.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES SECTION -->
+  <section class="features-section container">
+    <div class="section-head">
+      <h2>Everything you need to learn Qaraqalpaq</h2>
+      <p>One simple toolkit, built for fast progress.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">🔍</span>
+        <h3>1,461 Words</h3>
+        <p>Karakalpak, English and Russian in one place.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🃏</span>
+        <h3>Smart Flashcards</h3>
+        <p>Flip cards to memorize faster.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🎯</span>
+        <h3>Quick Quiz</h3>
+        <p>Test your knowledge instantly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="cta-section container">
+    <div class="cta-box">
+      <h2>Ready to start learning?</h2>
+      <a class="btn btn-primary btn-lg" href="dictionary.html">Explore the Dictionary <span class="btn-arrow" aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="public/assets/logo.png" alt="Qaraqalpaq Tili logo" class="brand-mark small">
+      <span>QARAQALPAQ TILI</span>
+    </div>
+    <p>Keeping the Karakalpak language alive, one word at a time.</p>
+  </div>
+</footer>
+
+<script defer src="js/app.js"></script>
+</body>
+</html>

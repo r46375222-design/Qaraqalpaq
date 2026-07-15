@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Qaraqalpaq Tili</title>
+<meta name="description" content="Test your Karakalpak vocabulary with a quick multiple-choice quiz.">
+<link rel="icon" type="image/png" href="public/assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css?v=103">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <img src="public/assets/logo.png" alt="Qaraqalpaq Tili logo" class="brand-mark">
+      <span class="brand-name">QARAQALPAQ <strong>TILI</strong></span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link" data-page="index">Home</a>
+      <a href="dictionary.html" class="nav-link" data-page="dictionary">Dictionary</a>
+      <a href="flashcards.html" class="nav-link" data-page="flashcards">Flashcards</a>
+      <a href="quiz.html" class="nav-link" data-page="quiz">Quiz</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="view view-active" id="view-quiz">
+    <div class="container container-narrow">
+      <div class="section-head">
+        <h1>Quiz Mode</h1>
+        <p>Pick the right translation. Four options, one correct answer.</p>
+      </div>
+
+      <div class="quiz-lang-toggle" id="quizLangToggle" role="group" aria-label="Quiz answer language">
+        <button class="lang-btn active" data-lang="en">English</button>
+        <button class="lang-btn" data-lang="ru">Русский</button>
+      </div>
+
+      <div class="quiz-panel" id="quizIntro">
+        <select id="quizCategory" class="select"></select>
+        <div class="quiz-score-preview">
+          <div class="score-box">
+            <span class="score-num" id="quizScore">0</span>
+            <span class="score-label">Score</span>
+          </div>
+          <div class="score-box">
+            <span class="score-num" id="quizStreak">0</span>
+            <span class="score-label">Streak</span>
+          </div>
+          <div class="score-box">
+            <span class="score-num" id="quizTotal">0</span>
+            <span class="score-label">Answered</span>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-lg" id="quizStart">Start Quiz <span class="btn-arrow" aria-hidden="true">→</span></button>
+      </div>
+
+      <div class="quiz-stage" id="quizStage" hidden>
+        <div class="quiz-top">
+          <div class="score-box mini">
+            <span class="score-num" id="quizScoreLive">0</span><span class="score-label">Score</span>
+          </div>
+          <div class="score-box mini">
+            <span class="score-num" id="quizStreakLive">0</span><span class="score-label">Streak</span>
+          </div>
+        </div>
+        <div class="quiz-question-card">
+          <span class="quiz-q-label">What does this mean?</span>
+          <span class="quiz-q-word" id="quizQuestionWord">Word</span>
+        </div>
+        <div class="quiz-options" id="quizOptions"></div>
+        <button class="btn btn-primary btn-lg" id="quizNext" hidden>Next Question <span class="btn-arrow" aria-hidden="true">→</span></button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="public/assets/logo.png" alt="Qaraqalpaq Tili logo" class="brand-mark small">
+      <span>QARAQALPAQ TILI</span>
+    </div>
+    <p>Keeping the Karakalpak language alive, one word at a time.</p>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+</body>
+</html>

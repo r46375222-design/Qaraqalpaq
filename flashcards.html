@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards — Qaraqalpaq Tili</title>
+<meta name="description" content="Flip through Karakalpak flashcards by category to memorize vocabulary faster.">
+<link rel="icon" type="image/png" href="public/assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css?v=103">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <img src="public/assets/logo.png" alt="Qaraqalpaq Tili logo" class="brand-mark">
+      <span class="brand-name">QARAQALPAQ <strong>TILI</strong></span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link" data-page="index">Home</a>
+      <a href="dictionary.html" class="nav-link" data-page="dictionary">Dictionary</a>
+      <a href="flashcards.html" class="nav-link" data-page="flashcards">Flashcards</a>
+      <a href="quiz.html" class="nav-link" data-page="quiz">Quiz</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="view view-active" id="view-flashcards">
+    <div class="container container-narrow">
+      <div class="section-head">
+        <h1>Flashcard Mode</h1>
+        <p>Tap the card to flip. Swipe through and lock in new words.</p>
+      </div>
+
+      <div class="progress-bar-wrap" id="progressBarWrap"></div>
+
+      <div class="flash-controls">
+        <select id="flashCategory" class="select"></select>
+        <div class="flash-progress" id="flashProgress">1 / 1</div>
+      </div>
+
+      <div class="flash-stage">
+        <button class="flash-nav flash-prev" id="flashPrev" aria-label="previous">‹</button>
+        <div class="flashcard" id="flashcard">
+          <span class="learned-badge" id="flashLearnedBadge" aria-hidden="true">✓</span>
+          <div class="flashcard-inner">
+            <div class="flashcard-face flashcard-front">
+              <span class="flash-badge" id="flashCatBadge">Category</span>
+              <span class="flash-word" id="flashWordKK">Word</span>
+              <span class="flash-hint">Tap to reveal</span>
+            </div>
+            <div class="flashcard-face flashcard-back">
+              <span class="flash-en" id="flashWordEN">English</span>
+              <span class="flash-ru" id="flashWordRU">Russian</span>
+            </div>
+          </div>
+        </div>
+        <button class="flash-nav flash-next" id="flashNext" aria-label="next">›</button>
+      </div>
+
+      <div class="flash-actions">
+        <button class="btn btn-outline" id="flashShuffle">⤮ Shuffle</button>
+        <button class="btn btn-primary" id="flashFlipBtn">Flip Card</button>
+        <button class="btn btn-outline" id="flashLearnBtn">✓ Mark as Learned</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="public/assets/logo.png" alt="Qaraqalpaq Tili logo" class="brand-mark small">
+      <span>QARAQALPAQ TILI</span>
+    </div>
+    <p>Keeping the Karakalpak language alive, one word at a time.</p>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+</body>
+</html>
