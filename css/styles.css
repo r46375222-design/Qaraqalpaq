@@ -1020,7 +1020,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 .quiz-option:disabled { cursor: default; }
 
 /* ===== SOCIAL PROOF SECTION ===== */
-.social-proof { padding: 70px 0 0; }
+.social-proof { padding: 40px 0 0; }
 .avatar-row {
   display: flex;
   flex-direction: column;
@@ -1403,7 +1403,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   transition: width 0.4s ease;
 }
 
-.progress-widget { max-width: 760px; margin: 0 auto 44px; }
+.progress-widget { max-width: 760px; margin: 0 auto 24px; }
 .progress-widget-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1475,7 +1475,9 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   .showcase-section, .features-section, .phone-section, .cta-section { padding-top: 60px; }
   .phone-section { padding-bottom: 60px; }
   .cta-section { padding-bottom: 80px; }
-  .container { padding: 0 18px; }
+  /* Horizontal only! "padding: 0 18px" was wiping out the vertical padding
+     of every section that also has .container — sections glued together on mobile */
+  .container { padding-left: 18px; padding-right: 18px; }
   .flash-nav { width: 48px; height: 48px; }
   .flash-actions .btn { min-height: 48px; }
   .pill { padding: 12px 16px; min-height: 44px; }
