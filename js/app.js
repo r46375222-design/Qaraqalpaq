@@ -188,6 +188,14 @@
         console.warn('Hero background failed, using static fallback', e);
         $('#heroCanvas').classList.add('webgl-fallback');
       }
+      // Back/forward cache: the Back button restores the page WITHOUT reloading,
+      // but pagehide already destroyed the WebGL canvas — rebuild it from scratch.
+      window.addEventListener('pageshow', (e) => {
+        const c = $('#heroCanvas');
+        if (!e.persisted || !c || c.querySelector('canvas')) return;
+        try { initDottedSurface(); }
+        catch (err) { c.classList.add('webgl-fallback'); }
+      });
     }
     if ($('.stat-num')) setupStatsAnimation();
     if ($('.phone-screen')) initPhoneMockup();
@@ -435,6 +443,10 @@
       material.dispose();
       renderer.forceContextLoss();
       renderer.dispose();
+      // Remove the dead canvas and show static dots, so if the page comes back
+      // from bfcache nothing white/stale can ever be visible.
+      if (renderer.domElement.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement);
+      showFallback();
     }, { once: true });
   }
 
