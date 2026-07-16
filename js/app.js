@@ -462,11 +462,211 @@
     }, 2500);
   }
 
+  // ===== TRANSLATOR (dictionary-based, no external APIs) =====
+  let TRANS_INDEX = null;   // exact-match maps: kk/en/ru → Map(foldedKey → [words])
+  let SEARCH_KEYS = null;   // per-word folded keys for suggestion scans
+
+  // Fold text into a diacritics-insensitive, punctuation-free key so that
+  // "salemetsiz" finds "Sálemetsiz be!" and "привет" finds "Привет!".
+  function foldKey(s) {
+    return String(s || '')
+      .toLowerCase()
+      .replace(/ı/g, 'i')                           // dotless ı has no combining mark
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')  // á ǵ ń ó ú → a g n o u
+      .replace(/[^\p{L}\p{N}\s]/gu, ' ')                 // strip punctuation
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  // "Excuse me / Sorry" and "Hello! (polite)" should match "sorry" and "hello".
+  function textVariants(s) {
+    const base = String(s || '');
+    const noParen = base.replace(/\([^)]*\)/g, ' ');
+    const out = new Set();
+    [base, noParen, ...noParen.split(/[\/,;]/)].forEach(p => {
+      const k = foldKey(p);
+      if (k) out.add(k);
+    });
+    return [...out];
+  }
+
+  function buildTranslatorIndex() {
+    TRANS_INDEX = { kk: new Map(), en: new Map(), ru: new Map() };
+    SEARCH_KEYS = [];
+    const add = (map, key, w) => {
+      const arr = map.get(key);
+      if (arr) { if (!arr.includes(w)) arr.push(w); }
+      else map.set(key, [w]);
+    };
+    WORDS.forEach(w => {
+      textVariants(w.kk).forEach(k => add(TRANS_INDEX.kk, k, w));
+      textVariants(w.en).forEach(k => add(TRANS_INDEX.en, k, w));
+      textVariants(w.ru).forEach(k => add(TRANS_INDEX.ru, k, w));
+      SEARCH_KEYS.push({ w, kk: foldKey(w.kk), en: foldKey(w.en), ru: foldKey(w.ru) });
+    });
+  }
+
+  function detectLang(raw) {
+    if (/[Ѐ-ӿ]/.test(raw)) return 'ru';
+    if (/[áǵńóúıÁǴŃÓÚ]/.test(raw)) return 'kk'; // á ǵ ń ó ú ı
+    return null; // plain Latin — could be Qaraqalpaq or English
+  }
+
+  function lookupExact(key, lang) {
+    if (lang === 'ru') return { src: 'ru', matches: TRANS_INDEX.ru.get(key) || [] };
+    if (lang === 'kk') return { src: 'kk', matches: TRANS_INDEX.kk.get(key) || [] };
+    const kk = TRANS_INDEX.kk.get(key) || [];
+    if (kk.length) return { src: 'kk', matches: kk };
+    return { src: 'en', matches: TRANS_INDEX.en.get(key) || [] };
+  }
+
+  function suggestWords(key, lang, limit = 6) {
+    const fields = lang === 'ru' ? ['ru'] : lang === 'kk' ? ['kk'] : ['kk', 'en'];
+    const starts = [], contains = [];
+    for (const item of SEARCH_KEYS) {
+      let placed = false;
+      for (const f of fields) {
+        if (item[f].startsWith(key)) { starts.push(item.w); placed = true; break; }
+      }
+      if (!placed) {
+        for (const f of fields) {
+          if (item[f].includes(key)) { contains.push(item.w); break; }
+        }
+      }
+      if (starts.length >= limit) break;
+    }
+    return starts.concat(contains).slice(0, limit);
+  }
+
+  function translateQuery(raw) {
+    const lang = detectLang(raw);
+    const key = foldKey(raw);
+    if (!key) return null;
+    const exact = lookupExact(key, lang);
+    if (exact.matches.length) return { type: 'exact', src: exact.src, matches: exact.matches.slice(0, 4) };
+    const rawTokens = raw.split(/\s+/).filter(t => foldKey(t));
+    if (rawTokens.length > 1) {
+      const parts = rawTokens.map(t => Object.assign({ raw: t }, lookupExact(foldKey(t), lang)));
+      if (parts.some(p => p.matches.length)) return { type: 'phrase', parts };
+    }
+    return { type: 'suggest', lang, suggestions: suggestWords(key, lang) };
+  }
+
+  const DIR_LABELS = {
+    kk: 'Qaraqalpaq → English · Русский',
+    en: 'English → Qaraqalpaq',
+    ru: 'Русский → Qaraqalpaq',
+  };
+
+  function trMatchHtml(w) {
+    return `
+      <div class="tr-match" style="--accent:${categoryColor(w.category)}">
+        <span class="tr-match-icon">${categoryIcon(w.category)}</span>
+        <div class="tr-match-text">
+          <span class="tr-match-kk">${escapeHtml(w.kk)}</span>
+          <span class="tr-match-en">${escapeHtml(w.en)}</span>
+          <span class="tr-match-ru">${escapeHtml(w.ru)}</span>
+        </div>
+        <div class="tr-match-side">
+          <span class="tr-cat">${escapeHtml(w.category)}</span>
+          <button class="tr-find" data-kk="${escapeAttr(w.kk)}">Find in dictionary →</button>
+        </div>
+      </div>`;
+  }
+
+  function trPhraseRowHtml(part) {
+    const m = part.matches[0];
+    const target = !m
+      ? '<span class="tr-note">not found</span>'
+      : part.src === 'kk'
+        ? `<span class="tr-phrase-en">${escapeHtml(m.en)}</span><span class="tr-phrase-ru">${escapeHtml(m.ru)}</span>`
+        : `<span class="tr-phrase-kk">${escapeHtml(m.kk)}</span>`;
+    return `
+      <div class="tr-phrase-row${m ? '' : ' is-missing'}">
+        <span class="tr-phrase-token">${escapeHtml(part.raw)}</span>
+        <span class="tr-phrase-arrow">→</span>
+        <div class="tr-phrase-target">${target}</div>
+      </div>`;
+  }
+
+  function renderTranslation(raw) {
+    const results = $('#translatorResults');
+    const dirEl = $('#translatorDir');
+    const res = translateQuery(raw);
+    if (!res) { results.hidden = true; results.innerHTML = ''; dirEl.hidden = true; return; }
+
+    let dir = null;
+    let html = '';
+
+    if (res.type === 'exact') {
+      dir = DIR_LABELS[res.src];
+      html = res.matches.map(trMatchHtml).join('');
+    } else if (res.type === 'phrase') {
+      const firstFound = res.parts.find(p => p.matches.length);
+      dir = firstFound ? DIR_LABELS[firstFound.src] : null;
+      html = `<div class="tr-phrase">${res.parts.map(trPhraseRowHtml).join('')}</div>
+        <p class="tr-note">Translated word by word — grammar may differ in full sentences.</p>`;
+    } else {
+      dir = res.lang ? DIR_LABELS[res.lang] : null;
+      if (res.suggestions.length) {
+        const chips = res.suggestions.map(w => {
+          const label = res.lang === 'ru' ? `${w.kk} · ${w.ru}` : `${w.kk} · ${w.en}`;
+          return `<button class="pill tr-sugg" data-q="${escapeAttr(w.kk)}">${escapeHtml(label)}</button>`;
+        }).join('');
+        html = `<p class="tr-note">No exact match. Did you mean:</p><div class="tr-suggest">${chips}</div>`;
+      } else {
+        html = '<p class="tr-note">No translation found — this word isn\'t in the dictionary yet (1,299 words and growing).</p>';
+      }
+    }
+
+    dirEl.hidden = !dir;
+    if (dir) dirEl.textContent = dir;
+    results.hidden = false;
+    results.innerHTML = html;
+  }
+
+  function initTranslator() {
+    const input = $('#translatorInput');
+    if (!input) return;
+    const results = $('#translatorResults');
+    const dirEl = $('#translatorDir');
+    const clearBtn = $('#translatorClear');
+    let timer;
+
+    const run = () => {
+      const raw = input.value.trim();
+      clearBtn.hidden = raw === '';
+      if (!raw) { results.hidden = true; results.innerHTML = ''; dirEl.hidden = true; return; }
+      if (!TRANS_INDEX) buildTranslatorIndex();
+      renderTranslation(raw);
+    };
+
+    input.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(run, 160); });
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') { clearTimeout(timer); run(); } });
+    clearBtn.addEventListener('click', () => { input.value = ''; run(); input.focus(); });
+
+    results.addEventListener('click', e => {
+      const sugg = e.target.closest('.tr-sugg');
+      if (sugg) { input.value = sugg.dataset.q; run(); return; }
+      const find = e.target.closest('.tr-find');
+      if (find) {
+        const search = $('#searchInput');
+        if (!search) return;
+        search.value = find.dataset.kk;
+        state.search = find.dataset.kk;
+        state.page = 1;
+        renderDictionary();
+        $('.search-wrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
+
   // ===== DICTIONARY PAGE =====
   function initDictionaryPage() {
     buildCategoryPills();
     setupSearch();
     setupPillsScroll();
+    initTranslator();
     $('#wordGrid').addEventListener('click', e => {
       const learnBtn = e.target.closest('.learn-btn');
       if (learnBtn) {

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=103">
+<link rel="stylesheet" href="css/styles.css?v=104">
 </head>
 <body class="page-dictionary">
 
@@ -43,6 +43,18 @@
       <div class="progress-widget" id="progressWidget"></div>
 
       <div id="wordOfDay"></div>
+
+      <div class="translator" id="translator">
+        <div class="translator-head">
+          <span class="translator-label">⇄ Translator</span>
+          <span class="translator-dir" id="translatorDir" hidden></span>
+        </div>
+        <div class="translator-input-wrap">
+          <input type="text" id="translatorInput" placeholder="Type a word in Qaraqalpaq, English or Russian..." autocomplete="off">
+          <button class="translator-clear" id="translatorClear" aria-label="Clear" hidden>✕</button>
+        </div>
+        <div class="translator-results" id="translatorResults" hidden></div>
+      </div>
 
       <div class="search-wrap">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
