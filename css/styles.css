@@ -75,7 +75,15 @@ body.page-dictionary .wotd-card {
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { scroll-behavior: smooth; overflow-x: hidden; width: 100%; }
+/* color-scheme + explicit dark background kill the white flash on reload:
+   the browser paints its default (white) canvas before CSS arrives unless told otherwise */
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  width: 100%;
+  color-scheme: dark;
+  background-color: #07090d;
+}
 
 body {
   font-family: var(--font-body);
@@ -1639,4 +1647,93 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
     flex-direction: row; align-items: center;
     width: 100%; justify-content: space-between;
   }
+}
+
+/* Translator as a flagship section on the home page */
+.translator-section { padding: 80px 0 0; scroll-margin-top: 90px; }
+.translator-section .translator { margin-bottom: 0; }
+.translator-more { text-align: center; margin-top: 18px; }
+.translator-more a {
+  color: var(--teal-on-surface);
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none;
+}
+.translator-more a:hover { text-decoration: underline; }
+
+/* 4 feature cards: 4-up on desktop, 2x2 on tablets (1-up ≤768px comes from the old rule) */
+@media (min-width: 1025px) {
+  .features-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 1024px) and (min-width: 769px) {
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .translator-section { padding-top: 60px; }
+}
+
+/* ===== FEEDBACK CARD (appears after a couple of minutes on the site) ===== */
+.feedback-card {
+  position: fixed;
+  right: 20px; bottom: 20px;
+  z-index: 1000;
+  width: min(320px, calc(100vw - 40px));
+  background: linear-gradient(135deg, var(--bg-elevated-2), var(--bg-elevated));
+  border: 1px solid var(--border-strong);
+  border-radius: 18px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.feedback-card.is-visible { opacity: 1; transform: translateY(0); }
+.feedback-close {
+  position: absolute; top: 10px; right: 10px;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 0.8rem; line-height: 1;
+}
+.feedback-close:hover { color: var(--text); border-color: var(--teal); }
+.feedback-title { font-family: var(--font-display); font-weight: 800; color: var(--text); font-size: 1rem; margin-bottom: 4px; padding-right: 26px; }
+.feedback-sub { color: var(--text-dim); font-size: 0.82rem; margin-bottom: 12px; }
+.feedback-stars { display: flex; gap: 6px; }
+.feedback-star {
+  font-size: 1.6rem;
+  color: var(--text-faint);
+  transition: color 0.15s ease, transform 0.15s ease;
+  padding: 2px;
+}
+.feedback-star:hover { transform: scale(1.15); color: #fbbf24; }
+.feedback-star.is-on { color: #fbbf24; }
+.feedback-extra { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+.feedback-comment {
+  width: 100%;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 10px 12px;
+  resize: vertical;
+  outline: none;
+}
+.feedback-comment:focus { border-color: var(--teal); }
+.feedback-send {
+  align-self: flex-end;
+  background: var(--teal-dark);
+  color: var(--white);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 9px 20px;
+  border-radius: 999px;
+  transition: background 0.18s ease;
+}
+.feedback-send:hover { background: var(--teal); }
+@media (max-width: 768px) {
+  .feedback-card { right: 12px; bottom: 12px; left: 12px; width: auto; }
 }

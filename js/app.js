@@ -199,10 +199,12 @@
     }
     if ($('.stat-num')) setupStatsAnimation();
     if ($('.phone-screen')) initPhoneMockup();
+    if ($('#translatorInput')) initTranslator(); // dictionary page AND home page
     if ($('#wordGrid')) initDictionaryPage();
     if ($('#flashcard')) initFlashcardsPage();
     if ($('#quizIntro')) initQuizPage();
     if ($('#progressWidget')) renderProgressWidget();
+    initFeedbackWidget();
   }
 
   // ===== TUBELIGHT NAV INDICATOR =====
@@ -651,7 +653,11 @@
       const find = e.target.closest('.tr-find');
       if (find) {
         const search = $('#searchInput');
-        if (!search) return;
+        if (!search) {
+          // Home page has no word grid — hand the query over to the dictionary page
+          location.href = 'dictionary.html?q=' + encodeURIComponent(find.dataset.kk);
+          return;
+        }
         search.value = find.dataset.kk;
         state.search = find.dataset.kk;
         state.page = 1;
@@ -659,6 +665,14 @@
         $('.search-wrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
+
+    // Support dictionary.html?q=word links (e.g. from the home-page translator)
+    const q = new URLSearchParams(location.search).get('q');
+    if (q) {
+      input.value = q;
+      run();
+      $('#translator').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   }
 
   // ===== DICTIONARY PAGE =====
@@ -666,7 +680,6 @@
     buildCategoryPills();
     setupSearch();
     setupPillsScroll();
-    initTranslator();
     $('#wordGrid').addEventListener('click', e => {
       const learnBtn = e.target.closest('.learn-btn');
       if (learnBtn) {
@@ -1055,6 +1068,97 @@
     $('#quizTotal').textContent = state.quiz.answered;
     $('#quizScoreLive').textContent = state.quiz.score;
     $('#quizStreakLive').textContent = state.quiz.streak;
+  }
+
+  // ===== FEEDBACK WIDGET (submits to Google Form, no backend needed) =====
+  const FEEDBACK = {
+    action: 'https://docs.google.com/forms/d/e/1FAIpQLSerHvwfsAVGPyPhC8fC5JLWscpDIeo-Ub-wsbLGD7sN2eMyVw/formResponse',
+    ratingField: 'entry.1122276316',
+    commentField: 'entry.2033114747',
+    showAfterSeconds: 120, // cumulative time on site before the card appears
+    storageKey: 'qaraqalpaq_feedback',
+  };
+
+  function initFeedbackWidget() {
+    let fb;
+    try { fb = JSON.parse(localStorage.getItem(FEEDBACK.storageKey)) || {}; } catch (e) { fb = {}; }
+    if (fb.done || fb.dismissed) return;
+
+    const save = () => { try { localStorage.setItem(FEEDBACK.storageKey, JSON.stringify(fb)); } catch (e) {} };
+
+    // Count time across visits/pages, pause while the tab is hidden
+    const tick = 5;
+    const timer = setInterval(() => {
+      if (document.visibilityState !== 'visible') return;
+      fb.seconds = (fb.seconds || 0) + tick;
+      save();
+      if (fb.seconds >= FEEDBACK.showAfterSeconds) {
+        clearInterval(timer);
+        showFeedbackCard();
+      }
+    }, tick * 1000);
+
+    function showFeedbackCard() {
+      const card = document.createElement('div');
+      card.className = 'feedback-card';
+      card.innerHTML = `
+        <button class="feedback-close" aria-label="Close">✕</button>
+        <p class="feedback-title">Enjoying Qaraqalpaq Tili?</p>
+        <p class="feedback-sub">Rate the site — it takes 5 seconds and helps a lot.</p>
+        <div class="feedback-stars" role="radiogroup" aria-label="Rating">
+          ${[1, 2, 3, 4, 5].map(n => `<button class="feedback-star" data-val="${n}" aria-label="${n} star${n > 1 ? 's' : ''}">★</button>`).join('')}
+        </div>
+        <div class="feedback-extra" hidden>
+          <textarea class="feedback-comment" rows="2" placeholder="What should we improve? (optional)"></textarea>
+          <button class="feedback-send">Send</button>
+        </div>`;
+      document.body.appendChild(card);
+      requestAnimationFrame(() => card.classList.add('is-visible'));
+
+      let rating = 0;
+      const stars = $$('.feedback-star', card);
+      const paint = () => stars.forEach((s, i) => s.classList.toggle('is-on', i < rating));
+
+      stars.forEach(star => {
+        star.addEventListener('click', () => {
+          rating = parseInt(star.dataset.val, 10);
+          paint();
+          $('.feedback-extra', card).hidden = false;
+        });
+      });
+
+      $('.feedback-close', card).addEventListener('click', () => {
+        fb.dismissed = true;
+        save();
+        hide();
+      });
+
+      $('.feedback-send', card).addEventListener('click', () => {
+        if (!rating) return;
+        const body = new URLSearchParams();
+        body.append(FEEDBACK.ratingField, String(rating));
+        const comment = $('.feedback-comment', card).value.trim();
+        if (comment) body.append(FEEDBACK.commentField, comment);
+        fetch(FEEDBACK.action, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: body.toString(),
+        }).catch(() => {});
+        fb.done = true;
+        save();
+        $('.feedback-title', card).textContent = 'Raxmet! Thank you 💜';
+        $('.feedback-sub', card).textContent = 'Your feedback helps Qaraqalpaq Tili grow.';
+        $('.feedback-stars', card).style.pointerEvents = 'none';
+        $('.feedback-extra', card).hidden = true;
+        setTimeout(hide, 2500);
+      });
+
+      function hide() {
+        card.classList.remove('is-visible');
+        setTimeout(() => card.remove(), 400);
+      }
+    }
   }
 
   // ===== UTIL =====

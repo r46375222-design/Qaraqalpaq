@@ -3,13 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#07090d">
 <title>Qaraqalpaq Tili — Learn Karakalpak Online</title>
-<meta name="description" content="Learn the Karakalpak language with an interactive dictionary, flashcards, and quizzes. 1,299 words across 48 categories.">
+<meta name="description" content="Learn the Karakalpak language with an instant translator, interactive dictionary, flashcards, and quizzes. 1,299 words across 48 categories.">
 <link rel="icon" type="image/png" href="public/assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=104">
+<link rel="stylesheet" href="css/styles.css?v=106">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body class="page-home">
@@ -42,10 +44,10 @@
   <div class="hero-content">
     <span class="hero-tag">✺ Tili — your gateway to Karakalpak</span>
     <h1 class="hero-title">Learn <span class="hero-accent">Qaraqalpaq</span> the modern way.</h1>
-    <p class="hero-sub">An interactive dictionary, flashcards and quizzes built for a new generation of learners — fast, bold, and actually fun.</p>
+    <p class="hero-sub">An instant translator, dictionary, flashcards and quizzes built for a new generation of learners — fast, bold, and actually fun.</p>
     <div class="hero-cta">
-      <a class="btn btn-primary" href="dictionary.html">Start Learning <span class="btn-arrow" aria-hidden="true">→</span></a>
-      <a class="btn btn-outline" href="quiz.html">Take a Quiz</a>
+      <a class="btn btn-primary" href="#translator-home">Try the Translator <span class="btn-arrow" aria-hidden="true">→</span></a>
+      <a class="btn btn-outline" href="dictionary.html">Explore the Dictionary</a>
     </div>
   </div>
 
@@ -69,6 +71,26 @@
 </section>
 
 <main>
+
+  <!-- TRANSLATOR SECTION (flagship feature) -->
+  <section class="translator-section container" id="translator-home">
+    <div class="section-head">
+      <h2>⇄ Instant Translator</h2>
+      <p>Type any word in Qaraqalpaq, English or Russian — it detects the language and translates instantly, right in your browser.</p>
+    </div>
+    <div class="translator" id="translator">
+      <div class="translator-head">
+        <span class="translator-label">⇄ Translator</span>
+        <span class="translator-dir" id="translatorDir" hidden></span>
+      </div>
+      <div class="translator-input-wrap">
+        <input type="text" id="translatorInput" placeholder="Type a word in Qaraqalpaq, English or Russian..." autocomplete="off">
+        <button class="translator-clear" id="translatorClear" aria-label="Clear" hidden>✕</button>
+      </div>
+      <div class="translator-results" id="translatorResults" hidden></div>
+    </div>
+    <p class="translator-more"><a href="dictionary.html">Explore all 1,299 words in the dictionary →</a></p>
+  </section>
 
   <div class="progress-widget container" id="progressWidget"></div>
 
@@ -114,8 +136,8 @@
           <span class="showcase-pill">Xosh</span>
         </div>
         <div class="showcase-foot">
-          <h3>Dictionary</h3>
-          <p>1,299 words across 48 categories</p>
+          <h3>Dictionary &amp; Translator</h3>
+          <p>1,299 words — instant translation both ways</p>
         </div>
       </div>
 
@@ -221,6 +243,11 @@
       <p>One simple toolkit, built for fast progress.</p>
     </div>
     <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">⇄</span>
+        <h3>Instant Translator</h3>
+        <p>Auto-detects Qaraqalpaq, English or Russian.</p>
+      </div>
       <div class="feature-card">
         <span class="feature-icon">🔍</span>
         <h3>1,299 Words</h3>
