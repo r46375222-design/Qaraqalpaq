@@ -650,7 +650,7 @@
       html = `<div class="tr-phrase">${res.parts.map(trPhraseRowHtml).join('')}</div>`;
     } else {
       trSetLangs(res.lang);
-      out.innerHTML = '<span class="tr-output-hint">No exact match — this word isn\'t in the dictionary yet (1,299 words and growing).</span>';
+      out.innerHTML = '<span class="tr-output-hint">No exact match — this word isn\'t in the dictionary yet (1,300 words and growing).</span>';
       if (res.suggestions.length) {
         const chips = res.suggestions.map(w => {
           const label = res.lang === 'ru' ? `${w.kk} · ${w.ru}` : `${w.kk} · ${w.en}`;

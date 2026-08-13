@@ -1818,6 +1818,17 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   .tr-langbar { grid-template-columns: auto auto; }
   .tr-swap { display: none; }
 }
+/* Roomier translator from tablet up — everything scoped to ≥769px so the
+   phone layout above stays exactly as it is */
+@media (min-width: 769px) {
+  .translator-section .translator { max-width: 880px; }
+  .tr-pane, .tr-pane-src textarea, .tr-output { min-height: 178px; }
+  .tr-pane-src textarea { font-size: 1.25rem; padding: 20px 44px 20px 22px; }
+  .tr-pane-src textarea::placeholder { font-size: 1rem; }
+  .tr-output { padding: 20px 22px; }
+  .tr-output-big { font-size: clamp(1.4rem, 2.8vw, 1.9rem); }
+  .tr-output-sub { font-size: 0.98rem; }
+}
 
 /* ===== SÓZLE GAME ===== */
 .btn-sm { padding: 9px 16px; font-size: 0.82rem; }
