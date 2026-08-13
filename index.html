@@ -6,12 +6,12 @@
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#07090d">
 <title>Qaraqalpaq Tili — Learn Karakalpak Online</title>
-<meta name="description" content="Learn the Karakalpak language with an instant translator, interactive dictionary, flashcards, quizzes and Sózle — the daily Karakalpak word game. 1,300 words across 48 categories.">
+<meta name="description" content="Learn the Karakalpak language with an instant translator, interactive dictionary, flashcards, quizzes and Sózle — the daily Karakalpak word game. 1,301 words across 48 categories.">
 <link rel="icon" type="image/png" href="public/assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=109">
+<link rel="stylesheet" href="css/styles.css?v=110">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body class="page-home">
@@ -55,7 +55,7 @@
   <div class="stats-bar" id="statsBar">
     <div class="stat">
       <span class="stat-icon" aria-hidden="true">📚</span>
-      <span class="stat-num" data-count="1300">0</span>
+      <span class="stat-num" data-count="1301">0</span>
       <span class="stat-label">Words</span>
     </div>
     <div class="stat">
@@ -96,7 +96,7 @@
       </div>
       <div class="translator-results" id="translatorResults" hidden></div>
     </div>
-    <p class="translator-more"><a href="dictionary.html">Explore all 1,300 words in the dictionary →</a></p>
+    <p class="translator-more"><a href="dictionary.html">Explore all 1,301 words in the dictionary →</a></p>
   </section>
 
   <!-- SÓZLE GAME BANNER -->
@@ -116,7 +116,7 @@
     </div>
     <div class="proof-stats">
       <div class="proof-stat">
-        <span class="stat-num proof-num" data-count="1300">0</span>
+        <span class="stat-num proof-num" data-count="1301">0</span>
         <span class="proof-label">Real words, checked by a native speaker</span>
       </div>
       <div class="proof-stat">
@@ -152,7 +152,7 @@
         </div>
         <div class="showcase-foot">
           <h3>Dictionary &amp; Translator</h3>
-          <p>1,300 words — instant translation both ways</p>
+          <p>1,301 words — instant translation both ways</p>
         </div>
       </div>
 
@@ -265,7 +265,7 @@
       </div>
       <div class="feature-card">
         <span class="feature-icon">🔍</span>
-        <h3>1,300 Words</h3>
+        <h3>1,301 Words</h3>
         <p>Karakalpak, English and Russian in one place.</p>
       </div>
       <div class="feature-card">
@@ -278,6 +278,22 @@
         <h3>Quick Quiz</h3>
         <p>Test your knowledge instantly.</p>
       </div>
+    </div>
+  </section>
+
+  <!-- WORD REQUEST / CORRECTION -->
+  <section class="wordreq-section container" id="wordReq">
+    <div class="wordreq">
+      <div class="wordreq-head">
+        <h3>Missing a word? Spotted a mistake?</h3>
+        <p>Tell us the word — we read every message and keep the dictionary growing.</p>
+      </div>
+      <form class="wordreq-form" id="wordReqForm" novalidate>
+        <input type="text" id="wordReqWord" placeholder="Word or phrase in any language" autocomplete="off">
+        <textarea id="wordReqNote" rows="2" placeholder="Correct spelling, meaning or context (optional)"></textarea>
+        <button type="submit" class="btn btn-primary">Send it in <span class="btn-arrow" aria-hidden="true">→</span></button>
+      </form>
+      <p class="wordreq-msg" id="wordReqMsg" hidden></p>
     </div>
   </section>
 

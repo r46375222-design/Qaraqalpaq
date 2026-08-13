@@ -6,12 +6,12 @@
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#07090d">
 <title>Dictionary — Qaraqalpaq Tili</title>
-<meta name="description" content="Search 1,300 Karakalpak words with English and Russian translations across 48 categories.">
+<meta name="description" content="Search 1,301 Karakalpak words with English and Russian translations across 48 categories.">
 <link rel="icon" type="image/png" href="public/assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=109">
+<link rel="stylesheet" href="css/styles.css?v=110">
 </head>
 <body class="page-dictionary">
 
@@ -83,6 +83,22 @@
       </div>
 
       <div class="pagination" id="pagination"></div>
+
+      <!-- WORD REQUEST / CORRECTION -->
+      <div class="wordreq-section" id="wordReq">
+        <div class="wordreq">
+          <div class="wordreq-head">
+            <h3>Missing a word? Spotted a mistake?</h3>
+            <p>Tell us the word — we read every message and keep the dictionary growing.</p>
+          </div>
+          <form class="wordreq-form" id="wordReqForm" novalidate>
+            <input type="text" id="wordReqWord" placeholder="Word or phrase in any language" autocomplete="off">
+            <textarea id="wordReqNote" rows="2" placeholder="Correct spelling, meaning or context (optional)"></textarea>
+            <button type="submit" class="btn btn-primary">Send it in <span class="btn-arrow" aria-hidden="true">→</span></button>
+          </form>
+          <p class="wordreq-msg" id="wordReqMsg" hidden></p>
+        </div>
+      </div>
     </div>
   </section>
 </main>

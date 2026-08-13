@@ -205,6 +205,7 @@
     if ($('#quizIntro')) initQuizPage();
     if ($('#sozleBoard')) initSozle();
     if ($('#progressWidget')) renderProgressWidget();
+    initWordRequest();
     initFeedbackWidget();
   }
 
@@ -650,7 +651,8 @@
       html = `<div class="tr-phrase">${res.parts.map(trPhraseRowHtml).join('')}</div>`;
     } else {
       trSetLangs(res.lang);
-      out.innerHTML = '<span class="tr-output-hint">No exact match — this word isn\'t in the dictionary yet (1,300 words and growing).</span>';
+      out.innerHTML = `<span class="tr-output-hint">No exact match — this word isn't in the dictionary yet (1,301 words and growing).</span>
+        <button class="tr-report" data-q="${escapeAttr(raw)}">Missing a word? Tell us →</button>`;
       if (res.suggestions.length) {
         const chips = res.suggestions.map(w => {
           const label = res.lang === 'ru' ? `${w.kk} · ${w.ru}` : `${w.kk} · ${w.en}`;
@@ -1391,6 +1393,59 @@
     $('#quizTotal').textContent = state.quiz.answered;
     $('#quizScoreLive').textContent = state.quiz.score;
     $('#quizStreakLive').textContent = state.quiz.streak;
+  }
+
+  // ===== WORD REQUESTS & CORRECTIONS (own Google Form, no backend) =====
+  const WORDREQ = {
+    action: 'https://docs.google.com/forms/d/e/1FAIpQLSeYM-zDv2jb9djAaMwqs7YMeqAOQ_71NeFMYM46kajxce9FUQ/formResponse',
+    wordField: 'entry.1570439197',
+    noteField: 'entry.355778381',
+  };
+
+  function initWordRequest() {
+    const form = $('#wordReqForm');
+    if (!form) return;
+    const word = $('#wordReqWord');
+    const note = $('#wordReqNote');
+    const msg = $('#wordReqMsg');
+
+    const say = (text, ok) => {
+      msg.hidden = false;
+      msg.textContent = text;
+      msg.classList.toggle('is-ok', !!ok);
+      msg.classList.toggle('is-warn', !ok);
+    };
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const w = word.value.trim();
+      if (!w) { say('Please type the word first.', false); word.focus(); return; }
+
+      const body = new URLSearchParams();
+      body.append(WORDREQ.wordField, w);
+      const n = note.value.trim();
+      if (n) body.append(WORDREQ.noteField, n);
+      // Google Forms rejects CORS reads, so fire-and-forget: the POST still lands
+      fetch(WORDREQ.action, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+      }).catch(() => {});
+
+      form.reset();
+      say('Raxmet! Got it — we\'ll review this word soon. 💜', true);
+    });
+
+    // "Missing a word? Tell us →" inside the translator jumps here with the word filled in
+    document.addEventListener('click', e => {
+      const btn = e.target.closest('.tr-report');
+      if (!btn) return;
+      word.value = btn.dataset.q || '';
+      msg.hidden = true;
+      $('#wordReq').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => note.focus(), 400);
+    });
   }
 
   // ===== FEEDBACK WIDGET (submits to Google Form, no backend needed) =====

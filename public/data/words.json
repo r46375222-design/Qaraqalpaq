@@ -402,6 +402,12 @@
   "category": "Education & IT"
  },
  {
+  "kk": "Sózler",
+  "ru": "Слова",
+  "en": "Words",
+  "category": "Education & IT"
+ },
+ {
   "kk": "Til",
   "ru": "Язык",
   "en": "Language",
@@ -681,12 +687,6 @@
   "kk": "Gúl",
   "ru": "Цветок",
   "en": "Flower",
-  "category": "Surrounding World"
- },
- {
-  "kk": "Tawaq",
-  "ru": "Гора",
-  "en": "Mountain",
   "category": "Surrounding World"
  },
  {
@@ -1266,7 +1266,7 @@
   "category": "Food & Drinks"
  },
  {
-  "kk": "Gósht",
+  "kk": "Gósh",
   "ru": "Мясо",
   "en": "Meat",
   "category": "Food & Drinks"
@@ -2880,12 +2880,6 @@
   "category": "Fruits, Vegetables & Produce"
  },
  {
-  "kk": "Gósh",
-  "ru": "Мясо",
-  "en": "Meat",
-  "category": "Fruits, Vegetables & Produce"
- },
- {
   "kk": "Slivka",
   "ru": "Сливки",
   "en": "Cream",
@@ -3078,9 +3072,15 @@
   "category": "Home, Furniture & Household Items"
  },
  {
-  "kk": "Shashtartqısh",
+  "kk": "Fen",
   "ru": "Фен",
   "en": "Hairdryer",
+  "category": "Home, Furniture & Household Items"
+ },
+ {
+  "kk": "Shashtartqısh",
+  "ru": "Фен (сушилка для волос)",
+  "en": "Hairdryer (hair blower)",
   "category": "Home, Furniture & Household Items"
  },
  {
@@ -5955,6 +5955,12 @@
   "kk": "Ashıw",
   "ru": "Открывать",
   "en": "To open",
+  "category": "Advanced Verbs"
+ },
+ {
+  "kk": "Aylandırıw",
+  "ru": "Крутить",
+  "en": "To turn / To spin",
   "category": "Advanced Verbs"
  },
  {
