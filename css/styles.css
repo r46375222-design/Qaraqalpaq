@@ -1821,7 +1821,9 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 
 /* ===== SÓZLE GAME ===== */
 .btn-sm { padding: 9px 16px; font-size: 0.82rem; }
-.game-strip { padding: 26px 0 0; }
+/* Needs air on BOTH sides — with 0 bottom padding the banner glued itself
+   to the stats row below (progress-widget has no top margin) */
+.game-strip { padding: 44px 0 40px; }
 .game-banner {
   display: flex; align-items: center; justify-content: center;
   gap: 14px; flex-wrap: wrap;
@@ -1848,6 +1850,12 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 .gt.y { background: #ca8a04; }
 .gt.d { background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text-dim); }
 .game-banner-text { font-size: 0.95rem; }
+
+@media (max-width: 768px) {
+  .game-strip { padding: 32px 0 28px; }
+  .game-banner { padding: 14px 18px; gap: 10px; }
+  .game-banner-text { font-size: 0.88rem; }
+}
 
 .page-game main { padding-top: 40px; }
 .sozle-daily-num { color: var(--text-faint); font-size: 0.6em; font-weight: 700; }
