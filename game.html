@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#07090d">
-<title>Flashcards — Qaraqalpaq Tili</title>
-<meta name="description" content="Flip through Karakalpak flashcards by category to memorize vocabulary faster.">
+<title>Sózle — The Karakalpak Word Game | Qaraqalpaq Tili</title>
+<meta name="description" content="Sózle — a daily Wordle-style game in Karakalpak. Guess the 5-letter word in 6 tries and learn the language while playing.">
 <link rel="icon" type="image/png" href="public/assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css?v=107">
 </head>
-<body>
+<body class="page-game">
 
 <header class="nav">
   <div class="nav-inner">
@@ -35,44 +35,32 @@
 </header>
 
 <main>
-  <section class="view view-active" id="view-flashcards">
+  <section class="view view-active" id="view-game">
     <div class="container container-narrow">
       <div class="section-head">
-        <h1>Flashcard Mode</h1>
-        <p>Tap the card to flip. Swipe through and lock in new words.</p>
+        <h1>Sózle<span class="sozle-daily-num" id="sozleNum"></span></h1>
+        <p>Guess the Karakalpak word in 6 tries. Green = right spot, yellow = wrong spot. New word every day — and you learn its meaning when you're done.</p>
       </div>
 
-      <div class="progress-bar-wrap" id="progressBarWrap"></div>
-
-      <div class="flash-controls">
-        <select id="flashCategory" class="select"></select>
-        <div class="flash-progress" id="flashProgress">1 / 1</div>
-      </div>
-
-      <div class="flash-stage">
-        <button class="flash-nav flash-prev" id="flashPrev" aria-label="previous">‹</button>
-        <div class="flashcard" id="flashcard">
-          <span class="learned-badge" id="flashLearnedBadge" aria-hidden="true">✓</span>
-          <div class="flashcard-inner">
-            <div class="flashcard-face flashcard-front">
-              <span class="flash-badge" id="flashCatBadge">Category</span>
-              <span class="flash-word" id="flashWordKK">Word</span>
-              <span class="flash-hint">Tap to reveal</span>
-            </div>
-            <div class="flashcard-face flashcard-back">
-              <span class="flash-en" id="flashWordEN">English</span>
-              <span class="flash-ru" id="flashWordRU">Russian</span>
-            </div>
-          </div>
+      <div class="sozle-topbar">
+        <div class="sozle-stats" id="sozleStats"></div>
+        <div class="sozle-actions">
+          <button class="btn btn-outline btn-sm" id="sozleHint">💡 Hint</button>
+          <button class="btn btn-outline btn-sm" id="sozleFree" hidden>🎲 Random word</button>
         </div>
-        <button class="flash-nav flash-next" id="flashNext" aria-label="next">›</button>
       </div>
 
-      <div class="flash-actions">
-        <button class="btn btn-outline" id="flashShuffle">⤮ Shuffle</button>
-        <button class="btn btn-primary" id="flashFlipBtn">Flip Card</button>
-        <button class="btn btn-outline" id="flashLearnBtn">✓ Mark as Learned</button>
-      </div>
+      <p class="sozle-hint-text" id="sozleHintText" hidden></p>
+
+      <div class="sozle-board" id="sozleBoard" aria-label="Game board"></div>
+
+      <p class="sozle-msg" id="sozleMsg" role="status"></p>
+
+      <div class="sozle-panel" id="sozlePanel" hidden></div>
+
+      <div class="sozle-keys" id="sozleKeys" aria-label="Keyboard"></div>
+
+      <p class="sozle-foot">Letters á, ǵ, ı, ń, ó, ú are on the keyboard above — that's what makes it Qaraqalpaq ✨</p>
     </div>
   </section>
 </main>

@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=106">
+<link rel="stylesheet" href="css/styles.css?v=107">
 </head>
 <body class="page-dictionary">
 
@@ -26,6 +26,7 @@
       <a href="dictionary.html" class="nav-link" data-page="dictionary">Dictionary</a>
       <a href="flashcards.html" class="nav-link" data-page="flashcards">Flashcards</a>
       <a href="quiz.html" class="nav-link" data-page="quiz">Quiz</a>
+      <a href="game.html" class="nav-link" data-page="game">Sózle</a>
     </nav>
     <button class="nav-toggle" id="navToggle" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -46,14 +47,20 @@
 
       <div id="wordOfDay"></div>
 
-      <div class="translator" id="translator">
-        <div class="translator-head">
-          <span class="translator-label">⇄ Translator</span>
-          <span class="translator-dir" id="translatorDir" hidden></span>
+      <div class="translator translator-panes" id="translator">
+        <div class="tr-langbar">
+          <span class="tr-lang" id="trLangSrc">Detect language</span>
+          <span class="tr-swap" aria-hidden="true">⇄</span>
+          <span class="tr-lang tr-lang-dst" id="trLangDst">Translation</span>
         </div>
-        <div class="translator-input-wrap">
-          <input type="text" id="translatorInput" placeholder="Type a word in Qaraqalpaq, English or Russian..." autocomplete="off">
-          <button class="translator-clear" id="translatorClear" aria-label="Clear" hidden>✕</button>
+        <div class="tr-panes">
+          <div class="tr-pane tr-pane-src">
+            <textarea id="translatorInput" rows="3" placeholder="Type in Qaraqalpaq, English or Russian…" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+            <button class="translator-clear" id="translatorClear" aria-label="Clear" hidden>✕</button>
+          </div>
+          <div class="tr-pane tr-pane-dst">
+            <div class="tr-output" id="translatorOutput"><span class="tr-output-hint">Translation appears here</span></div>
+          </div>
         </div>
         <div class="translator-results" id="translatorResults" hidden></div>
       </div>

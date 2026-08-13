@@ -6,12 +6,12 @@
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#07090d">
 <title>Qaraqalpaq Tili — Learn Karakalpak Online</title>
-<meta name="description" content="Learn the Karakalpak language with an instant translator, interactive dictionary, flashcards, and quizzes. 1,299 words across 48 categories.">
+<meta name="description" content="Learn the Karakalpak language with an instant translator, interactive dictionary, flashcards, quizzes and Sózle — the daily Karakalpak word game. 1,299 words across 48 categories.">
 <link rel="icon" type="image/png" href="public/assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=106">
+<link rel="stylesheet" href="css/styles.css?v=107">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body class="page-home">
@@ -27,6 +27,7 @@
       <a href="dictionary.html" class="nav-link" data-page="dictionary">Dictionary</a>
       <a href="flashcards.html" class="nav-link" data-page="flashcards">Flashcards</a>
       <a href="quiz.html" class="nav-link" data-page="quiz">Quiz</a>
+      <a href="game.html" class="nav-link" data-page="game">Sózle</a>
     </nav>
     <button class="nav-toggle" id="navToggle" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -78,18 +79,32 @@
       <h2>⇄ Instant Translator</h2>
       <p>Type any word in Qaraqalpaq, English or Russian — it detects the language and translates instantly, right in your browser.</p>
     </div>
-    <div class="translator" id="translator">
-      <div class="translator-head">
-        <span class="translator-label">⇄ Translator</span>
-        <span class="translator-dir" id="translatorDir" hidden></span>
+    <div class="translator translator-panes" id="translator">
+      <div class="tr-langbar">
+        <span class="tr-lang" id="trLangSrc">Detect language</span>
+        <span class="tr-swap" aria-hidden="true">⇄</span>
+        <span class="tr-lang tr-lang-dst" id="trLangDst">Translation</span>
       </div>
-      <div class="translator-input-wrap">
-        <input type="text" id="translatorInput" placeholder="Type a word in Qaraqalpaq, English or Russian..." autocomplete="off">
-        <button class="translator-clear" id="translatorClear" aria-label="Clear" hidden>✕</button>
+      <div class="tr-panes">
+        <div class="tr-pane tr-pane-src">
+          <textarea id="translatorInput" rows="3" placeholder="Type in Qaraqalpaq, English or Russian…" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+          <button class="translator-clear" id="translatorClear" aria-label="Clear" hidden>✕</button>
+        </div>
+        <div class="tr-pane tr-pane-dst">
+          <div class="tr-output" id="translatorOutput"><span class="tr-output-hint">Translation appears here</span></div>
+        </div>
       </div>
       <div class="translator-results" id="translatorResults" hidden></div>
     </div>
     <p class="translator-more"><a href="dictionary.html">Explore all 1,299 words in the dictionary →</a></p>
+  </section>
+
+  <!-- SÓZLE GAME BANNER -->
+  <section class="game-strip container">
+    <a class="game-banner" href="game.html">
+      <span class="game-banner-tiles" aria-hidden="true"><i class="gt g">S</i><i class="gt y">Ó</i><i class="gt d">Z</i><i class="gt g">L</i><i class="gt d">E</i></span>
+      <span class="game-banner-text"><strong>New — Sózle:</strong> the Karakalpak word game. Guess today's word in 6 tries →</span>
+    </a>
   </section>
 
   <div class="progress-widget container" id="progressWidget"></div>

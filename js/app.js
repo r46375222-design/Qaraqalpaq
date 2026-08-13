@@ -203,6 +203,7 @@
     if ($('#wordGrid')) initDictionaryPage();
     if ($('#flashcard')) initFlashcardsPage();
     if ($('#quizIntro')) initQuizPage();
+    if ($('#sozleBoard')) initSozle();
     if ($('#progressWidget')) renderProgressWidget();
     initFeedbackWidget();
   }
@@ -554,11 +555,22 @@
     return { type: 'suggest', lang, suggestions: suggestWords(key, lang) };
   }
 
-  const DIR_LABELS = {
-    kk: 'Qaraqalpaq → English · Русский',
-    en: 'English → Qaraqalpaq',
-    ru: 'Русский → Qaraqalpaq',
-  };
+  const LANG_NAMES = { kk: 'Qaraqalpaq', en: 'English', ru: 'Русский' };
+  const TARGET_LABELS = { kk: 'English · Русский', en: 'Qaraqalpaq', ru: 'Qaraqalpaq' };
+
+  // "Hello! (polite)" → "Hello!", "Excuse me / Sorry" → "Excuse me" — clean text for the output pane
+  function primaryText(s) {
+    const t = String(s || '').replace(/\([^)]*\)/g, '').split(/[\/;]/)[0].trim();
+    return t || String(s || '');
+  }
+
+  function trSetLangs(src) {
+    const srcEl = $('#trLangSrc');
+    const dstEl = $('#trLangDst');
+    if (!srcEl || !dstEl) return;
+    srcEl.textContent = src ? LANG_NAMES[src] : 'Detect language';
+    dstEl.textContent = src ? TARGET_LABELS[src] : 'Translation';
+  }
 
   function trMatchHtml(w) {
     return `
@@ -591,39 +603,64 @@
       </div>`;
   }
 
+  const TR_OUTPUT_HINT = '<span class="tr-output-hint">Translation appears here</span>';
+
   function renderTranslation(raw) {
     const results = $('#translatorResults');
-    const dirEl = $('#translatorDir');
+    const out = $('#translatorOutput');
     const res = translateQuery(raw);
-    if (!res) { results.hidden = true; results.innerHTML = ''; dirEl.hidden = true; return; }
+    if (!res) {
+      results.hidden = true; results.innerHTML = '';
+      out.innerHTML = TR_OUTPUT_HINT;
+      trSetLangs(null);
+      return;
+    }
 
-    let dir = null;
     let html = '';
 
     if (res.type === 'exact') {
-      dir = DIR_LABELS[res.src];
-      html = res.matches.map(trMatchHtml).join('');
+      const m = res.matches[0];
+      trSetLangs(res.src);
+      const big = res.src === 'kk' ? primaryText(m.en) : m.kk;
+      const sub = res.src === 'kk' ? m.ru : (res.src === 'ru' ? primaryText(m.en) : m.ru);
+      out.innerHTML = `
+        <div class="tr-output-main">
+          <span class="tr-output-big">${escapeHtml(big)}</span>
+          <span class="tr-output-sub">${escapeHtml(sub)}</span>
+          <div class="tr-output-meta">
+            <span class="tr-cat">${escapeHtml(m.category)}</span>
+            <button class="tr-find" data-kk="${escapeAttr(m.kk)}">Find in dictionary →</button>
+          </div>
+        </div>`;
+      const rest = res.matches.slice(1);
+      html = rest.length ? `<p class="tr-note">More matches:</p>` + rest.map(trMatchHtml).join('') : '';
     } else if (res.type === 'phrase') {
       const firstFound = res.parts.find(p => p.matches.length);
-      dir = firstFound ? DIR_LABELS[firstFound.src] : null;
-      html = `<div class="tr-phrase">${res.parts.map(trPhraseRowHtml).join('')}</div>
-        <p class="tr-note">Translated word by word — grammar may differ in full sentences.</p>`;
+      trSetLangs(firstFound ? firstFound.src : null);
+      const joined = res.parts.map(p => {
+        const m = p.matches[0];
+        if (!m) return `<span class="tr-miss">${escapeHtml(p.raw)}</span>`;
+        return escapeHtml(p.src === 'kk' ? primaryText(m.en) : m.kk);
+      }).join(' ');
+      out.innerHTML = `
+        <div class="tr-output-main">
+          <span class="tr-output-big tr-output-phrase">${joined}</span>
+          <span class="tr-output-sub">Word-by-word — grammar may differ in full sentences.</span>
+        </div>`;
+      html = `<div class="tr-phrase">${res.parts.map(trPhraseRowHtml).join('')}</div>`;
     } else {
-      dir = res.lang ? DIR_LABELS[res.lang] : null;
+      trSetLangs(res.lang);
+      out.innerHTML = '<span class="tr-output-hint">No exact match — this word isn\'t in the dictionary yet (1,299 words and growing).</span>';
       if (res.suggestions.length) {
         const chips = res.suggestions.map(w => {
           const label = res.lang === 'ru' ? `${w.kk} · ${w.ru}` : `${w.kk} · ${w.en}`;
           return `<button class="pill tr-sugg" data-q="${escapeAttr(w.kk)}">${escapeHtml(label)}</button>`;
         }).join('');
-        html = `<p class="tr-note">No exact match. Did you mean:</p><div class="tr-suggest">${chips}</div>`;
-      } else {
-        html = '<p class="tr-note">No translation found — this word isn\'t in the dictionary yet (1,299 words and growing).</p>';
+        html = `<p class="tr-note">Did you mean:</p><div class="tr-suggest">${chips}</div>`;
       }
     }
 
-    dirEl.hidden = !dir;
-    if (dir) dirEl.textContent = dir;
-    results.hidden = false;
+    results.hidden = !html;
     results.innerHTML = html;
   }
 
@@ -631,23 +668,29 @@
     const input = $('#translatorInput');
     if (!input) return;
     const results = $('#translatorResults');
-    const dirEl = $('#translatorDir');
+    const out = $('#translatorOutput');
     const clearBtn = $('#translatorClear');
     let timer;
 
     const run = () => {
       const raw = input.value.trim();
       clearBtn.hidden = raw === '';
-      if (!raw) { results.hidden = true; results.innerHTML = ''; dirEl.hidden = true; return; }
+      if (!raw) {
+        results.hidden = true; results.innerHTML = '';
+        out.innerHTML = TR_OUTPUT_HINT;
+        trSetLangs(null);
+        return;
+      }
       if (!TRANS_INDEX) buildTranslatorIndex();
       renderTranslation(raw);
     };
 
     input.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(run, 160); });
-    input.addEventListener('keydown', e => { if (e.key === 'Enter') { clearTimeout(timer); run(); } });
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); clearTimeout(timer); run(); } });
     clearBtn.addEventListener('click', () => { input.value = ''; run(); input.focus(); });
 
-    results.addEventListener('click', e => {
+    // One listener on the whole card: "Find in dictionary" now also lives in the output pane
+    $('#translator').addEventListener('click', e => {
       const sugg = e.target.closest('.tr-sugg');
       if (sugg) { input.value = sugg.dataset.q; run(); return; }
       const find = e.target.closest('.tr-find');
@@ -673,6 +716,286 @@
       run();
       $('#translator').scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
+  }
+
+  // ===== SÓZLE — the Karakalpak word game (Wordle-style, data from words.json) =====
+  const SOZLE_KEY = 'qaraqalpaq_sozle';
+  const SOZLE_EPOCH = Date.UTC(2026, 6, 22); // puzzle #1 = 22 July 2026
+  const SOZLE_ALLOWED = new Set('aábdefgǵhıijklmnńoópqrstuúvwxyz');
+  const SOZLE_ROWS = [
+    ['q', 'w', 'e', 'r', 't', 'y', 'u', 'ı', 'i', 'o', 'p'],
+    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ń', 'ǵ'],
+    ['enter', 'z', 'x', 'v', 'b', 'n', 'm', 'á', 'ó', 'ú', 'back'],
+  ];
+
+  let SOZLE_LIST = null; // deterministically shuffled [{key, w}]
+  let sozle = null;      // current game
+
+  function mulberry32(seed) {
+    return function () {
+      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+      let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function buildSozleList() {
+    const seen = new Set();
+    const list = [];
+    WORDS.forEach(w => {
+      const key = String(w.kk || '').trim().toLowerCase();
+      if (key.length !== 5 || seen.has(key)) return;
+      for (const ch of key) if (!SOZLE_ALLOWED.has(ch)) return;
+      seen.add(key);
+      list.push({ key, w });
+    });
+    // Fixed-seed shuffle so every player in the world gets the same daily word
+    const rnd = mulberry32(20260722);
+    for (let i = list.length - 1; i > 0; i--) {
+      const j = Math.floor(rnd() * (i + 1));
+      [list[i], list[j]] = [list[j], list[i]];
+    }
+    SOZLE_LIST = list;
+  }
+
+  function sozleDayNum() {
+    const now = new Date();
+    const local = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+    return Math.floor((local - SOZLE_EPOCH) / 86400000) + 1;
+  }
+
+  function sozleDefaultStats() {
+    return { played: 0, won: 0, streak: 0, maxStreak: 0, lastWonNum: 0, lastPlayedNum: 0, dist: [0, 0, 0, 0, 0, 0], lastGame: null };
+  }
+  function loadSozleStats() {
+    try { return Object.assign(sozleDefaultStats(), JSON.parse(localStorage.getItem(SOZLE_KEY) || '{}')); }
+    catch (e) { return sozleDefaultStats(); }
+  }
+  function saveSozleStats(s) { try { localStorage.setItem(SOZLE_KEY, JSON.stringify(s)); } catch (e) {} }
+
+  // Classic Wordle evaluation: two passes so repeated letters colour correctly
+  function sozleEval(guess, answer) {
+    const res = new Array(5).fill('absent');
+    const left = {};
+    for (let i = 0; i < 5; i++) {
+      if (guess[i] === answer[i]) res[i] = 'correct';
+      else left[answer[i]] = (left[answer[i]] || 0) + 1;
+    }
+    for (let i = 0; i < 5; i++) {
+      if (res[i] !== 'correct' && left[guess[i]]) { res[i] = 'present'; left[guess[i]]--; }
+    }
+    return res;
+  }
+
+  function sozleRenderBoard() {
+    const board = $('#sozleBoard');
+    let html = '';
+    for (let r = 0; r < 6; r++) {
+      html += '<div class="sozle-row">';
+      for (let c = 0; c < 5; c++) {
+        let ch = '', cls = '';
+        if (r < sozle.guesses.length) {
+          ch = sozle.guesses[r][c];
+          cls = ' is-' + sozle.evals[r][c];
+        } else if (r === sozle.guesses.length && !sozle.done) {
+          ch = sozle.cur[c] || '';
+          if (ch) cls = ' is-filled';
+        }
+        html += `<div class="sozle-tile${cls}">${escapeHtml(ch)}</div>`;
+      }
+      html += '</div>';
+    }
+    board.innerHTML = html;
+  }
+
+  function sozleRenderKeys() {
+    const status = {}; // letter → best status
+    const rank = { absent: 1, present: 2, correct: 3 };
+    sozle.guesses.forEach((g, gi) => {
+      for (let i = 0; i < 5; i++) {
+        const s = sozle.evals[gi][i];
+        if (!status[g[i]] || rank[s] > rank[status[g[i]]]) status[g[i]] = s;
+      }
+    });
+    $('#sozleKeys').innerHTML = SOZLE_ROWS.map(row =>
+      '<div class="sozle-key-row">' + row.map(k => {
+        if (k === 'enter') return '<button class="sozle-key sozle-key-wide" data-key="enter">ENTER</button>';
+        if (k === 'back') return '<button class="sozle-key sozle-key-wide" data-key="back">⌫</button>';
+        const s = status[k] ? ' is-' + status[k] : '';
+        return `<button class="sozle-key${s}" data-key="${k}">${k}</button>`;
+      }).join('') + '</div>'
+    ).join('');
+  }
+
+  function sozleRenderStats() {
+    const s = loadSozleStats();
+    const winPct = s.played ? Math.round((s.won / s.played) * 100) : 0;
+    $('#sozleStats').innerHTML = `
+      <span class="sozle-stat"><strong>${s.played}</strong> played</span>
+      <span class="sozle-stat"><strong>${winPct}%</strong> won</span>
+      <span class="sozle-stat">🔥 <strong>${s.streak}</strong> streak</span>`;
+  }
+
+  function sozleMsg(text, sticky) {
+    const el = $('#sozleMsg');
+    el.textContent = text;
+    clearTimeout(sozleMsg._t);
+    if (!sticky && text) sozleMsg._t = setTimeout(() => { el.textContent = ''; }, 2200);
+  }
+
+  function sozleShareText() {
+    const n = sozle.mode === 'daily' ? `#${sozle.num}` : '(practice)';
+    const score = sozle.win ? sozle.guesses.length : 'X';
+    const hint = sozle.hintUsed ? ' 💡' : '';
+    const grid = sozle.evals.map(row =>
+      row.map(s => s === 'correct' ? '🟩' : s === 'present' ? '🟨' : '⬛').join('')
+    ).join('\n');
+    return `Sózle ${n} ${score}/6${hint}\n${grid}\nhttps://qaraqalpaq.vercel.app/game.html`;
+  }
+
+  function sozleEndPanel() {
+    const w = sozle.entry.w;
+    const head = sozle.win
+      ? ['', 'Genius! 🤯', 'Ájayıp! 🎉', 'Great! 🎉', 'Nice! 👏', 'Good! 🙂', 'Phew! 😅'][sozle.guesses.length]
+      : 'The word was:';
+    $('#sozlePanel').innerHTML = `
+      <p class="sozle-panel-head">${head}</p>
+      <div class="sozle-answer">
+        <span class="sozle-answer-kk">${escapeHtml(w.kk)}</span>
+        <span class="sozle-answer-en">${escapeHtml(w.en)}</span>
+        <span class="sozle-answer-ru">${escapeHtml(w.ru)}</span>
+        <span class="tr-cat">${escapeHtml(w.category)}</span>
+      </div>
+      <p class="sozle-learned">You just learned a Karakalpak word 🎓</p>
+      <div class="sozle-share">
+        <button class="btn btn-primary btn-sm" id="sozleCopy">Copy result</button>
+        <a class="btn btn-outline btn-sm" id="sozleTg" target="_blank" rel="noopener"
+           href="https://t.me/share/url?url=${encodeURIComponent('https://qaraqalpaq.vercel.app/game.html')}&text=${encodeURIComponent(sozleShareText())}">Share on Telegram</a>
+        <a class="btn btn-outline btn-sm" href="dictionary.html?q=${encodeURIComponent(w.kk)}">Find in dictionary →</a>
+      </div>`;
+    $('#sozlePanel').hidden = false;
+    $('#sozleFree').hidden = false;
+    $('#sozleHint').hidden = true;
+    const copyBtn = $('#sozleCopy');
+    copyBtn.addEventListener('click', () => {
+      const done = () => { copyBtn.textContent = 'Copied ✓'; setTimeout(() => { copyBtn.textContent = 'Copy result'; }, 1600); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(sozleShareText()).then(done, done);
+      else done();
+    });
+  }
+
+  function sozleFinish(win) {
+    sozle.done = true;
+    sozle.win = win;
+    if (sozle.mode === 'daily') {
+      const s = loadSozleStats();
+      if (s.lastPlayedNum !== sozle.num) {
+        s.played++;
+        s.lastPlayedNum = sozle.num;
+        if (win) {
+          s.won++;
+          s.dist[sozle.guesses.length - 1]++;
+          s.streak = s.lastWonNum === sozle.num - 1 ? s.streak + 1 : 1;
+          s.maxStreak = Math.max(s.maxStreak, s.streak);
+          s.lastWonNum = sozle.num;
+        } else {
+          s.streak = 0;
+        }
+        s.lastGame = { num: sozle.num, guesses: sozle.guesses, evals: sozle.evals, win, hintUsed: sozle.hintUsed };
+        saveSozleStats(s);
+      }
+      recordPractice(); // counts toward the site-wide day streak too
+    }
+    sozleRenderStats();
+    sozleEndPanel();
+  }
+
+  function sozleSubmit() {
+    if (sozle.done) return;
+    if (sozle.cur.length < 5) { sozleMsg('Not enough letters'); return; }
+    const guess = sozle.cur;
+    const ev = sozleEval(guess, sozle.answer);
+    sozle.guesses.push(guess);
+    sozle.evals.push(ev);
+    sozle.cur = '';
+    sozleRenderBoard();
+    sozleRenderKeys();
+    if (guess === sozle.answer) { sozleFinish(true); return; }
+    if (sozle.guesses.length >= 6) { sozleFinish(false); return; }
+  }
+
+  function sozleKey(k) {
+    if (!sozle || sozle.done) return;
+    if (k === 'enter') { sozleSubmit(); return; }
+    if (k === 'back') { sozle.cur = sozle.cur.slice(0, -1); sozleRenderBoard(); return; }
+    if (sozle.cur.length >= 5 || !SOZLE_ALLOWED.has(k)) return;
+    sozle.cur += k;
+    sozleRenderBoard();
+  }
+
+  function sozleStart(mode) {
+    const num = sozleDayNum();
+    const entry = mode === 'daily'
+      ? SOZLE_LIST[((num - 1) % SOZLE_LIST.length + SOZLE_LIST.length) % SOZLE_LIST.length]
+      : SOZLE_LIST[Math.floor(Math.random() * SOZLE_LIST.length)];
+    sozle = { mode, num, entry, answer: entry.key, guesses: [], evals: [], cur: '', done: false, win: false, hintUsed: false };
+    $('#sozleNum').textContent = mode === 'daily' ? ` #${num}` : ' · practice';
+    $('#sozlePanel').hidden = true;
+    $('#sozleHint').hidden = false;
+    $('#sozleHintText').hidden = true;
+    $('#sozleFree').hidden = true;
+    sozleMsg('');
+
+    // Already finished today's puzzle → restore the finished board (no replaying for stats)
+    if (mode === 'daily') {
+      const s = loadSozleStats();
+      if (s.lastGame && s.lastGame.num === num) {
+        sozle.guesses = s.lastGame.guesses;
+        sozle.evals = s.lastGame.evals;
+        sozle.done = true;
+        sozle.win = s.lastGame.win;
+        sozle.hintUsed = !!s.lastGame.hintUsed;
+        sozleRenderBoard();
+        sozleRenderKeys();
+        sozleRenderStats();
+        sozleEndPanel();
+        return;
+      }
+    }
+    sozleRenderBoard();
+    sozleRenderKeys();
+    sozleRenderStats();
+  }
+
+  function initSozle() {
+    buildSozleList();
+    if (!SOZLE_LIST.length) return;
+    sozleStart('daily');
+
+    $('#sozleKeys').addEventListener('click', e => {
+      const btn = e.target.closest('.sozle-key');
+      if (btn) sozleKey(btn.dataset.key);
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.target && /^(input|textarea|select)$/i.test(e.target.tagName)) return; // don't steal typing from forms
+      if (e.key === 'Enter') { sozleKey('enter'); return; }
+      if (e.key === 'Backspace') { sozleKey('back'); return; }
+      const k = e.key.toLowerCase();
+      if (k.length === 1 && SOZLE_ALLOWED.has(k)) sozleKey(k);
+    });
+
+    $('#sozleHint').addEventListener('click', () => {
+      const w = sozle.entry.w;
+      sozle.hintUsed = true;
+      const el = $('#sozleHintText');
+      el.innerHTML = `💡 It means: <strong>${escapeHtml(w.en)}</strong> · ${escapeHtml(w.ru)}`;
+      el.hidden = false;
+    });
+
+    $('#sozleFree').addEventListener('click', () => sozleStart('free'));
   }
 
   // ===== DICTIONARY PAGE =====
