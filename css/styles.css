@@ -873,6 +873,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   max-width: 480px;
   height: 300px;
   perspective: 1400px;
+  touch-action: pan-y; /* vertical drags scroll the page, horizontal ones are the swipe (next / previous) */
 }
 .flashcard .learned-badge { top: 14px; right: 14px; }
 .flashcard-inner {
@@ -2055,6 +2056,22 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
     font-size: clamp(1rem, calc((100dvh - var(--sozle-chrome)) / 13.5), 1.35rem);
   }
   .sozle-msg { min-height: 20px; margin-bottom: 6px; font-size: 0.85rem; }
+}
+
+/* ===== PAGINATION SCROLL TARGET =====
+   Changing the page scrolls back to the category row, so the first cards of the new
+   page are on screen. The margin keeps the row clear of the fixed nav. */
+.pills-wrap { scroll-margin-top: 96px; }
+
+/* ===== FORM FIELDS ON PHONES =====
+   iOS Safari zooms the whole page in when a focused field has text smaller than 16px
+   and does not zoom back out. Every input / select / textarea stays at 16px on phones. */
+@media (max-width: 768px) {
+  #searchInput,
+  .select,
+  .wordreq-form input,
+  .wordreq-form textarea,
+  .feedback-comment { font-size: 16px; }
 }
 
 /* ===== SIDE GUTTERS FOR THE HOME SECTIONS (keep this block last) =====

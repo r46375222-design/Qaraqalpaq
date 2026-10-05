@@ -43,7 +43,25 @@
     try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(PROGRESS)); } catch (e) {}
   }
 
-  function todayStr() { return new Date().toISOString().slice(0, 10); }
+  // Days are LOCAL calendar days (same as Sózle). toISOString() is UTC: it moved
+  // "today" at 05:00 in Nukus and in the middle of the afternoon in the US.
+  function localDateStr(d) {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+  function todayStr() { return localDateStr(new Date()); }
+  function yesterdayStr() {
+    const y = new Date();
+    y.setDate(y.getDate() - 1);
+    return localDateStr(y);
+  }
+
+  // The streak shown on screen: alive only if the last practice was today or
+  // yesterday. The stored number itself is reset by recordPractice() on the next practice.
+  function currentStreak() {
+    const last = PROGRESS.lastPracticeDate;
+    if (!last || last < yesterdayStr()) return 0;
+    return PROGRESS.streak || 0;
+  }
 
   function wordId(w) { return `${w.category}::${w.kk}`; }
 
@@ -52,10 +70,7 @@
   function recordPractice() {
     const today = todayStr();
     if (PROGRESS.lastPracticeDate !== today) {
-      const y = new Date();
-      y.setDate(y.getDate() - 1);
-      const yesterday = y.toISOString().slice(0, 10);
-      PROGRESS.streak = PROGRESS.lastPracticeDate === yesterday ? (PROGRESS.streak || 0) + 1 : 1;
+      PROGRESS.streak = PROGRESS.lastPracticeDate === yesterdayStr() ? (PROGRESS.streak || 0) + 1 : 1;
       PROGRESS.lastPracticeDate = today;
     }
     saveProgress();
@@ -95,7 +110,7 @@
   function wordsLearnedToday() {
     const today = todayStr();
     return Object.values(PROGRESS.learned)
-      .filter(e => new Date(e.at).toISOString().slice(0, 10) === today).length;
+      .filter(e => localDateStr(new Date(e.at)) === today).length;
   }
 
   function totalWordsLearned() { return Object.keys(PROGRESS.learned).length; }
@@ -107,7 +122,7 @@
       <div class="progress-widget-grid">
         <div class="pw-stat"><span class="pw-num">${wordsLearnedToday()}</span><span class="pw-label">Learned Today</span></div>
         <div class="pw-stat"><span class="pw-num">${totalWordsLearned()}</span><span class="pw-label">Total Learned</span></div>
-        <div class="pw-stat"><span class="pw-num">${PROGRESS.streak || 0}</span><span class="pw-label">Day Streak</span></div>
+        <div class="pw-stat"><span class="pw-num">${currentStreak()}</span><span class="pw-label">Day Streak</span></div>
         <div class="pw-stat"><span class="pw-num">${PROGRESS.quizBestScore || 0}</span><span class="pw-label">Quiz Best</span></div>
       </div>`;
   }
@@ -838,10 +853,13 @@
   function sozleRenderStats() {
     const s = loadSozleStats();
     const winPct = s.played ? Math.round((s.won / s.played) * 100) : 0;
+    // A streak is alive only if the last win was today's or yesterday's puzzle —
+    // otherwise show 0 instead of a number from weeks ago
+    const streak = s.lastWonNum >= sozleDayNum() - 1 ? s.streak : 0;
     $('#sozleStats').innerHTML = `
       <span class="sozle-stat"><strong>${s.played}</strong> played</span>
       <span class="sozle-stat"><strong>${winPct}%</strong> won</span>
-      <span class="sozle-stat">🔥 <strong>${s.streak}</strong> streak</span>`;
+      <span class="sozle-stat">🔥 <strong>${streak}</strong> streak</span>`;
   }
 
   function sozleMsg(text, sticky) {
@@ -1019,11 +1037,22 @@
       const btn = e.target.closest('.sozle-key');
       if (btn) sozleKey(btn.dataset.key);
     });
+    // A mouse or touch press must not leave keyboard focus on an on-screen key:
+    // otherwise the next physical Enter or Space "presses" that key a second time
+    // (click ú, type the rest, hit Enter with 4 letters → a stray second ú).
+    $('#sozleKeys').addEventListener('mousedown', e => {
+      if (e.target.closest('.sozle-key')) e.preventDefault();
+    });
 
     document.addEventListener('keydown', e => {
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       if (e.target && /^(input|textarea|select)$/i.test(e.target.tagName)) return; // don't steal typing from forms
-      if (e.key === 'Enter') { sozleKey('enter'); return; }
+      if (e.key === 'Enter') {
+        // Enter always submits the guess — it never "presses" a focused on-screen key
+        if (e.target && e.target.closest && e.target.closest('.sozle-key')) e.preventDefault();
+        sozleKey('enter');
+        return;
+      }
       if (e.key === 'Backspace') { sozleKey('back'); return; }
       const k = e.key.toLowerCase();
       if (k.length === 1 && SOZLE_ALLOWED.has(k)) sozleKey(k);
@@ -1256,7 +1285,9 @@
         if (!p || p < 1 || p > totalPages) return;
         state.page = p;
         renderDictionary();
-        $('#view-dictionary').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Back to the category row, not to the top of the section: the heading, progress,
+        // Word of the Day and translator sit above the grid (≈1,400px of them on a phone)
+        $('.pills-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
   }
@@ -1274,8 +1305,44 @@
       state.flash.category = e.target.value;
       refreshFlashList();
     });
-    $('#flashcard').addEventListener('click', flipFlashcard);
+    const cardEl = $('#flashcard');
+    let lastSwipeAt = 0;
+    cardEl.addEventListener('click', () => {
+      if (Date.now() - lastSwipeAt < 400) return; // the tail of a swipe is not a tap
+      flipFlashcard();
+    });
     $('#flashFlipBtn').addEventListener('click', flipFlashcard);
+
+    // Swipe left / right on the card = next / previous word (the page says "Swipe through").
+    // Mostly-vertical drags are ignored, so scrolling the page over the card still works.
+    let touchStart = null;
+    cardEl.addEventListener('touchstart', e => {
+      const t = e.changedTouches[0];
+      touchStart = e.touches.length === 1 ? { x: t.clientX, y: t.clientY } : null;
+    }, { passive: true });
+    cardEl.addEventListener('touchend', e => {
+      if (!touchStart) return;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - touchStart.x;
+      const dy = t.clientY - touchStart.y;
+      touchStart = null;
+      if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      lastSwipeAt = Date.now();
+      stepFlashcard(dx < 0 ? 1 : -1);
+    }, { passive: true });
+
+    // Keyboard: ← → move between words, Space / Enter flip the card
+    document.addEventListener('keydown', e => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      const tag = (e.target && e.target.tagName) || '';
+      if (/^(input|textarea|select)$/i.test(tag)) return; // the category dropdown uses the arrows itself
+      if (e.key === 'ArrowRight') stepFlashcard(1);
+      else if (e.key === 'ArrowLeft') stepFlashcard(-1);
+      else if ((e.key === ' ' || e.key === 'Enter') && !/^(button|a)$/i.test(tag)) {
+        e.preventDefault(); // Space would scroll the page
+        flipFlashcard();
+      }
+    });
     $('#flashPrev').addEventListener('click', () => stepFlashcard(-1));
     $('#flashNext').addEventListener('click', () => stepFlashcard(1));
     $('#flashShuffle').addEventListener('click', () => {
@@ -1288,11 +1355,25 @@
       const { list, index } = state.flash;
       if (list.length === 0) return;
       toggleLearned(wordId(list[index]));
-      showFlashcard();
+      // Only the button and the badge change — showFlashcard() would also turn the
+      // card back to its front while you are reading the translation
+      renderFlashLearned(list[index]);
       renderProgressBar();
     });
     renderProgressBar();
     refreshFlashList();
+  }
+
+  function renderFlashLearned(w) {
+    const learnBtn = $('#flashLearnBtn');
+    const badge = $('#flashLearnedBadge');
+    const learned = isLearned(wordId(w));
+    if (learnBtn) {
+      learnBtn.hidden = false;
+      learnBtn.textContent = learned ? '✓ Learned' : '✓ Mark as Learned';
+      learnBtn.classList.toggle('is-learned', learned);
+    }
+    if (badge) badge.classList.toggle('is-visible', learned);
   }
 
   function refreshFlashList() {
@@ -1325,13 +1406,7 @@
     $('#flashWordEN').textContent = w.en;
     $('#flashWordRU').textContent = w.ru;
     $('#flashProgress').textContent = `${index + 1} / ${list.length}`;
-    const learned = isLearned(wordId(w));
-    if (learnBtn) {
-      learnBtn.hidden = false;
-      learnBtn.textContent = learned ? '✓ Learned' : '✓ Mark as Learned';
-      learnBtn.classList.toggle('is-learned', learned);
-    }
-    if (badge) badge.classList.toggle('is-visible', learned);
+    renderFlashLearned(w);
   }
 
   function flipFlashcard() {
