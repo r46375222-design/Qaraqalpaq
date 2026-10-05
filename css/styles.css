@@ -75,6 +75,11 @@ body.page-dictionary .wotd-card {
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* The HTML `hidden` attribute must always win. Without this rule every class that
+   sets `display` (.btn, .feedback-extra, .translator-results…) silently overrides
+   it, and elements that JS hides stay on screen. */
+[hidden] { display: none !important; }
+
 /* color-scheme + explicit dark background kill the white flash on reload:
    the browser paints its default (white) canvas before CSS arrives unless told otherwise */
 html {
@@ -2011,4 +2016,77 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
   .sozle-tile { font-size: 1.35rem; }
   .sozle-key { height: 46px; font-size: 0.85rem; }
   .sozle-keys { max-width: 100%; }
+
+  /* ----- One-screen layout on phones -----
+     Title, stats, board and keyboard must all be visible without scrolling
+     (before this block the ENTER / ⌫ row started below the fold on a 375×812 screen).
+     1. The "how to play" paragraph moves UNDER the keyboard (flex order) — it is
+        still on the page, it just no longer pushes the game down.
+     2. The board is sized from the viewport HEIGHT. --sozle-chrome is everything
+        on screen that is not the board: nav + title + stats row + message + keyboard.
+        If you change the height of any of those on phones, re-measure this number. */
+  .page-game main { padding-top: 12px; }
+  .page-game .container-narrow {
+    display: flex; flex-direction: column;
+    --sozle-chrome: 352px;
+  }
+  /* the hint line takes one more row — give it back from the board */
+  .page-game .container-narrow:has(.sozle-hint-text:not([hidden])) { --sozle-chrome: 382px; }
+  .page-game .container-narrow > * { width: 100%; }
+  .page-game .section-head { display: contents; }
+  .page-game .section-head h1 { font-size: 1.45rem; line-height: 1.2; margin-bottom: 6px; }
+  .page-game .section-head p { order: 2; margin-top: 18px; font-size: 0.86rem; }
+  .page-game .sozle-foot { order: 3; margin-top: 10px; }
+
+  .sozle-topbar { margin-bottom: 8px; gap: 8px; }
+  .sozle-stats { gap: 10px; font-size: 0.78rem; }
+  .sozle-actions .btn-sm { padding: 7px 12px; font-size: 0.78rem; }
+  .sozle-hint-text { margin-bottom: 8px; font-size: 0.84rem; }
+
+  .sozle-board {
+    gap: 5px; margin-bottom: 6px;
+    max-width: clamp(165px, calc((100vh - var(--sozle-chrome)) / 1.2), 280px);   /* older browsers */
+    max-width: clamp(165px, calc((100dvh - var(--sozle-chrome)) / 1.2), 280px);  /* dvh = height with the address bar showing */
+  }
+  .sozle-row { gap: 5px; }
+  .sozle-tile {
+    border-radius: 6px;
+    font-size: clamp(1rem, calc((100vh - var(--sozle-chrome)) / 13.5), 1.35rem);
+    font-size: clamp(1rem, calc((100dvh - var(--sozle-chrome)) / 13.5), 1.35rem);
+  }
+  .sozle-msg { min-height: 20px; margin-bottom: 6px; font-size: 0.85rem; }
+}
+
+/* ===== SIDE GUTTERS FOR THE HOME SECTIONS (keep this block last) =====
+   These sections set their vertical spacing with the `padding` shorthand
+   (e.g. `.showcase-section { padding: 90px 0 0 }`). The shorthand also zeroes the
+   side padding they should get from .container, so below ~1290px their cards ran
+   edge to edge — on tablets, and on phones for the three sections that are declared
+   after the ≤768px `.container` rule (translator, Sózle banner, word request).
+   The doubled class only raises specificity so this wins wherever it sits.
+   Wide screens are untouched: the clamp is 0 from 1288px up and grows to 24px at 1240px.
+   NEW SECTION WITH .container? Use padding-top / padding-bottom, or add it here. */
+.container.translator-section,
+.container.game-strip,
+.container.social-proof,
+.container.showcase-section,
+.container.phone-section,
+.container.features-section,
+.container.wordreq-section,
+.container.cta-section {
+  padding-left: clamp(0px, calc((1288px - 100vw) / 2), 24px);
+  padding-right: clamp(0px, calc((1288px - 100vw) / 2), 24px);
+}
+@media (max-width: 768px) {
+  .container.translator-section,
+  .container.game-strip,
+  .container.social-proof,
+  .container.showcase-section,
+  .container.phone-section,
+  .container.features-section,
+  .container.wordreq-section,
+  .container.cta-section {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
 }

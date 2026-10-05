@@ -705,7 +705,11 @@
         }
         search.value = find.dataset.kk;
         state.search = find.dataset.kk;
-        state.page = 1;
+        // The word may sit in a different category than the one being filtered —
+        // without this reset the grid answered "0 results" for a word that exists
+        setActiveCategory('All');
+        const pillsRow = $('#categoryPills');
+        if (pillsRow) pillsRow.scrollLeft = 0;
         renderDictionary();
         $('.search-wrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
@@ -768,7 +772,8 @@
   }
 
   function sozleDefaultStats() {
-    return { played: 0, won: 0, streak: 0, maxStreak: 0, lastWonNum: 0, lastPlayedNum: 0, dist: [0, 0, 0, 0, 0, 0], lastGame: null };
+    // lastGame = today's finished game; current = today's game still in progress
+    return { played: 0, won: 0, streak: 0, maxStreak: 0, lastWonNum: 0, lastPlayedNum: 0, dist: [0, 0, 0, 0, 0, 0], lastGame: null, current: null };
   }
   function loadSozleStats() {
     try { return Object.assign(sozleDefaultStats(), JSON.parse(localStorage.getItem(SOZLE_KEY) || '{}')); }
@@ -890,8 +895,10 @@
   function sozleFinish(win) {
     sozle.done = true;
     sozle.win = win;
+    sozle.doneAt = Date.now(); // the feedback card waits a moment after this (see initFeedbackWidget)
     if (sozle.mode === 'daily') {
       const s = loadSozleStats();
+      s.current = null; // no longer in progress
       if (s.lastPlayedNum !== sozle.num) {
         s.played++;
         s.lastPlayedNum = sozle.num;
@@ -905,8 +912,8 @@
           s.streak = 0;
         }
         s.lastGame = { num: sozle.num, guesses: sozle.guesses, evals: sozle.evals, win, hintUsed: sozle.hintUsed };
-        saveSozleStats(s);
       }
+      saveSozleStats(s);
       recordPractice(); // counts toward the site-wide day streak too
     }
     sozleRenderStats();
@@ -925,6 +932,24 @@
     sozleRenderKeys();
     if (guess === sozle.answer) { sozleFinish(true); return; }
     if (sozle.guesses.length >= 6) { sozleFinish(false); return; }
+    sozleSaveCurrent();
+  }
+
+  // Today's unfinished game is saved after every guess, so a reload or a closed tab
+  // brings the board back — instead of handing out six fresh tries at the same word.
+  // Practice games are not saved.
+  function sozleSaveCurrent() {
+    if (!sozle || sozle.mode !== 'daily' || sozle.done) return;
+    const s = loadSozleStats();
+    s.current = { num: sozle.num, answer: sozle.answer, guesses: sozle.guesses, hintUsed: sozle.hintUsed };
+    saveSozleStats(s);
+  }
+
+  function sozleShowHint() {
+    const w = sozle.entry.w;
+    const el = $('#sozleHintText');
+    el.innerHTML = `💡 It means: <strong>${escapeHtml(w.en)}</strong> · ${escapeHtml(w.ru)}`;
+    el.hidden = false;
   }
 
   function sozleKey(k) {
@@ -964,6 +989,21 @@
         sozleEndPanel();
         return;
       }
+      // Started today's puzzle earlier and left → put the guesses back.
+      // Same day AND same answer only (the pool can change between deploys);
+      // colours are recomputed from the answer, never read from storage.
+      const c = s.current;
+      if (c && c.num === num && c.answer === entry.key && Array.isArray(c.guesses)) {
+        const valid = c.guesses
+          .filter(g => typeof g === 'string' && g.length === 5 && [...g].every(ch => SOZLE_ALLOWED.has(ch)))
+          .slice(0, 5);
+        if (!valid.includes(entry.key)) {
+          sozle.guesses = valid;
+          sozle.evals = valid.map(g => sozleEval(g, entry.key));
+        }
+        sozle.hintUsed = !!c.hintUsed;
+        if (sozle.hintUsed) sozleShowHint();
+      }
     }
     sozleRenderBoard();
     sozleRenderKeys();
@@ -990,11 +1030,9 @@
     });
 
     $('#sozleHint').addEventListener('click', () => {
-      const w = sozle.entry.w;
       sozle.hintUsed = true;
-      const el = $('#sozleHintText');
-      el.innerHTML = `💡 It means: <strong>${escapeHtml(w.en)}</strong> · ${escapeHtml(w.ru)}`;
-      el.hidden = false;
+      sozleShowHint();
+      sozleSaveCurrent();
     });
 
     $('#sozleFree').addEventListener('click', () => sozleStart('free'));
@@ -1026,12 +1064,16 @@
     ).join('');
     $$('.pill', wrap).forEach(pill => {
       pill.addEventListener('click', () => {
-        state.category = pill.dataset.cat;
-        state.page = 1;
-        $$('.pill', wrap).forEach(p => p.classList.toggle('active', p === pill));
+        setActiveCategory(pill.dataset.cat);
         renderDictionary();
       });
     });
+  }
+
+  function setActiveCategory(cat) {
+    state.category = cat;
+    state.page = 1;
+    $$('#categoryPills .pill').forEach(p => p.classList.toggle('active', p.dataset.cat === cat));
   }
 
   function setupPillsScroll() {
@@ -1053,13 +1095,34 @@
     });
   }
 
+  // 0 = the word itself (or one of its "a / b" variants), 1 = starts with the query, 2 = contains it
+  function searchRank(item, q) {
+    const isExact = map => { const hit = map.get(q); return !!hit && hit.includes(item.w); };
+    if (isExact(TRANS_INDEX.kk) || isExact(TRANS_INDEX.en) || isExact(TRANS_INDEX.ru)) return 0;
+    if (item.kk.startsWith(q) || item.en.startsWith(q) || item.ru.startsWith(q)) return 1;
+    return 2;
+  }
+
+  // The grid search folds text exactly like the translator does (foldKey), so
+  // "salem" finds "Sálem!" and "ıdıs" finds "Ídıs". Returns [{ w, rank }].
   function getFilteredWords() {
-    const q = norm(state.search);
-    return WORDS.filter(w => {
-      if (state.category !== 'All' && w.category !== state.category) return false;
-      if (!q) return true;
-      return norm(w.kk).includes(q) || norm(w.en).includes(q) || norm(w.ru).includes(q);
-    });
+    const raw = norm(state.search).trim();
+    const q = foldKey(state.search);
+    const inCategory = w => state.category === 'All' || w.category === state.category;
+    if (!raw) return WORDS.filter(inCategory).map(w => ({ w, rank: 0 }));
+    if (!q) {
+      // Only punctuation typed ("!", "?") — nothing to fold, match the raw text
+      return WORDS
+        .filter(w => inCategory(w) && (norm(w.kk).includes(raw) || norm(w.en).includes(raw) || norm(w.ru).includes(raw)))
+        .map(w => ({ w, rank: 0 }));
+    }
+    if (!TRANS_INDEX) buildTranslatorIndex(); // also builds SEARCH_KEYS (folded copies of every word)
+    const out = [];
+    for (const item of SEARCH_KEYS) {
+      if (!inCategory(item.w)) continue;
+      if (item.kk.includes(q) || item.en.includes(q) || item.ru.includes(q)) out.push({ w: item.w, rank: searchRank(item, q) });
+    }
+    return out;
   }
 
   function renderWordOfDay() {
@@ -1115,7 +1178,11 @@
     }
     empty.hidden = true;
 
-    const sorted = [...filtered].sort((a, b) => a.category.localeCompare(b.category) || a.kk.localeCompare(b.kk));
+    // Best match first (only matters while searching — without a query every rank is 0),
+    // then the usual order: category, then word
+    const sorted = filtered
+      .sort((a, b) => a.rank - b.rank || a.w.category.localeCompare(b.w.category) || a.w.kk.localeCompare(b.w.kk))
+      .map(x => x.w);
     const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
     if (state.page > totalPages) state.page = totalPages;
     const startIdx = (state.page - 1) * PAGE_SIZE;
@@ -1454,6 +1521,7 @@
     ratingField: 'entry.1122276316',
     commentField: 'entry.2033114747',
     showAfterSeconds: 120, // cumulative time on site before the card appears
+    afterGameMs: 15000,    // on the Sózle page: pause between the end of a game and the card
     storageKey: 'qaraqalpaq_feedback',
   };
 
@@ -1471,6 +1539,10 @@
       fb.seconds = (fb.seconds || 0) + tick;
       save();
       if (fb.seconds >= FEEDBACK.showAfterSeconds) {
+        // Never pop up over a Sózle game in progress: on phones the card covers half
+        // the board and the keyboard. Wait until the game is over, plus a short pause
+        // so the player can read the answer and share the result first.
+        if (sozle && (!sozle.done || Date.now() - (sozle.doneAt || 0) < FEEDBACK.afterGameMs)) return;
         clearInterval(timer);
         showFeedbackCard();
       }

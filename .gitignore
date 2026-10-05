@@ -6,8 +6,16 @@ CLAUDE.md
 credentials.json
 token.json
 
+# Musa's personal admissions notes — private, must never go live on the site
+LOGISTIKA_PODACHI.md
+20_VOPROSOV.md
+*.ics
+
 # Local dev server & backups — not needed in production
 server.ps1
 index.backup.html
 css/styles.backup.css
 liveblocks.io_.png
+
+# Files Claude delivers into the chat get mirrored here — never publish them
+Claude outputs/
