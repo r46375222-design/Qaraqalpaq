@@ -979,6 +979,17 @@
     sozleRenderBoard();
   }
 
+  // á ǵ ı ń ó ú have no key on a physical keyboard: type the plain letter, then '.
+  // Pressing ' again turns it back.
+  const SOZLE_ACCENT = { a: 'á', g: 'ǵ', i: 'ı', n: 'ń', o: 'ó', u: 'ú', 'á': 'a', 'ǵ': 'g', 'ı': 'i', 'ń': 'n', 'ó': 'o', 'ú': 'u' };
+  function sozleAccent() {
+    if (!sozle || sozle.done || !sozle.cur) return;
+    const swap = SOZLE_ACCENT[sozle.cur.slice(-1)];
+    if (!swap) return;
+    sozle.cur = sozle.cur.slice(0, -1) + swap;
+    sozleRenderBoard();
+  }
+
   function sozleStart(mode) {
     const num = sozleDayNum();
     const entry = mode === 'daily'
@@ -1054,8 +1065,20 @@
         return;
       }
       if (e.key === 'Backspace') { sozleKey('back'); return; }
-      const k = e.key.toLowerCase();
-      if (k.length === 1 && SOZLE_ALLOWED.has(k)) sozleKey(k);
+      // 1. The key already is a letter of the alphabet (Latin layouts, Turkish ı…)
+      const k = e.key.length === 1 ? e.key.toLowerCase() : '';
+      if (SOZLE_ALLOWED.has(k)) { sozleKey(k); return; }
+      // 2. Apostrophe (or the ` key): turn the last letter into its Karakalpak
+      //    variant — a' → á, g' → ǵ, i' → ı, n' → ń, o' → ó, u' → ú
+      if (e.code === 'Quote' || e.code === 'Backquote' || (k && "'`’ʼ´".includes(k))) {
+        e.preventDefault(); // Firefox opens quick-find on '
+        sozleAccent();
+        return;
+      }
+      // 3. A letter of another script (Russian layout: the Q key sends "й"): go by the
+      //    key's POSITION, so typing works without switching the keyboard to English
+      const pos = /^Key([A-Z])$/.exec(e.code || '');
+      if (pos && k && /\p{L}/u.test(k) && SOZLE_ALLOWED.has(pos[1].toLowerCase())) sozleKey(pos[1].toLowerCase());
     });
 
     $('#sozleHint').addEventListener('click', () => {
@@ -1228,11 +1251,14 @@
     const id = wordId(w);
     const learned = isLearned(id);
     const learnBtnHtml = `<button class="learn-btn" data-id="${escapeAttr(id)}">${learned ? '✓ Learned' : 'Mark as Learned'}</button>`;
+    // The ✓ badge lives INSIDE each face, so it turns with the card. As a child of
+    // .word-card it stayed put in the corner while the card rotated under it.
+    const badgeHtml = '<span class="learned-badge" aria-hidden="true">✓</span>';
     return `
       <div class="word-card${learned ? ' is-learned' : ''}" style="--accent:${accent}">
-        <span class="learned-badge" aria-hidden="true">✓</span>
         <div class="word-card-inner">
           <div class="word-card-face word-card-front">
+            ${badgeHtml}
             <div class="word-card-top">
               <span class="word-card-icon">${icon}</span>
               <span class="word-cat-badge">${escapeHtml(w.category)}</span>
@@ -1242,6 +1268,7 @@
             ${learnBtnHtml}
           </div>
           <div class="word-card-face word-card-back">
+            ${badgeHtml}
             <div class="word-card-top"><span class="word-card-icon">${icon}</span></div>
             <div class="word-card-trans">
               <span class="word-en">${escapeHtml(w.en)}</span>
@@ -1366,14 +1393,14 @@
 
   function renderFlashLearned(w) {
     const learnBtn = $('#flashLearnBtn');
-    const badge = $('#flashLearnedBadge');
     const learned = isLearned(wordId(w));
     if (learnBtn) {
       learnBtn.hidden = false;
       learnBtn.textContent = learned ? '✓ Learned' : '✓ Mark as Learned';
       learnBtn.classList.toggle('is-learned', learned);
     }
-    if (badge) badge.classList.toggle('is-visible', learned);
+    // one badge on each face of the card (see flashcards.html)
+    $$('#flashcard .learned-badge').forEach(b => b.classList.toggle('is-visible', learned));
   }
 
   function refreshFlashList() {
@@ -1389,7 +1416,6 @@
     card.classList.remove('flipped');
     state.flash.flipped = false;
     const learnBtn = $('#flashLearnBtn');
-    const badge = $('#flashLearnedBadge');
     if (list.length === 0) {
       $('#flashCatBadge').textContent = '—';
       $('#flashWordKK').textContent = 'No words in this category';
@@ -1397,7 +1423,7 @@
       $('#flashWordRU').textContent = '';
       $('#flashProgress').textContent = '0 / 0';
       if (learnBtn) learnBtn.hidden = true;
-      if (badge) badge.classList.remove('is-visible');
+      $$('#flashcard .learned-badge').forEach(b => b.classList.remove('is-visible'));
       return;
     }
     const w = list[index];

@@ -1835,6 +1835,35 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   .tr-output-big { font-size: clamp(1.4rem, 2.8vw, 1.9rem); }
   .tr-output-sub { font-size: 0.98rem; }
 }
+/* The HOME-PAGE translator is the flagship feature, so it is the biggest block on the
+   page after the hero: wider card, taller panes, larger type. Home only — the
+   dictionary page keeps the compact card above its search. Phones (≤768px) untouched. */
+@media (min-width: 769px) {
+  .translator-section .translator { max-width: 1100px; padding: 34px 36px 36px; border-radius: 28px; }
+  .translator-section .tr-langbar { margin-bottom: 18px; }
+  .translator-section .tr-lang { font-size: 0.84rem; padding: 8px 18px; }
+  .translator-section .tr-swap { width: 42px; height: 42px; font-size: 1.3rem; }
+  .translator-section .tr-panes { border-radius: 20px; }
+  /* 270px tall, a little less on short laptop screens (768px-high displays) so the
+     whole card still fits under the title after the hero button jumps here */
+  .translator-section .tr-pane,
+  .translator-section .tr-pane-src textarea,
+  .translator-section .tr-output { min-height: clamp(200px, calc(100vh - 460px), 270px); }
+  .translator-section .tr-pane-src textarea { font-size: 1.55rem; padding: 28px 58px 28px 30px; }
+  .translator-section .tr-pane-src textarea::placeholder { font-size: 1.2rem; }
+  .translator-section .tr-pane-src .translator-clear { top: 22px; right: 16px; }
+  .translator-section .tr-output { padding: 28px 30px; }
+  .translator-section .tr-output-hint { font-size: 1.2rem; }
+  .translator-section .tr-output-big { font-size: clamp(1.8rem, 3.2vw, 2.5rem); }
+  .translator-section .tr-output-sub { font-size: 1.15rem; }
+  .translator-section .tr-output-meta { margin-top: 14px; gap: 14px; }
+  .translator-section .tr-output-meta .tr-cat { font-size: 0.74rem; }
+  .translator-section .tr-output .tr-find,
+  .translator-section .tr-output .tr-report { font-size: 0.9rem; padding: 9px 18px; }
+  /* "Try the Translator" in the hero jumps here: land with the title just under the
+     nav so the whole (now taller) card fits on a laptop screen */
+  .translator-section { scroll-margin-top: 10px; }
+}
 
 /* ===== WORD REQUESTS & CORRECTIONS ===== */
 .wordreq-section { padding: 0 0 90px; }
@@ -2012,6 +2041,17 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
 .sozle-key.is-present { background: #ca8a04; border-color: #ca8a04; color: #fff; }
 .sozle-key.is-absent { background: var(--bg); border-color: var(--bg); color: var(--text-faint); }
 .sozle-foot { text-align: center; color: var(--text-faint); font-size: 0.8rem; margin-top: 18px; }
+/* "you can type on your own keyboard" — only where there is a real keyboard and mouse */
+.sozle-kbd-hint { display: none; margin-top: 8px; }
+.sozle-kbd-hint kbd {
+  display: inline-block; min-width: 20px; padding: 1px 6px; margin: 0 1px;
+  font-family: inherit; font-size: 0.78rem; font-weight: 700; text-align: center;
+  color: var(--text-dim);
+  background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 5px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .sozle-kbd-hint { display: block; }
+}
 @media (max-width: 480px) {
   .sozle-board { max-width: 280px; }
   .sozle-tile { font-size: 1.35rem; }
