@@ -96,7 +96,15 @@ body {
   color: var(--text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  /* No sideways scrolling, ever (hero glows and the dictionary's title glow are wider
+     than a phone). `clip` cuts the overflow exactly like `hidden` but does NOT turn
+     <body> into a scroll container. With `hidden` here AND on <html>, <body> became
+     one, and `position: sticky` on .nav then stuck to a box that never scrolls — the
+     nav rode away with the page on Flashcards, Quiz and Sózle.
+     The first line is the fallback for browsers without `clip` (Safari before 16):
+     there the nav simply behaves as it did before. Do not drop either line. */
   overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -248,7 +256,7 @@ input, select { font-family: inherit; }
 .nav-toggle { display: none; flex-direction: column; gap: 5px; width: 28px; }
 .nav-toggle span { display: block; height: 2.5px; width: 100%; background: var(--text); border-radius: 2px; }
 
-/* "?" — opens the short how-to-use guide (see HELP PANEL near the end of this file).
+/* "?" — opens the short how-to-use guide (see GUIDE near the end of this file).
    No animation here on purpose: nothing inside .nav animates (see the .nav rule in CLAUDE.md). */
 .nav-links { margin-left: auto; } /* links stay on the right now that "?" follows them */
 .nav-help {
@@ -974,7 +982,10 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   justify-content: center;
   gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 28px;
+  /* as wide as its two buttons (still centred), so the guide lights up the buttons
+     and not an empty full-width strip */
+  width: -moz-fit-content; width: fit-content;
+  margin: 0 auto 28px;
 }
 .lang-btn {
   font-family: var(--font-display);
@@ -2132,92 +2143,111 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
   .sozle-msg { min-height: 20px; margin-bottom: 6px; font-size: 0.85rem; }
 }
 
-/* ===== HELP PANEL (the "?" button in the nav) =====
-   Desktop: a card that hangs under the button (top / right are set from JS).
-   Phones: a sheet that slides up from the bottom over a dimmed page. */
-.help-backdrop { display: none; }
-.help-panel {
-  position: fixed;
-  z-index: 900;
-  width: 348px; max-width: calc(100vw - 24px);
-  max-height: calc(100vh - 110px);
-  overflow-y: auto;
-  background: linear-gradient(135deg, var(--bg-elevated-2), var(--bg-elevated));
+/* ===== GUIDE (the "?" button in the nav) — a spotlight tour =====
+   .tour-catch  an invisible sheet over the whole screen. It takes every click (a click
+                anywhere outside the caption closes the tour), so nothing on the page
+                under it can be pressed by accident.
+   .tour-hole   lies exactly over the element being explained. It is see-through;
+                its huge box-shadow is what dims the rest of the page.
+   .tour-card   the caption with Next / Skip.
+   The hole and the caption are placed in DOCUMENT coordinates (position: absolute, set
+   from JS), so the browser itself moves them when the page scrolls. Do NOT turn them
+   into position: fixed + a scroll listener: on phones that runs a frame behind the
+   finger and the light slides off the element. */
+.tour-catch {
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0;
+  z-index: 1090; /* above the feedback card (1000) */
+  -webkit-tap-highlight-color: transparent;
+}
+.tour-hole {
+  position: absolute;
+  z-index: 1091;
+  pointer-events: none;
+  border-radius: 14px;
+  box-shadow: 0 0 0 var(--tour-spread, 9999px) rgba(4, 5, 10, 0);
+  transition: box-shadow 0.22s ease,
+    top 0.3s cubic-bezier(0.3, 0.9, 0.3, 1), left 0.3s cubic-bezier(0.3, 0.9, 0.3, 1),
+    width 0.3s cubic-bezier(0.3, 0.9, 0.3, 1), height 0.3s cubic-bezier(0.3, 0.9, 0.3, 1);
+}
+.tour-hole.is-in { box-shadow: 0 0 0 var(--tour-spread, 9999px) rgba(4, 5, 10, 0.78); }
+.tour-hole.is-jump { transition: none; }
+.tour-hole::after { /* the bright edge of the light */
+  content: '';
+  position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+  border-radius: inherit;
+  border: 2px solid var(--teal-light);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.26), 0 0 28px rgba(99, 102, 241, 0.4);
+}
+/* While the tour is open the nav stays ABOVE it. A lit element that the visitor scrolls
+   up then slides under the nav like the rest of the page; with the nav under the tour,
+   the light was drawn across the nav bar. The links are faded and switched off (a click
+   on the nav closes the tour, like a click anywhere else); "?" stays lit.
+   No animation here — nothing on or inside .nav animates (see CLAUDE.md). */
+.nav.tour-on { z-index: 1095; }
+.nav.tour-on .brand, .nav.tour-on .nav-links, .nav.tour-on .nav-toggle { opacity: 0.3; pointer-events: none; }
+.tour-card {
+  position: absolute;
+  z-index: 1092;
+  width: 320px; max-width: calc(100vw - 24px);
+  padding: 15px 16px 12px;
+  background: var(--bg-elevated-2);
   border: 1px solid var(--border-strong);
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  padding: 18px 18px 16px;
+  border-radius: 16px;
+  box-shadow: 0 18px 44px -12px rgba(0, 0, 0, 0.8);
+  touch-action: manipulation; /* quick taps on Next must not zoom the page */
   opacity: 0;
-  transform: translateY(-6px);
-  transition: opacity 0.18s ease, transform 0.18s ease;
-  outline: none;
+  transform: translateY(6px);
 }
-.help-panel.is-open { opacity: 1; transform: none; }
-.help-panel h4 {
-  font-size: 0.68rem; font-weight: 800;
-  letter-spacing: 0.6px; text-transform: uppercase;
-  color: var(--teal-light);
-  margin-bottom: 8px;
+.tour-card.is-in { opacity: 1; transform: none; transition: opacity 0.2s ease, transform 0.2s ease; }
+/* the little pointer towards the element; --tour-caret is set from JS */
+.tour-card.is-below::before, .tour-card.is-above::before {
+  content: '';
+  position: absolute; left: var(--tour-caret, 50%);
+  width: 12px; height: 12px; margin-left: -6px;
+  background: var(--bg-elevated-2);
+  border: 1px solid var(--border-strong);
+  transform: rotate(45deg);
 }
-.help-panel h4:not(:first-of-type) { margin-top: 16px; }
-.help-close {
-  position: absolute; top: 12px; right: 12px;
-  width: 26px; height: 26px; border-radius: 50%;
-  background: var(--bg-elevated); border: 1px solid var(--border);
-  color: var(--text-dim); font-size: 0.75rem; line-height: 1;
+.tour-card.is-below::before { top: -7px; border-right-color: transparent; border-bottom-color: transparent; }
+.tour-card.is-above::before { bottom: -7px; border-left-color: transparent; border-top-color: transparent; }
+.tour-text {
+  font-size: 0.95rem; font-weight: 500; line-height: 1.45;
+  color: var(--text);
+  margin-bottom: 12px;
 }
-.help-close:hover { color: var(--text); border-color: var(--teal); }
-.help-tip {
-  display: flex; justify-content: space-between; align-items: center; gap: 14px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.86rem; line-height: 1.35;
-}
-.help-tip:last-child { border-bottom: none; }
-.help-tip span:first-child { color: var(--text); font-weight: 500; }
-.help-tip span:last-child { color: var(--text-dim); text-align: right; }
-.help-panel kbd {
+.tour-card kbd {
   display: inline-block; min-width: 22px; padding: 1px 7px;
   font-family: inherit; font-size: 0.74rem; font-weight: 700; text-align: center;
   color: var(--text);
-  background: var(--bg-elevated-2);
+  background: var(--bg-elevated);
   border: 1px solid var(--border-strong); border-bottom-width: 2px; border-radius: 6px;
 }
-.help-map { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.help-link {
-  display: flex; flex-direction: column; gap: 2px;
-  padding: 9px 11px;
-  background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
-  text-decoration: none;
-  transition: border-color 0.18s ease;
+.tour-row { display: flex; align-items: center; gap: 6px; }
+.tour-count {
+  margin-right: auto;
+  font-size: 0.74rem; font-weight: 700; letter-spacing: 0.4px;
+  color: var(--text-faint);
 }
-.help-link:last-child { grid-column: 1 / -1; }
-.help-link:hover { border-color: var(--teal); }
-.help-link.is-here { border-color: var(--teal-soft-border); background: var(--teal-soft); }
-.help-link b { font-family: var(--font-display); font-weight: 700; font-size: 0.82rem; color: var(--text); }
-.help-link i { font-style: normal; font-size: 0.72rem; line-height: 1.3; color: var(--text-faint); }
+.tour-skip, .tour-next {
+  min-height: 36px; padding: 0 14px;
+  border-radius: 999px;
+  font-size: 0.86rem; font-weight: 700; line-height: 1;
+}
+.tour-skip { color: var(--text-dim); font-weight: 600; }
+.tour-skip:hover { color: var(--text); }
+.tour-next { padding: 0 18px; background: var(--teal); color: var(--white); }
+.tour-next:hover { background: var(--teal-dark); }
+.tour-skip:focus, .tour-next:focus { outline: none; }
+/* .by-keys is set from JS once the keyboard is used: "Next" is focused on every step
+   (so Enter works), but a ring around it would only be noise for mouse and touch */
+.tour-card.by-keys .tour-skip:focus, .tour-card.by-keys .tour-next:focus { outline: 2px solid var(--teal-light); outline-offset: 2px; }
 @media (max-width: 768px) {
-  .help-backdrop {
-    display: block;
-    position: fixed; inset: 0; z-index: 890;
-    background: rgba(5, 7, 12, 0.6);
-    opacity: 0; transition: opacity 0.2s ease;
-  }
-  .help-backdrop.is-open { opacity: 1; }
-  .help-panel {
-    left: 0; right: 0; bottom: 0; top: auto;
-    width: auto; max-width: none;
-    max-height: 82vh;
-    border-radius: 22px 22px 0 0;
-    border-bottom: none;
-    padding: 22px 18px 24px;
-    transform: translateY(24px);
-  }
-  .help-tip { font-size: 0.9rem; padding: 10px 0; }
-  .help-close { top: 14px; right: 14px; width: 32px; height: 32px; }
+  .tour-text { font-size: 1rem; }
+  .tour-skip, .tour-next { min-height: 44px; } /* finger-sized */
 }
 @media (prefers-reduced-motion: reduce) {
-  .help-panel, .help-backdrop { transition: none; }
+  .tour-hole, .tour-card.is-in { transition: none; }
+  .tour-card { transform: none; }
 }
 
 /* ===== PAGINATION SCROLL TARGET =====

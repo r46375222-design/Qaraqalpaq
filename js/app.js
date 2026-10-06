@@ -1058,7 +1058,7 @@
     document.addEventListener('keydown', e => {
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       if (e.target && /^(input|textarea|select)$/i.test(e.target.tagName)) return; // don't steal typing from forms
-      if (e.target && e.target.closest && e.target.closest('#navHelp, #helpPanel')) return; // the guide, not the game
+      if (e.target && e.target.closest && e.target.closest('#navHelp, #tourCard')) return; // the guide, not the game
       if (e.key === 'Enter') {
         // Enter always submits the guess — it never "presses" a focused on-screen key
         if (e.target && e.target.closest && e.target.closest('.sozle-key')) e.preventDefault();
@@ -1714,133 +1714,315 @@
     }
   }
 
-  // ===== HELP PANEL ("?" in the nav) =====
-  // A short "how to use this site" guide: tips for the page you are on + a map of
-  // the site. Opens only when "?" is pressed. Phones get a sheet from the bottom.
+  // ===== GUIDE ("?" in the nav) — a spotlight tour =====
+  // Pressing "?" dims the page and lights up ONE real element at a time, with a short
+  // caption next to it and Next / Skip. It never opens by itself — only from "?".
   // Started right away (not in init), so it works before words.json has loaded.
   const HELP_SEEN_KEY = 'qaraqalpaq_help_seen';
+  const HELP_MAX_STEPS = 4;
   const K = t => `<kbd>${t}</kbd>`;
-  // [what you want to do, how — with a mouse and keyboard, how — on a touch screen]
+  // One step = [selector of the element to light up, caption for a mouse and keyboard,
+  //             caption for a touch screen].
+  // - no third item: the same caption on both;  null: no such step for that input.
+  // - a step whose element is missing or hidden is skipped silently, and only the first
+  //   HELP_MAX_STEPS of what is left are shown. So a page may list the steps of several
+  //   of its states (quiz: start screen / a question; Sózle: playing / finished).
   const HELP_TIPS = {
     index: [
-      ['Translate a word', 'type it in any language', 'type it in any language'],
-      ['No á ń ú keys?', 'plain letters work: salem', 'plain letters work: salem'],
-      ['Open it in the dictionary', 'Find in dictionary', 'Find in dictionary'],
-      ['Missing a word?', 'tell us below', 'tell us below'],
+      ['#translator .tr-pane-src', 'Type any word — the language is detected automatically.'],
+      ['.game-banner', 'A new Karakalpak word to guess every day.'],
+      ['#wordReq .wordreq', 'Missing a word or spotted a mistake? Tell us here.'],
     ],
     dictionary: [
-      ['See the translation', 'click a card', 'tap a card'],
-      ['Find a word', 'search in any of 3 languages', 'search in any of 3 languages'],
-      ['Show one topic', 'pick a category', 'pick a category'],
-      ['Keep a word', '✓ Mark as Learned', '✓ Mark as Learned'],
+      ['.search-wrap', 'Search in any of the 3 languages — plain letters work too: salem finds Sálem.'],
+      ['.pills-wrap', 'Pick a category to see one topic.'],
+      ['#wordGrid .word-card', 'Click a card to see the translation.', 'Tap a card to see the translation.'],
+      ['#wordGrid .word-card .learn-btn', 'Mark the words you know — your progress is saved on this device.'],
     ],
     flashcards: [
-      ['Flip the card', `${K('Space')} or click it`, 'tap it'],
-      ['Next / previous word', `${K('←')} ${K('→')}`, 'swipe left or right'],
-      ['Mix the order', 'Shuffle', 'Shuffle'],
-      ['Keep a word', '✓ Mark as Learned', '✓ Mark as Learned'],
+      ['#flashcard', `Click the card or press ${K('Space')} to flip it.`, 'Tap the card to flip it.'],
+      ['#flashNext', `Next word: this arrow, or ${K('←')} ${K('→')} on your keyboard.`, null],
+      ['.flash-stage', null, 'Swipe the card left or right — or tap the arrows — for another word.'],
+      ['#flashShuffle', 'Shuffle mixes the order of the cards.'],
+      ['#flashLearnBtn', 'Mark the words you know — your progress is saved on this device.'],
     ],
     quiz: [
-      ['Answer', 'pick one of 4 options', 'pick one of 4 options'],
-      ['Answers in Russian', 'switch English / Русский', 'switch English / Русский'],
-      ['One topic only', 'choose a category first', 'choose a category first'],
+      ['#quizLangToggle', 'Choose the language of the answers: English or Русский.'],
+      ['#quizCategory', 'Pick one topic — or keep all categories.'],
+      ['#quizStart', 'Every question gives you 4 options, one of them is right.'],
+      ['#quizOptions', 'Pick the right translation — one of the 4 is correct.'],
+      ['.quiz-top', 'Your score, and your streak of right answers in a row.'],
     ],
     game: [
-      ['Type a letter', 'your keyboard, any layout', 'tap the keys'],
-      ['á ǵ ı ń ó ú', `the letter, then ${K("'")}`, 'they are on the keyboard'],
-      ['Check your guess', K('Enter'), 'ENTER'],
-      ['Colours', '🟩 right spot · 🟨 wrong spot', '🟩 right spot · 🟨 wrong spot'],
-      ['Stuck?', '💡 Hint shows the meaning', '💡 Hint shows the meaning'],
+      ['#sozleBoard', 'Six tries to guess the 5-letter word: 🟩 right spot, 🟨 wrong spot.'],
+      ['#sozleKeys', `Type on your own keyboard, in any layout — for á ǵ ı ń ó ú press the letter, then ${K("'")}.`,
+        'Tap the letters — á ǵ ı ń ó ú have their own keys — then ENTER.'],
+      ['#sozleHint', 'Stuck? The hint shows what the word means.'],
+      ['#sozleFree', 'Done for today? Play a random word — it does not change your stats.'],
+      ['#sozleStats', 'Games played, wins, and your 🔥 streak of daily wins.'],
     ],
   };
-  const HELP_MAP = [
-    ['index', 'index.html#translator-home', 'Translator', 'Type in any of 3 languages'],
-    ['dictionary', 'dictionary.html', 'Dictionary', 'Every word, search and categories'],
-    ['flashcards', 'flashcards.html', 'Flashcards', 'Flip and memorise'],
-    ['quiz', 'quiz.html', 'Quiz', '4 options, one right'],
-    ['game', 'game.html', 'Sózle', 'Guess the daily word in 6 tries'],
-  ];
 
   function initHelp() {
     const btn = $('#navHelp');
     if (!btn) return;
     const page = (location.pathname.split('/').pop() || 'index.html').replace('.html', '') || 'index';
-    let panel = null, backdrop = null;
+    const root = document.documentElement;
+    const nav = $('.nav');
+    const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const PAD = 6;    // air between the element and the edge of the light
+    const GAP = 12;   // between the light and the caption
+    const EDGE = 12;  // the caption never comes closer to the side of the screen
+
     let seen = false;
     try { seen = !!localStorage.getItem(HELP_SEEN_KEY); } catch (e) {}
     if (!seen) btn.classList.add('is-new'); // small dot until the guide has been opened once
 
-    function build() {
+    let ui = null;            // the three layers, built on first use
+    let steps = [], at = 0;   // steps = [{ el, html }], at = the one on screen
+    let mode = '';            // where the caption sits: below / above / over the element
+    let goalY = 0;            // the scroll position this step was laid out for
+    let drawn = null;         // where the light was last drawn — to notice the element moving
+    let raf = 0, lastW = 0, byKeyboard = false;
+    const isOpen = () => !!ui && !ui.card.hidden;
+
+    // On screen right now? (exists, not display:none / [hidden], has a size, not visibility:hidden)
+    function visible(el) {
+      if (!el || !el.getClientRects().length) return false;
+      const r = el.getBoundingClientRect();
+      return r.width >= 2 && r.height >= 2 && getComputedStyle(el).visibility !== 'hidden';
+    }
+
+    function collect() {
       const touch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
-      const tips = (HELP_TIPS[page] || HELP_TIPS.index)
-        .map(([what, mouse, finger]) => `<div class="help-tip"><span>${what}</span><span>${touch ? finger : mouse}</span></div>`).join('');
-      const map = HELP_MAP.map(([id, href, name, text]) => {
-        const sub = id === 'dictionary' && WORDS.length ? `${WORDS.length.toLocaleString()} words, search and categories` : text;
-        return `<a class="help-link${id === page ? ' is-here' : ''}" href="${href}"><b>${name}</b><i>${sub}</i></a>`;
-      }).join('');
-      panel.innerHTML = `
-        <button class="help-close" type="button" aria-label="Close">✕</button>
-        <h4>On this page</h4>
-        <div class="help-tips">${tips}</div>
-        <h4>Where things are</h4>
-        <div class="help-map">${map}</div>`;
-    }
-
-    // Desktop: the panel hangs under the "?" button. Phones: CSS turns it into a bottom sheet.
-    function place() {
-      if (!panel || panel.hidden) return;
-      if (window.innerWidth <= 768) { panel.style.top = panel.style.right = ''; return; }
-      const r = btn.getBoundingClientRect();
-      panel.style.top = Math.max(12, Math.round(r.bottom + 14)) + 'px'; // stays on screen if the nav scrolls away
-      // clientWidth, not innerWidth: a fixed element's `right` is measured from the inside of the scrollbar
-      panel.style.right = Math.max(12, Math.round(document.documentElement.clientWidth - r.right)) + 'px';
-    }
-
-    function open(byKeyboard) {
-      if (!panel) {
-        backdrop = document.createElement('div');
-        backdrop.className = 'help-backdrop';
-        panel = document.createElement('div');
-        panel.className = 'help-panel';
-        panel.id = 'helpPanel';
-        panel.tabIndex = -1;
-        panel.setAttribute('role', 'dialog');
-        panel.setAttribute('aria-label', 'How to use this site');
-        document.body.append(backdrop, panel); // on <body>, not inside .nav (its blur would trap a fixed child)
-        backdrop.addEventListener('click', close);
-        panel.addEventListener('click', e => { if (e.target.closest('.help-close')) close(); });
+      const out = [];
+      for (const [sel, mouse, finger = mouse] of (HELP_TIPS[page] || [])) {
+        const html = touch ? finger : mouse;
+        if (!html) continue;
+        const el = $$(sel).find(visible);
+        if (el) out.push({ el, html });
+        if (out.length === HELP_MAX_STEPS) break;
       }
-      build();
-      backdrop.hidden = panel.hidden = false;
-      place();
-      void panel.offsetWidth; // commit the closed state first so the fade-in runs (no rAF: it never fires in a hidden tab)
-      backdrop.classList.add('is-open'); panel.classList.add('is-open');
+      return out;
+    }
+
+    function build() {
+      const mk = cls => { const d = document.createElement('div'); d.className = cls; return d; };
+      const catcher = mk('tour-catch'), hole = mk('tour-hole'), card = mk('tour-card');
+      card.id = 'tourCard';
+      card.setAttribute('role', 'dialog');
+      card.setAttribute('aria-modal', 'true');
+      card.setAttribute('aria-label', 'How to use this page');
+      card.innerHTML = `
+        <p class="tour-text" aria-live="polite"></p>
+        <div class="tour-row">
+          <span class="tour-count"></span>
+          <button class="tour-skip" type="button">Skip</button>
+          <button class="tour-next" type="button"></button>
+        </div>`;
+      document.body.append(catcher, hole, card); // on <body>, not inside .nav (its blur would trap them)
+      ui = { catcher, hole, card, text: $('.tour-text', card), count: $('.tour-count', card), skip: $('.tour-skip', card), next: $('.tour-next', card) };
+      catcher.addEventListener('click', close); // a click anywhere outside the caption
+      ui.skip.addEventListener('click', close);
+      ui.next.addEventListener('click', () => go(1));
+    }
+
+    function scrollPage(y) {
+      if (!calm.matches) { window.scrollTo({ top: y, behavior: 'smooth' }); return; }
+      const was = root.style.scrollBehavior;
+      root.style.scrollBehavior = 'auto'; // <html> is scroll-behavior: smooth in the stylesheet
+      window.scrollTo(0, y);
+      root.style.scrollBehavior = was;
+    }
+
+    // Puts the light over the current element and the caption next to it.
+    // Everything is in DOCUMENT coordinates (position: absolute), so the browser moves
+    // both with the page while it scrolls — nothing to keep in sync from a scroll event,
+    // which on phones always runs a frame behind the finger.
+    // rescroll = bring the element into view (a new step); false = only follow it.
+    function place(rescroll) {
+      const el = steps[at].el;
+      const { hole, card } = ui;
+      const vw = root.clientWidth, vh = window.innerHeight; // clientWidth: without the scrollbar
+      const sx = window.pageXOffset, sy = window.pageYOffset;
+      const docH = Math.max(root.scrollHeight, vh);
+      const r = el.getBoundingClientRect();
+
+      const left = Math.max(4, r.left - PAD), right = Math.min(vw - 4, r.right + PAD);
+      const top = r.top + sy - PAD, height = r.height + PAD * 2, bottom = top + height;
+      // corner rounding: the element's own, or that of a child that fills it
+      // (the flashcard's rounding is on its faces, not on the card)
+      let radius = 0;
+      for (let n = el, i = 0; n && i < 3; n = n.firstElementChild, i++) {
+        const nr = n.getBoundingClientRect();
+        if (Math.abs(nr.width - r.width) > 2 || Math.abs(nr.height - r.height) > 2) break;
+        radius = Math.max(radius, parseFloat(getComputedStyle(n).borderTopLeftRadius) || 0);
+      }
+      hole.style.left = Math.round(left + sx) + 'px';
+      hole.style.top = Math.round(top) + 'px';
+      hole.style.width = Math.round(right - left) + 'px';
+      hole.style.height = Math.round(height) + 'px';
+      hole.style.borderRadius = Math.max(10, Math.min(radius + PAD, height / 2, (right - left) / 2)) + 'px';
+      // the shadow that dims the page has to reach its far ends from wherever the light is
+      hole.style.setProperty('--tour-spread', Math.ceil(Math.max(docH, vw)) + 'px');
+      drawn = { x: r.left + sx, y: r.top + sy, w: r.width, h: r.height, docH };
+
+      const cw = card.offsetWidth, ch = card.offsetHeight;
+      const navH = nav && /sticky|fixed/.test(getComputedStyle(nav).position) ? nav.offsetHeight : 0;
+      const bandTop = navH + 10, bandBot = vh - 10; // the part of the screen that is free
+      const maxScroll = Math.max(0, docH - vh);
+      // Scroll position at which a block (the light + the caption) is fully on screen, or
+      // null if it cannot be. Already on screen — stay where we are; otherwise centre it
+      // (centred, the next step is usually on screen too, so the page jumps less often).
+      const fit = (a, b) => {
+        const spare = (bandBot - bandTop) - (b - a);
+        if (spare < 0) return null;
+        let y = sy;
+        if (a < sy + bandTop || b > sy + bandBot) y = a - bandTop - spare / 2;
+        y = Math.min(maxScroll, Math.max(0, Math.round(y)));
+        return a >= y + bandTop - 1 && b <= y + bandBot + 1 ? y : null;
+      };
+      if (rescroll || !mode) {
+        let y = sy;
+        // The caption goes under the element; above it only when that spares a scroll
+        // (or when there is no room under it at all).
+        const below = fit(top, bottom + GAP + ch), above = fit(top - GAP - ch, bottom);
+        if (below !== null && (below === sy || above !== sy)) { mode = 'below'; y = below; }
+        else if (above !== null) { mode = 'above'; y = above; }
+        else {
+          // the element is too tall to share the screen with the caption:
+          // the caption goes over its lower edge
+          mode = 'over';
+          const own = fit(top, bottom);
+          y = own !== null ? own : Math.min(maxScroll, Math.max(0, Math.round(top - bandTop)));
+        }
+        goalY = y;
+      }
+      let cTop;
+      if (mode === 'below') cTop = bottom + GAP;
+      else if (mode === 'above') cTop = top - GAP - ch;
+      else cTop = Math.max(top + 8, Math.min(bottom - ch - 8, goalY + bandBot - ch));
+      const mid = r.left + r.width / 2;
+      const cLeft = Math.min(Math.max(EDGE, vw - EDGE - cw), Math.max(EDGE, mid - cw / 2));
+      card.style.left = Math.round(cLeft + sx) + 'px';
+      card.style.top = Math.round(cTop) + 'px';
+      card.style.setProperty('--tour-caret', Math.round(Math.min(cw - 24, Math.max(24, mid - cLeft))) + 'px');
+      card.classList.toggle('is-below', mode === 'below');
+      card.classList.toggle('is-above', mode === 'above');
+      if (rescroll && goalY !== sy) scrollPage(goalY);
+    }
+
+    function render(first) {
+      const last = at === steps.length - 1;
+      ui.text.innerHTML = steps[at].html;
+      ui.count.textContent = steps.length > 1 ? `${at + 1} / ${steps.length}` : '';
+      ui.next.innerHTML = last ? 'Done' : 'Next <span aria-hidden="true">→</span>';
+      ui.skip.hidden = last; // nothing left to skip
+      mode = '';
+      ui.card.classList.remove('is-in');
+      if (first) ui.hole.classList.add('is-jump'); // appear in place, do not glide in from the corner
+      place(true);
+      void ui.card.offsetWidth; // commit this state so the fade-in runs (no rAF: it never fires in a hidden tab)
+      ui.hole.classList.remove('is-jump');
+      ui.card.classList.add('is-in');
+      ui.hole.classList.add('is-in');
+      if (ui.card.contains(document.activeElement) || first) ui.next.focus({ preventScroll: true });
+    }
+
+    // dir = +1 / -1. Elements that have gone since the tour was opened are stepped over.
+    function go(dir) {
+      let i = at + dir;
+      while (i >= 0 && i < steps.length && !visible(steps[i].el)) i += dir;
+      if (i >= steps.length) { close(); return; }
+      if (i < 0) return;
+      at = i;
+      render(false);
+    }
+
+    // While the tour is open: has the lit element moved (fonts or words arriving, a card
+    // re-rendering) or gone? One measurement per frame; nothing runs when it is closed.
+    function follow() {
+      if (!isOpen()) return;
+      raf = requestAnimationFrame(follow);
+      const el = steps[at].el;
+      if (!visible(el)) { go(1); return; }
+      const r = el.getBoundingClientRect();
+      const x = r.left + window.pageXOffset, y = r.top + window.pageYOffset;
+      if (Math.abs(x - drawn.x) > 1 || Math.abs(y - drawn.y) > 1 || Math.abs(r.width - drawn.w) > 1 ||
+          Math.abs(r.height - drawn.h) > 1 || Math.max(root.scrollHeight, window.innerHeight) !== drawn.docH) place(false);
+    }
+
+    function open(viaKeyboard) {
+      if (nav) nav.classList.remove('menu-open'); // the phone menu would cover the page
+      steps = collect();
+      if (!steps.length) return;
+      if (!ui) build();
+      if (nav) nav.classList.add('tour-on'); // lifts the nav above the tour and fades its links (see the stylesheet)
+      byKeyboard = viaKeyboard;
+      ui.card.classList.toggle('by-keys', viaKeyboard); // focus rings only for keyboard users
+      at = 0;
+      lastW = root.clientWidth;
+      ui.catcher.hidden = ui.hole.hidden = ui.card.hidden = false;
+      render(true);
       btn.setAttribute('aria-expanded', 'true');
       btn.classList.remove('is-new');
       try { localStorage.setItem(HELP_SEEN_KEY, '1'); } catch (e) {}
-      if (byKeyboard) panel.focus();
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(follow);
     }
 
     function close() {
-      if (!panel || panel.hidden) return;
-      backdrop.classList.remove('is-open'); panel.classList.remove('is-open');
-      backdrop.hidden = panel.hidden = true;
+      if (!isOpen()) return;
+      cancelAnimationFrame(raf);
+      const hadFocus = ui.card.contains(document.activeElement);
+      ui.catcher.hidden = ui.hole.hidden = ui.card.hidden = true;
+      ui.card.classList.remove('is-in');
+      ui.hole.classList.remove('is-in');
+      if (nav) nav.classList.remove('tour-on');
       btn.setAttribute('aria-expanded', 'false');
-      if (panel.contains(document.activeElement)) btn.focus();
+      // Keyboard users go back to "?". After a mouse or a finger nothing keeps the focus —
+      // on the Sózle page the next Enter must check the guess, not reopen the guide.
+      if (byKeyboard) btn.focus({ preventScroll: true });
+      else if (hadFocus && document.activeElement) document.activeElement.blur();
     }
 
-    // A mouse press must not leave keyboard focus on "?" — on the Sózle page the next
-    // Enter would then open the guide instead of only checking the guess
+    // A mouse press must not leave keyboard focus on "?" (same Sózle reason as above)
     btn.addEventListener('mousedown', e => e.preventDefault());
-    btn.addEventListener('click', e => (panel && !panel.hidden) ? close() : open(e.detail === 0));
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
-    document.addEventListener('click', e => {
-      if (!panel || panel.hidden) return;
-      if (e.target.closest('#helpPanel, #navHelp')) return;
+    btn.addEventListener('click', e => isOpen() ? close() : open(e.detail === 0));
+    // The nav stays above the tour, so the sheet that catches clicks does not cover it:
+    // a click on the nav (anywhere but "?") closes the tour too, and does nothing else.
+    if (nav) nav.addEventListener('click', e => {
+      if (!isOpen() || e.target.closest('#navHelp')) return;
+      e.preventDefault();
+      e.stopPropagation();
       close();
-    });
-    window.addEventListener('resize', place, { passive: true });
-    window.addEventListener('scroll', place, { passive: true });
+    }, true);
+    // Capture phase + stopPropagation: while the tour is open the page under it
+    // (Sózle typing, flashcard arrows and Space) must not react to the keyboard.
+    document.addEventListener('keydown', e => {
+      if (!isOpen()) return;
+      e.stopPropagation();
+      if (/^(Tab|Arrow)/.test(e.key)) ui.card.classList.add('by-keys');
+      if (e.key === 'Escape') { e.preventDefault(); close(); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+      else if (e.key === 'Tab') { // only two things to tab between
+        e.preventDefault();
+        (document.activeElement === ui.next && !ui.skip.hidden ? ui.skip : ui.next).focus({ preventScroll: true });
+      }
+    }, true);
+    // A new width (rotation, window resize) can hide or reveal elements and changes where
+    // everything is. A new height alone is the phone's address bar sliding — ignore it,
+    // or the page would be scrolled back under the visitor's finger.
+    window.addEventListener('resize', () => {
+      if (!isOpen() || root.clientWidth === lastW) return;
+      lastW = root.clientWidth;
+      const el = steps[at].el;
+      steps = collect();
+      if (!steps.length) { close(); return; }
+      at = Math.max(0, steps.findIndex(s => s.el === el));
+      render(false);
+    }, { passive: true });
   }
   initHelp();
 
