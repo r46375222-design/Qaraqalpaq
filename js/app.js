@@ -120,10 +120,10 @@
     if (!el) return;
     el.innerHTML = `
       <div class="progress-widget-grid">
-        <div class="pw-stat"><span class="pw-num">${wordsLearnedToday()}</span><span class="pw-label">Learned Today</span></div>
-        <div class="pw-stat"><span class="pw-num">${totalWordsLearned()}</span><span class="pw-label">Total Learned</span></div>
-        <div class="pw-stat"><span class="pw-num">${currentStreak()}</span><span class="pw-label">Day Streak</span></div>
-        <div class="pw-stat"><span class="pw-num">${PROGRESS.quizBestScore || 0}</span><span class="pw-label">Quiz Best</span></div>
+        <div class="pw-stat"><span class="pw-icon" aria-hidden="true">✅</span><span class="pw-num">${wordsLearnedToday()}</span><span class="pw-label">Learned Today</span></div>
+        <div class="pw-stat"><span class="pw-icon" aria-hidden="true">🧠</span><span class="pw-num">${totalWordsLearned()}</span><span class="pw-label">Total Learned</span></div>
+        <div class="pw-stat"><span class="pw-icon" aria-hidden="true">🔥</span><span class="pw-num">${currentStreak()}</span><span class="pw-label">Day Streak</span></div>
+        <div class="pw-stat"><span class="pw-icon" aria-hidden="true">🏆</span><span class="pw-num">${PROGRESS.quizBestScore || 0}</span><span class="pw-label">Quiz Best</span></div>
       </div>`;
   }
 
@@ -1058,6 +1058,7 @@
     document.addEventListener('keydown', e => {
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       if (e.target && /^(input|textarea|select)$/i.test(e.target.tagName)) return; // don't steal typing from forms
+      if (e.target && e.target.closest && e.target.closest('#navHelp, #helpPanel')) return; // the guide, not the game
       if (e.key === 'Enter') {
         // Enter always submits the guess — it never "presses" a focused on-screen key
         if (e.target && e.target.closest && e.target.closest('.sozle-key')) e.preventDefault();
@@ -1251,25 +1252,26 @@
     const id = wordId(w);
     const learned = isLearned(id);
     const learnBtnHtml = `<button class="learn-btn" data-id="${escapeAttr(id)}">${learned ? '✓ Learned' : 'Mark as Learned'}</button>`;
-    // The ✓ badge lives INSIDE each face, so it turns with the card. As a child of
-    // .word-card it stayed put in the corner while the card rotated under it.
+    // The ✓ badge lives INSIDE each face, so it turns with the card (as a child of
+    // .word-card it stayed put in the corner while the card rotated under it), and it
+    // is the LAST ITEM OF THE TOP ROW, so a long category pill shortens with "…"
+    // instead of sliding under the badge.
     const badgeHtml = '<span class="learned-badge" aria-hidden="true">✓</span>';
     return `
       <div class="word-card${learned ? ' is-learned' : ''}" style="--accent:${accent}">
         <div class="word-card-inner">
           <div class="word-card-face word-card-front">
-            ${badgeHtml}
             <div class="word-card-top">
               <span class="word-card-icon">${icon}</span>
-              <span class="word-cat-badge">${escapeHtml(w.category)}</span>
+              <span class="word-cat-badge" title="${escapeAttr(w.category)}">${escapeHtml(w.category)}</span>
+              ${badgeHtml}
             </div>
             <span class="word-kk">${escapeHtml(w.kk)}</span>
             <span class="word-flip-hint">Tap to reveal ⟳</span>
             ${learnBtnHtml}
           </div>
           <div class="word-card-face word-card-back">
-            ${badgeHtml}
-            <div class="word-card-top"><span class="word-card-icon">${icon}</span></div>
+            <div class="word-card-top"><span class="word-card-icon">${icon}</span>${badgeHtml}</div>
             <div class="word-card-trans">
               <span class="word-en">${escapeHtml(w.en)}</span>
               <span class="word-ru">${escapeHtml(w.ru)}</span>
@@ -1711,6 +1713,136 @@
       }
     }
   }
+
+  // ===== HELP PANEL ("?" in the nav) =====
+  // A short "how to use this site" guide: tips for the page you are on + a map of
+  // the site. Opens only when "?" is pressed. Phones get a sheet from the bottom.
+  // Started right away (not in init), so it works before words.json has loaded.
+  const HELP_SEEN_KEY = 'qaraqalpaq_help_seen';
+  const K = t => `<kbd>${t}</kbd>`;
+  // [what you want to do, how — with a mouse and keyboard, how — on a touch screen]
+  const HELP_TIPS = {
+    index: [
+      ['Translate a word', 'type it in any language', 'type it in any language'],
+      ['No á ń ú keys?', 'plain letters work: salem', 'plain letters work: salem'],
+      ['Open it in the dictionary', 'Find in dictionary', 'Find in dictionary'],
+      ['Missing a word?', 'tell us below', 'tell us below'],
+    ],
+    dictionary: [
+      ['See the translation', 'click a card', 'tap a card'],
+      ['Find a word', 'search in any of 3 languages', 'search in any of 3 languages'],
+      ['Show one topic', 'pick a category', 'pick a category'],
+      ['Keep a word', '✓ Mark as Learned', '✓ Mark as Learned'],
+    ],
+    flashcards: [
+      ['Flip the card', `${K('Space')} or click it`, 'tap it'],
+      ['Next / previous word', `${K('←')} ${K('→')}`, 'swipe left or right'],
+      ['Mix the order', 'Shuffle', 'Shuffle'],
+      ['Keep a word', '✓ Mark as Learned', '✓ Mark as Learned'],
+    ],
+    quiz: [
+      ['Answer', 'pick one of 4 options', 'pick one of 4 options'],
+      ['Answers in Russian', 'switch English / Русский', 'switch English / Русский'],
+      ['One topic only', 'choose a category first', 'choose a category first'],
+    ],
+    game: [
+      ['Type a letter', 'your keyboard, any layout', 'tap the keys'],
+      ['á ǵ ı ń ó ú', `the letter, then ${K("'")}`, 'they are on the keyboard'],
+      ['Check your guess', K('Enter'), 'ENTER'],
+      ['Colours', '🟩 right spot · 🟨 wrong spot', '🟩 right spot · 🟨 wrong spot'],
+      ['Stuck?', '💡 Hint shows the meaning', '💡 Hint shows the meaning'],
+    ],
+  };
+  const HELP_MAP = [
+    ['index', 'index.html#translator-home', 'Translator', 'Type in any of 3 languages'],
+    ['dictionary', 'dictionary.html', 'Dictionary', 'Every word, search and categories'],
+    ['flashcards', 'flashcards.html', 'Flashcards', 'Flip and memorise'],
+    ['quiz', 'quiz.html', 'Quiz', '4 options, one right'],
+    ['game', 'game.html', 'Sózle', 'Guess the daily word in 6 tries'],
+  ];
+
+  function initHelp() {
+    const btn = $('#navHelp');
+    if (!btn) return;
+    const page = (location.pathname.split('/').pop() || 'index.html').replace('.html', '') || 'index';
+    let panel = null, backdrop = null;
+    let seen = false;
+    try { seen = !!localStorage.getItem(HELP_SEEN_KEY); } catch (e) {}
+    if (!seen) btn.classList.add('is-new'); // small dot until the guide has been opened once
+
+    function build() {
+      const touch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+      const tips = (HELP_TIPS[page] || HELP_TIPS.index)
+        .map(([what, mouse, finger]) => `<div class="help-tip"><span>${what}</span><span>${touch ? finger : mouse}</span></div>`).join('');
+      const map = HELP_MAP.map(([id, href, name, text]) => {
+        const sub = id === 'dictionary' && WORDS.length ? `${WORDS.length.toLocaleString()} words, search and categories` : text;
+        return `<a class="help-link${id === page ? ' is-here' : ''}" href="${href}"><b>${name}</b><i>${sub}</i></a>`;
+      }).join('');
+      panel.innerHTML = `
+        <button class="help-close" type="button" aria-label="Close">✕</button>
+        <h4>On this page</h4>
+        <div class="help-tips">${tips}</div>
+        <h4>Where things are</h4>
+        <div class="help-map">${map}</div>`;
+    }
+
+    // Desktop: the panel hangs under the "?" button. Phones: CSS turns it into a bottom sheet.
+    function place() {
+      if (!panel || panel.hidden) return;
+      if (window.innerWidth <= 768) { panel.style.top = panel.style.right = ''; return; }
+      const r = btn.getBoundingClientRect();
+      panel.style.top = Math.max(12, Math.round(r.bottom + 14)) + 'px'; // stays on screen if the nav scrolls away
+      // clientWidth, not innerWidth: a fixed element's `right` is measured from the inside of the scrollbar
+      panel.style.right = Math.max(12, Math.round(document.documentElement.clientWidth - r.right)) + 'px';
+    }
+
+    function open(byKeyboard) {
+      if (!panel) {
+        backdrop = document.createElement('div');
+        backdrop.className = 'help-backdrop';
+        panel = document.createElement('div');
+        panel.className = 'help-panel';
+        panel.id = 'helpPanel';
+        panel.tabIndex = -1;
+        panel.setAttribute('role', 'dialog');
+        panel.setAttribute('aria-label', 'How to use this site');
+        document.body.append(backdrop, panel); // on <body>, not inside .nav (its blur would trap a fixed child)
+        backdrop.addEventListener('click', close);
+        panel.addEventListener('click', e => { if (e.target.closest('.help-close')) close(); });
+      }
+      build();
+      backdrop.hidden = panel.hidden = false;
+      place();
+      void panel.offsetWidth; // commit the closed state first so the fade-in runs (no rAF: it never fires in a hidden tab)
+      backdrop.classList.add('is-open'); panel.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      btn.classList.remove('is-new');
+      try { localStorage.setItem(HELP_SEEN_KEY, '1'); } catch (e) {}
+      if (byKeyboard) panel.focus();
+    }
+
+    function close() {
+      if (!panel || panel.hidden) return;
+      backdrop.classList.remove('is-open'); panel.classList.remove('is-open');
+      backdrop.hidden = panel.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+      if (panel.contains(document.activeElement)) btn.focus();
+    }
+
+    // A mouse press must not leave keyboard focus on "?" — on the Sózle page the next
+    // Enter would then open the guide instead of only checking the guess
+    btn.addEventListener('mousedown', e => e.preventDefault());
+    btn.addEventListener('click', e => (panel && !panel.hidden) ? close() : open(e.detail === 0));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+    document.addEventListener('click', e => {
+      if (!panel || panel.hidden) return;
+      if (e.target.closest('#helpPanel, #navHelp')) return;
+      close();
+    });
+    window.addEventListener('resize', place, { passive: true });
+    window.addEventListener('scroll', place, { passive: true });
+  }
+  initHelp();
 
   // ===== UTIL =====
   function shuffle(arr) {

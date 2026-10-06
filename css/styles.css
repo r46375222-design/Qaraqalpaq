@@ -248,6 +248,33 @@ input, select { font-family: inherit; }
 .nav-toggle { display: none; flex-direction: column; gap: 5px; width: 28px; }
 .nav-toggle span { display: block; height: 2.5px; width: 100%; background: var(--text); border-radius: 2px; }
 
+/* "?" — opens the short how-to-use guide (see HELP PANEL near the end of this file).
+   No animation here on purpose: nothing inside .nav animates (see the .nav rule in CLAUDE.md). */
+.nav-links { margin-left: auto; } /* links stay on the right now that "?" follows them */
+.nav-help {
+  position: relative;
+  flex-shrink: 0;
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--teal-soft-border);
+  background: var(--teal-soft);
+  color: var(--teal-light);
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 0.95rem; line-height: 1;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+.nav-help:hover, .nav-help[aria-expanded="true"] { background: var(--teal); color: var(--white); }
+.nav-help:focus-visible { outline: 2px solid var(--teal-light); outline-offset: 2px; }
+/* a quiet dot until the guide has been opened once */
+.nav-help.is-new::after {
+  content: '';
+  position: absolute; top: -1px; right: -1px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #fbbf24;
+  border: 2px solid var(--bg-deep);
+}
+
 /* ===== NAV — scroll pill (index.html, dictionary.html only) =====
    Floats transparent and full-width by default; shrinks into a centered,
    blurred pill once the page scrolls past 50px. */
@@ -762,7 +789,12 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 }
 .word-card:hover .word-card-face { border-color: var(--border-strong); box-shadow: var(--shadow); }
 .word-card-back { transform: rotateY(180deg); background: var(--bg-elevated-2); }
-.word-card-top { display: flex; align-items: center; gap: 8px; }
+.word-card-top { display: flex; align-items: center; gap: 8px; min-height: 24px; }
+/* On dictionary cards the ✓ badge is the last flex item of the top row instead of an
+   absolutely positioned corner mark: the category pill gives way to it (ellipsis)
+   and can never end up underneath. min-height above = badge height, so marking a
+   word as learned does not nudge the card's content. */
+.word-card .learned-badge { position: static; margin-left: auto; flex-shrink: 0; }
 .word-card-icon { font-size: 1.3rem; line-height: 1; }
 .word-cat-badge {
   font-size: 0.62rem;
@@ -1433,6 +1465,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   text-align: center;
   box-shadow: var(--shadow-soft);
 }
+.pw-icon { display: block; font-size: 1.25rem; line-height: 1; margin-bottom: 8px; }
 .pw-num {
   display: block;
   font-family: var(--font-display);
@@ -1461,6 +1494,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 
 @media (max-width: 768px) {
   .nav-links { display: none; }
+  .nav-help { margin-left: auto; width: 38px; height: 38px; } /* links are hidden here: push "?" and the menu button to the right */
   .nav-toggle { display: flex; padding: 12px 4px; margin: -12px -4px; }
   .nav.menu-open .nav-links {
     display: flex;
@@ -2096,6 +2130,94 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
     font-size: clamp(1rem, calc((100dvh - var(--sozle-chrome)) / 13.5), 1.35rem);
   }
   .sozle-msg { min-height: 20px; margin-bottom: 6px; font-size: 0.85rem; }
+}
+
+/* ===== HELP PANEL (the "?" button in the nav) =====
+   Desktop: a card that hangs under the button (top / right are set from JS).
+   Phones: a sheet that slides up from the bottom over a dimmed page. */
+.help-backdrop { display: none; }
+.help-panel {
+  position: fixed;
+  z-index: 900;
+  width: 348px; max-width: calc(100vw - 24px);
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
+  background: linear-gradient(135deg, var(--bg-elevated-2), var(--bg-elevated));
+  border: 1px solid var(--border-strong);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 18px 18px 16px;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  outline: none;
+}
+.help-panel.is-open { opacity: 1; transform: none; }
+.help-panel h4 {
+  font-size: 0.68rem; font-weight: 800;
+  letter-spacing: 0.6px; text-transform: uppercase;
+  color: var(--teal-light);
+  margin-bottom: 8px;
+}
+.help-panel h4:not(:first-of-type) { margin-top: 16px; }
+.help-close {
+  position: absolute; top: 12px; right: 12px;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  color: var(--text-dim); font-size: 0.75rem; line-height: 1;
+}
+.help-close:hover { color: var(--text); border-color: var(--teal); }
+.help-tip {
+  display: flex; justify-content: space-between; align-items: center; gap: 14px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.86rem; line-height: 1.35;
+}
+.help-tip:last-child { border-bottom: none; }
+.help-tip span:first-child { color: var(--text); font-weight: 500; }
+.help-tip span:last-child { color: var(--text-dim); text-align: right; }
+.help-panel kbd {
+  display: inline-block; min-width: 22px; padding: 1px 7px;
+  font-family: inherit; font-size: 0.74rem; font-weight: 700; text-align: center;
+  color: var(--text);
+  background: var(--bg-elevated-2);
+  border: 1px solid var(--border-strong); border-bottom-width: 2px; border-radius: 6px;
+}
+.help-map { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.help-link {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 9px 11px;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
+  text-decoration: none;
+  transition: border-color 0.18s ease;
+}
+.help-link:last-child { grid-column: 1 / -1; }
+.help-link:hover { border-color: var(--teal); }
+.help-link.is-here { border-color: var(--teal-soft-border); background: var(--teal-soft); }
+.help-link b { font-family: var(--font-display); font-weight: 700; font-size: 0.82rem; color: var(--text); }
+.help-link i { font-style: normal; font-size: 0.72rem; line-height: 1.3; color: var(--text-faint); }
+@media (max-width: 768px) {
+  .help-backdrop {
+    display: block;
+    position: fixed; inset: 0; z-index: 890;
+    background: rgba(5, 7, 12, 0.6);
+    opacity: 0; transition: opacity 0.2s ease;
+  }
+  .help-backdrop.is-open { opacity: 1; }
+  .help-panel {
+    left: 0; right: 0; bottom: 0; top: auto;
+    width: auto; max-width: none;
+    max-height: 82vh;
+    border-radius: 22px 22px 0 0;
+    border-bottom: none;
+    padding: 22px 18px 24px;
+    transform: translateY(24px);
+  }
+  .help-tip { font-size: 0.9rem; padding: 10px 0; }
+  .help-close { top: 14px; right: 14px; width: 32px; height: 32px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .help-panel, .help-backdrop { transition: none; }
 }
 
 /* ===== PAGINATION SCROLL TARGET =====
