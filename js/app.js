@@ -13,6 +13,8 @@
     quiz: { category: 'All', lang: 'en', pool: [], current: null, score: 0, streak: 0, answered: 0, locked: false },
   };
 
+  let appReady = false; // true once words.json has arrived and init() has built the page
+
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
@@ -222,6 +224,12 @@
     if ($('#progressWidget')) renderProgressWidget();
     initWordRequest();
     initFeedbackWidget();
+    // dictionary.html?q=word ("Find in dictionary" pressed on another page): search the
+    // grid for it right away. Last on purpose — everything above the grid has its final
+    // height by now, so the scroll lands on the search field.
+    const q = new URLSearchParams(location.search).get('q');
+    if (q && $('#wordGrid')) findInDictionary(q);
+    appReady = true;
   }
 
   // ===== TUBELIGHT NAV INDICATOR =====
@@ -712,31 +720,39 @@
       if (sugg) { input.value = sugg.dataset.q; run(); return; }
       const find = e.target.closest('.tr-find');
       if (find) {
-        const search = $('#searchInput');
-        if (!search) {
-          // Home page has no word grid — hand the query over to the dictionary page
-          location.href = 'dictionary.html?q=' + encodeURIComponent(find.dataset.kk);
-          return;
-        }
-        search.value = find.dataset.kk;
-        state.search = find.dataset.kk;
-        // The word may sit in a different category than the one being filtered —
-        // without this reset the grid answered "0 results" for a word that exists
-        setActiveCategory('All');
-        const pillsRow = $('#categoryPills');
-        if (pillsRow) pillsRow.scrollLeft = 0;
-        renderDictionary();
-        $('.search-wrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Home page has no word grid — hand the query over to the dictionary page
+        if (!$('#searchInput')) location.href = 'dictionary.html?q=' + encodeURIComponent(find.dataset.kk);
+        else findInDictionary(find.dataset.kk);
       }
     });
 
-    // Support dictionary.html?q=word links (e.g. from the home-page translator)
+    // dictionary.html?q=word (from the home-page translator and from the Sózle result):
+    // the home page has no grid, there the word goes into the translator.
+    // On the dictionary page the grid takes it — see initDictionaryPage.
     const q = new URLSearchParams(location.search).get('q');
-    if (q) {
+    if (q && !$('#searchInput')) {
       input.value = q;
       run();
       $('#translator').scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
+  }
+
+  // "Find in dictionary": the word goes into the grid's own search, the grid is filtered
+  // (exact match first — see searchRank) and scrolled into view. Used by the button on
+  // the dictionary page and by an arrival through dictionary.html?q=word, so both give
+  // the same result. The grid must exist already (initDictionaryPage has run).
+  function findInDictionary(word) {
+    const search = $('#searchInput');
+    if (!search) return;
+    search.value = word;
+    state.search = word;
+    // The word may sit in a different category than the one being filtered —
+    // without this reset the grid answered "0 results" for a word that exists
+    setActiveCategory('All');
+    const pillsRow = $('#categoryPills');
+    if (pillsRow) pillsRow.scrollLeft = 0;
+    renderDictionary();
+    $('.search-wrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   // ===== SÓZLE — the Karakalpak word game (Wordle-style, data from words.json) =====
@@ -1058,7 +1074,7 @@
     document.addEventListener('keydown', e => {
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       if (e.target && /^(input|textarea|select)$/i.test(e.target.tagName)) return; // don't steal typing from forms
-      if (e.target && e.target.closest && e.target.closest('#navHelp, #tourCard')) return; // the guide, not the game
+      if (e.target && e.target.closest && e.target.closest('#navHelp, #tourCard, #tourAsk, #footerGuide')) return; // the guide, not the game
       if (e.key === 'Enter') {
         // Enter always submits the guess — it never "presses" a focused on-screen key
         if (e.target && e.target.closest && e.target.closest('.sozle-key')) e.preventDefault();
@@ -1714,13 +1730,30 @@
     }
   }
 
-  // ===== GUIDE ("?" in the nav) — a spotlight tour =====
-  // Pressing "?" dims the page and lights up ONE real element at a time, with a short
-  // caption next to it and Next / Skip. It never opens by itself — only from "?".
-  // Started right away (not in init), so it works before words.json has loaded.
-  const HELP_SEEN_KEY = 'qaraqalpaq_help_seen';
-  const HELP_MAX_STEPS = 4;
+  // ===== GUIDE — a spotlight tour of the page =====
+  // The page dims and ONE real element at a time is lit, with a short caption next to
+  // it and Next / Skip. Who starts it:
+  //   - the very first visit to the site: the tour of that page starts by itself, once;
+  //   - the first visit to each of the other pages: a small note under "?" asks
+  //     "Need a quick tour?" — shown ONCE per page, whatever the visitor does with it;
+  //   - "?" in the nav and "Guide" in the footer: any time.
+  // When the tours of all five pages have been opened, "?" leaves the nav for good
+  // (the footer link stays).
+  // Started right away (not in init), so "?" works before words.json has loaded.
+  //
+  // MEMORY, one localStorage key per page — qaraqalpaq_guide_<page>:
+  //   (nothing) never offered here · 'asked' the note was shown · 'seen' the tour was opened
+  // The same five page names are listed in the small <script> in the <head> of every
+  // html file (it hides "?" before the first paint) — keep the two lists the same.
+  const GUIDE_PAGES = ['index', 'dictionary', 'flashcards', 'quiz', 'game'];
+  const HELP_MAX_STEPS = 3;
   const K = t => `<kbd>${t}</kbd>`;
+  const HELP_TEXT = {
+    next: 'Next', skip: 'Skip', done: 'Done',
+    askTitle: 'Need a quick tour?',
+    askSub: 'Three quick tips · 15 seconds',
+    askYes: 'Show me', askNo: 'No thanks',
+  };
   // One step = [selector of the element to light up, caption for a mouse and keyboard,
   //             caption for a touch screen].
   // - no third item: the same caption on both;  null: no such step for that input.
@@ -1735,7 +1768,6 @@
     ],
     dictionary: [
       ['.search-wrap', 'Search in any of the 3 languages — plain letters work too: salem finds Sálem.'],
-      ['.pills-wrap', 'Pick a category to see one topic.'],
       ['#wordGrid .word-card', 'Click a card to see the translation.', 'Tap a card to see the translation.'],
       ['#wordGrid .word-card .learn-btn', 'Mark the words you know — your progress is saved on this device.'],
     ],
@@ -1743,7 +1775,6 @@
       ['#flashcard', `Click the card or press ${K('Space')} to flip it.`, 'Tap the card to flip it.'],
       ['#flashNext', `Next word: this arrow, or ${K('←')} ${K('→')} on your keyboard.`, null],
       ['.flash-stage', null, 'Swipe the card left or right — or tap the arrows — for another word.'],
-      ['#flashShuffle', 'Shuffle mixes the order of the cards.'],
       ['#flashLearnBtn', 'Mark the words you know — your progress is saved on this device.'],
     ],
     quiz: [
@@ -1759,7 +1790,6 @@
         'Tap the letters — á ǵ ı ń ó ú have their own keys — then ENTER.'],
       ['#sozleHint', 'Stuck? The hint shows what the word means.'],
       ['#sozleFree', 'Done for today? Play a random word — it does not change your stats.'],
-      ['#sozleStats', 'Games played, wins, and your 🔥 streak of daily wins.'],
     ],
   };
 
@@ -1770,21 +1800,39 @@
     const root = document.documentElement;
     const nav = $('.nav');
     const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const ms = n => calm.matches ? 0 : n; // every wait below shrinks to nothing for "reduce motion"
     const PAD = 6;    // air between the element and the edge of the light
     const GAP = 12;   // between the light and the caption
     const EDGE = 12;  // the caption never comes closer to the side of the screen
+    // The three phases every change is made of. They match the transition times in the
+    // stylesheet (block "GUIDE"); a little is added so a phase is really over.
+    const T_VEIL = 240, T_OFF = 170;
 
-    let seen = false;
-    try { seen = !!localStorage.getItem(HELP_SEEN_KEY); } catch (e) {}
-    if (!seen) btn.classList.add('is-new'); // small dot until the guide has been opened once
+    // ---------- memory ----------
+    const key = p => 'qaraqalpaq_guide_' + p;
+    let canRemember = true;
+    try {
+      localStorage.setItem('qaraqalpaq_guide_test', '1');
+      localStorage.removeItem('qaraqalpaq_guide_test');
+      localStorage.removeItem('qaraqalpaq_help_seen'); // key of the first version of the guide
+    } catch (e) { canRemember = false; }
+    const recall = p => { try { return localStorage.getItem(key(p)); } catch (e) { return null; } };
+    const remember = (p, v) => { try { localStorage.setItem(key(p), v); } catch (e) {} };
+    const allSeen = () => canRemember && GUIDE_PAGES.every(p => recall(p) === 'seen');
+    if (allSeen()) root.classList.add('guide-done'); // normally set by the script in <head>
 
-    let ui = null;            // the three layers, built on first use
+    // ---------- the tour ----------
+    let ui = null;            // the layers, built on first use
     let steps = [], at = 0;   // steps = [{ el, html }], at = the one on screen
     let mode = '';            // where the caption sits: below / above / over the element
     let goalY = 0;            // the scroll position this step was laid out for
     let drawn = null;         // where the light was last drawn — to notice the element moving
-    let raf = 0, lastW = 0, byKeyboard = false;
-    const isOpen = () => !!ui && !ui.card.hidden;
+    let active = false;       // open() … close()
+    let busy = false;         // between two steps: clicks on Next wait
+    let seq = 0;              // every open / step / close gets a number; a late timer of an older one does nothing
+    let raf = 0, lastW = 0, byKeyboard = false, opener = null;
+    const isOpen = () => active;
+    const later = (fn, t) => { const mine = seq; setTimeout(() => { if (mine === seq) fn(); }, ms(t)); };
 
     // On screen right now? (exists, not display:none / [hidden], has a size, not visibility:hidden)
     function visible(el) {
@@ -1806,9 +1854,22 @@
       return out;
     }
 
+    // The layers, bottom to top:
+    //   catcher  invisible, over the whole screen: takes every click outside the caption
+    //   veil     the same dark colour over the whole screen — only while the tour fades
+    //            in or out
+    //   hole     lies over the lit element; its huge box-shadow dims the rest of the page.
+    //            Inside it: shade (the same dark colour again — "the light is off") and
+    //            ring (the bright edge).
+    //   card     the caption
+    // ONLY opacity and transform are ever animated (veil, shade, ring, card). The hole
+    // never animates: it is moved in one go while the shade covers it, so the move
+    // cannot be seen — and nothing has to be laid out again frame after frame.
     function build() {
-      const mk = cls => { const d = document.createElement('div'); d.className = cls; return d; };
-      const catcher = mk('tour-catch'), hole = mk('tour-hole'), card = mk('tour-card');
+      const mk = (cls, parent) => { const d = document.createElement('div'); d.className = cls; (parent || document.body).appendChild(d); return d; };
+      const catcher = mk('tour-catch'), veil = mk('tour-veil'), hole = mk('tour-hole');
+      const shade = mk('tour-shade', hole), ring = mk('tour-ring', hole);
+      const card = mk('tour-card');
       card.id = 'tourCard';
       card.setAttribute('role', 'dialog');
       card.setAttribute('aria-modal', 'true');
@@ -1817,11 +1878,11 @@
         <p class="tour-text" aria-live="polite"></p>
         <div class="tour-row">
           <span class="tour-count"></span>
-          <button class="tour-skip" type="button">Skip</button>
+          <button class="tour-skip" type="button">${HELP_TEXT.skip}</button>
           <button class="tour-next" type="button"></button>
         </div>`;
-      document.body.append(catcher, hole, card); // on <body>, not inside .nav (its blur would trap them)
-      ui = { catcher, hole, card, text: $('.tour-text', card), count: $('.tour-count', card), skip: $('.tour-skip', card), next: $('.tour-next', card) };
+      catcher.hidden = veil.hidden = hole.hidden = card.hidden = true;
+      ui = { catcher, veil, hole, shade, ring, card, text: $('.tour-text', card), count: $('.tour-count', card), skip: $('.tour-skip', card), next: $('.tour-next', card) };
       catcher.addEventListener('click', close); // a click anywhere outside the caption
       ui.skip.addEventListener('click', close);
       ui.next.addEventListener('click', () => go(1));
@@ -1835,7 +1896,7 @@
       root.style.scrollBehavior = was;
     }
 
-    // Puts the light over the current element and the caption next to it.
+    // Puts the hole over the current element and the caption next to it.
     // Everything is in DOCUMENT coordinates (position: absolute), so the browser moves
     // both with the page while it scrolls — nothing to keep in sync from a scroll event,
     // which on phones always runs a frame behind the finger.
@@ -1858,13 +1919,17 @@
         if (Math.abs(nr.width - r.width) > 2 || Math.abs(nr.height - r.height) > 2) break;
         radius = Math.max(radius, parseFloat(getComputedStyle(n).borderTopLeftRadius) || 0);
       }
+      const w = Math.round(right - left), h = Math.round(height);
       hole.style.left = Math.round(left + sx) + 'px';
       hole.style.top = Math.round(top) + 'px';
-      hole.style.width = Math.round(right - left) + 'px';
-      hole.style.height = Math.round(height) + 'px';
+      hole.style.width = w + 'px';
+      hole.style.height = h + 'px';
       hole.style.borderRadius = Math.max(10, Math.min(radius + PAD, height / 2, (right - left) / 2)) + 'px';
       // the shadow that dims the page has to reach its far ends from wherever the light is
       hole.style.setProperty('--tour-spread', Math.ceil(Math.max(docH, vw)) + 'px');
+      // the ring settles onto the element from 7px outside it, whatever the element's size
+      hole.style.setProperty('--tour-rx', (1 + 14 / w).toFixed(4));
+      hole.style.setProperty('--tour-ry', (1 + 14 / h).toFixed(4));
       drawn = { x: r.left + sx, y: r.top + sy, w: r.width, h: r.height, docH };
 
       const cw = card.offsetWidth, ch = card.offsetHeight;
@@ -1912,38 +1977,46 @@
       if (rescroll && goalY !== sy) scrollPage(goalY);
     }
 
-    function render(first) {
+    // Caption text and the place of everything for the current step. Always done while
+    // the light is off (the shade covers the hole), so the move itself is never seen.
+    function lay() {
       const last = at === steps.length - 1;
       ui.text.innerHTML = steps[at].html;
       ui.count.textContent = steps.length > 1 ? `${at + 1} / ${steps.length}` : '';
-      ui.next.innerHTML = last ? 'Done' : 'Next <span aria-hidden="true">→</span>';
+      ui.next.innerHTML = last ? HELP_TEXT.done : `${HELP_TEXT.next} <span aria-hidden="true">→</span>`;
       ui.skip.hidden = last; // nothing left to skip
       mode = '';
-      ui.card.classList.remove('is-in');
-      if (first) ui.hole.classList.add('is-jump'); // appear in place, do not glide in from the corner
       place(true);
-      void ui.card.offsetWidth; // commit this state so the fade-in runs (no rAF: it never fires in a hidden tab)
-      ui.hole.classList.remove('is-jump');
+    }
+    // Light on, caption in.
+    function light() {
+      void ui.card.offsetWidth; // commit "off" first, so "on" is a transition (no rAF: it never fires in a hidden tab)
+      ui.hole.classList.add('is-lit');
       ui.card.classList.add('is-in');
-      ui.hole.classList.add('is-in');
-      if (ui.card.contains(document.activeElement) || first) ui.next.focus({ preventScroll: true });
+      ui.next.focus({ preventScroll: true });
     }
 
     // dir = +1 / -1. Elements that have gone since the tour was opened are stepped over.
     function go(dir) {
+      if (!active || busy) return;
       let i = at + dir;
       while (i >= 0 && i < steps.length && !visible(steps[i].el)) i += dir;
       if (i >= steps.length) { close(); return; }
       if (i < 0) return;
-      at = i;
-      render(false);
+      // light off + caption out → move → light on + caption in
+      busy = true;
+      seq++;
+      ui.hole.classList.remove('is-lit');
+      ui.card.classList.remove('is-in');
+      later(() => { at = i; busy = false; lay(); light(); }, T_OFF);
     }
 
     // While the tour is open: has the lit element moved (fonts or words arriving, a card
     // re-rendering) or gone? One measurement per frame; nothing runs when it is closed.
     function follow() {
-      if (!isOpen()) return;
+      if (!active) return;
       raf = requestAnimationFrame(follow);
+      if (busy || ui.hole.hidden) return;
       const el = steps[at].el;
       if (!visible(el)) { go(1); return; }
       const r = el.getBoundingClientRect();
@@ -1952,55 +2025,196 @@
           Math.abs(r.height - drawn.h) > 1 || Math.max(root.scrollHeight, window.innerHeight) !== drawn.docH) place(false);
     }
 
-    function open(viaKeyboard) {
+    function open(viaKeyboard, from) {
+      if (active) return;
+      hideAsk();
       if (nav) nav.classList.remove('menu-open'); // the phone menu would cover the page
       steps = collect();
       if (!steps.length) return;
       if (!ui) build();
-      if (nav) nav.classList.add('tour-on'); // lifts the nav above the tour and fades its links (see the stylesheet)
-      byKeyboard = viaKeyboard;
-      ui.card.classList.toggle('by-keys', viaKeyboard); // focus rings only for keyboard users
+      seq++; // also cancels what is left of a close that is still fading out
+      active = true; busy = true;
+      byKeyboard = !!viaKeyboard;
+      opener = from || btn;
       at = 0;
       lastW = root.clientWidth;
-      ui.catcher.hidden = ui.hole.hidden = ui.card.hidden = false;
-      render(true);
+      remember(page, 'seen');
+      // 1. the whole page dims evenly (and already scrolls to the first element)
+      const dimmed = !ui.hole.hidden; // reopened before the last tour had faded out: it is dark already
+      ui.catcher.hidden = ui.veil.hidden = ui.card.hidden = false;
+      ui.hole.classList.remove('is-lit');
+      ui.card.classList.remove('is-in');
+      ui.card.classList.toggle('by-keys', byKeyboard); // focus rings only for keyboard users
+      ui.veil.classList.toggle('is-cut', dimmed);
+      if (dimmed) ui.veil.classList.add('is-on');
+      ui.hole.hidden = true;
+      if (nav) nav.classList.add('tour-on'); // lifts the nav above the tour and fades its links (see the stylesheet)
       btn.setAttribute('aria-expanded', 'true');
-      btn.classList.remove('is-new');
-      try { localStorage.setItem(HELP_SEEN_KEY, '1'); } catch (e) {}
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(follow);
+      lay();
+      void ui.veil.offsetWidth;
+      ui.veil.classList.remove('is-cut');
+      ui.veil.classList.add('is-on');
+      // 2. the veil is swapped for the hole with its shade down — the very same picture —
+      //    and the light comes on
+      later(() => {
+        ui.veil.classList.add('is-cut');
+        ui.veil.classList.remove('is-on');
+        ui.hole.hidden = false;
+        busy = false;
+        light();
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(follow);
+      }, dimmed ? 0 : T_VEIL);
     }
 
     function close() {
-      if (!isOpen()) return;
+      if (!active) return;
+      seq++;
+      active = false; busy = false;
       cancelAnimationFrame(raf);
       const hadFocus = ui.card.contains(document.activeElement);
-      ui.catcher.hidden = ui.hole.hidden = ui.card.hidden = true;
-      ui.card.classList.remove('is-in');
-      ui.hole.classList.remove('is-in');
-      if (nav) nav.classList.remove('tour-on');
+      ui.catcher.hidden = true; // the page can be used again at once
       btn.setAttribute('aria-expanded', 'false');
-      // Keyboard users go back to "?". After a mouse or a finger nothing keeps the focus —
-      // on the Sózle page the next Enter must check the guess, not reopen the guide.
-      if (byKeyboard) btn.focus({ preventScroll: true });
+      // Keyboard users go back to where they started. After a mouse or a finger nothing
+      // keeps the focus — on the Sózle page the next Enter must check the guess, not
+      // reopen the guide.
+      if (byKeyboard && opener && visible(opener)) opener.focus({ preventScroll: true });
       else if (hadFocus && document.activeElement) document.activeElement.blur();
+      // 1. light off, caption out   2. hole swapped for the veil   3. the veil fades away
+      const fadeOut = () => {
+        ui.veil.classList.remove('is-cut');
+        ui.veil.classList.remove('is-on');
+        if (nav) nav.classList.remove('tour-on');
+        later(() => {
+          ui.veil.hidden = ui.card.hidden = true;
+          // Every page's tour has been opened: "?" has done its job. It fades where it
+          // stands, so the links do not move under the visitor's eyes; from the next
+          // page on it is not there at all (see .guide-done in the stylesheet).
+          if (allSeen()) { btn.classList.add('is-done'); btn.tabIndex = -1; btn.setAttribute('aria-hidden', 'true'); }
+        }, T_VEIL);
+      };
+      ui.hole.classList.remove('is-lit');
+      ui.card.classList.remove('is-in');
+      if (ui.hole.hidden) { fadeOut(); return; } // closed while it was still fading in
+      later(() => {
+        ui.veil.classList.add('is-cut', 'is-on');
+        ui.hole.hidden = true;
+        void ui.veil.offsetWidth;
+        fadeOut();
+      }, T_OFF);
     }
 
-    // A mouse press must not leave keyboard focus on "?" (same Sózle reason as above)
+    // ---------- "Need a quick tour?" — the note under "?" ----------
+    let ask = null, askTimer = 0, askRaf = 0;
+    function placeAsk() {
+      if (!ask) return;
+      const b = btn.getBoundingClientRect(), vw = root.clientWidth, w = ask.offsetWidth;
+      const x = Math.round(Math.min(Math.max(EDGE, vw - EDGE - w), Math.max(EDGE, b.left - 10)));
+      ask.style.transform = `translate3d(${x}px, ${Math.round(b.bottom + 12)}px, 0)`;
+      ask.style.setProperty('--ask-caret', Math.round(Math.min(w - 20, Math.max(20, b.left + b.width / 2 - x))) + 'px');
+    }
+    // "?" slides sideways when the home / dictionary nav shrinks into its pill:
+    // keep the note under it for the half second that takes
+    function trackAsk() {
+      if (!ask) return;
+      const until = Date.now() + 500;
+      cancelAnimationFrame(askRaf);
+      (function tick() { placeAsk(); if (ask && Date.now() < until) askRaf = requestAnimationFrame(tick); })();
+    }
+    function showAsk() {
+      remember(page, 'asked'); // from this moment it never comes back on this page
+      ask = document.createElement('div');
+      ask.className = 'tour-ask';
+      ask.id = 'tourAsk';
+      ask.setAttribute('role', 'region');
+      ask.setAttribute('aria-label', 'Page tour');
+      ask.innerHTML = `
+        <div class="tour-ask-box">
+          <p class="tour-ask-title">${HELP_TEXT.askTitle}</p>
+          <p class="tour-ask-sub">${HELP_TEXT.askSub}</p>
+          <div class="tour-ask-row">
+            <button class="tour-ask-yes" type="button">${HELP_TEXT.askYes}</button>
+            <button class="tour-ask-no" type="button">${HELP_TEXT.askNo}</button>
+          </div>
+        </div>`;
+      document.body.appendChild(ask);
+      placeAsk();
+      void ask.offsetWidth;
+      ask.classList.add('is-in');
+      $('.tour-ask-yes', ask).addEventListener('click', e => open(e.detail === 0));
+      $('.tour-ask-no', ask).addEventListener('click', hideAsk);
+      // it leaves by itself after a while — but not from under the pointer
+      const arm = t => { clearTimeout(askTimer); askTimer = setTimeout(hideAsk, t); };
+      ask.addEventListener('mouseenter', () => clearTimeout(askTimer));
+      ask.addEventListener('mouseleave', () => arm(4000));
+      arm(15000);
+    }
+    function hideAsk() {
+      if (!ask) return;
+      const el = ask;
+      ask = null;
+      clearTimeout(askTimer);
+      cancelAnimationFrame(askRaf);
+      el.classList.remove('is-in');
+      setTimeout(() => el.remove(), ms(220));
+    }
+
+    // Offered once the page has settled: after it has loaded, a good second later, and
+    // only while somebody is looking at it.
+    function whenSettled(run) {
+      const go2 = () => setTimeout(function wait() {
+        if (document.visibilityState === 'hidden') {
+          document.addEventListener('visibilitychange', function back() {
+            if (document.visibilityState === 'hidden') return;
+            document.removeEventListener('visibilitychange', back);
+            setTimeout(wait, 700);
+          });
+          return;
+        }
+        run();
+      }, 1300);
+      if (document.readyState === 'complete') { go2(); return; }
+      let started = false;
+      const start = () => { if (!started) { started = true; go2(); } };
+      window.addEventListener('load', start, { once: true });
+      setTimeout(start, 3000); // a slow image or font must not hold it back for ever
+    }
+    function offer(tries) {
+      if (active || recall(page) || root.classList.contains('guide-done')) return; // "?" was pressed meanwhile
+      if (!appReady) { if (tries > 0) setTimeout(() => offer(tries - 1), 250); return; } // words still loading
+      if (nav && nav.classList.contains('menu-open')) return; // busy with the menu — next time
+      const first = GUIDE_PAGES.every(p => !recall(p));
+      const a = document.activeElement;
+      const typing = !!a && /^(input|textarea|select)$/i.test(a.tagName);
+      if (first && !typing) open(false);
+      else if (visible(btn)) showAsk();
+    }
+    if (canRemember && HELP_TIPS[page] && !recall(page)) whenSettled(() => offer(24));
+
+    // ---------- wiring ----------
+    // A mouse press must not leave keyboard focus on "?" (same Sózle reason as in close)
     btn.addEventListener('mousedown', e => e.preventDefault());
-    btn.addEventListener('click', e => isOpen() ? close() : open(e.detail === 0));
+    btn.addEventListener('click', e => active ? close() : open(e.detail === 0, btn));
+    const foot = $('#footerGuide');
+    if (foot) foot.addEventListener('click', e => open(e.detail === 0, foot));
     // The nav stays above the tour, so the sheet that catches clicks does not cover it:
     // a click on the nav (anywhere but "?") closes the tour too, and does nothing else.
     if (nav) nav.addEventListener('click', e => {
-      if (!isOpen() || e.target.closest('#navHelp')) return;
+      if (!active || e.target.closest('#navHelp')) return;
       e.preventDefault();
       e.stopPropagation();
       close();
     }, true);
+    // The note goes away as soon as the visitor gets on with the page: a click or a tap
+    // anywhere else, or typing. Scrolling does not count.
+    document.addEventListener('click', e => {
+      if (ask && !e.target.closest('#tourAsk, #navHelp')) hideAsk();
+    }, true);
     // Capture phase + stopPropagation: while the tour is open the page under it
     // (Sózle typing, flashcard arrows and Space) must not react to the keyboard.
     document.addEventListener('keydown', e => {
-      if (!isOpen()) return;
+      if (ask && !/^(Tab|Shift|Control|Alt|Meta)$/.test(e.key) && !(e.target.closest && e.target.closest('#tourAsk'))) hideAsk();
+      if (!active) return;
       e.stopPropagation();
       if (/^(Tab|Arrow)/.test(e.key)) ui.card.classList.add('by-keys');
       if (e.key === 'Escape') { e.preventDefault(); close(); }
@@ -2011,17 +2225,22 @@
         (document.activeElement === ui.next && !ui.skip.hidden ? ui.skip : ui.next).focus({ preventScroll: true });
       }
     }, true);
+    window.addEventListener('scroll', trackAsk, { passive: true });
     // A new width (rotation, window resize) can hide or reveal elements and changes where
     // everything is. A new height alone is the phone's address bar sliding — ignore it,
     // or the page would be scrolled back under the visitor's finger.
     window.addEventListener('resize', () => {
-      if (!isOpen() || root.clientWidth === lastW) return;
+      trackAsk();
+      if (!active || busy || root.clientWidth === lastW) return;
       lastW = root.clientWidth;
       const el = steps[at].el;
       steps = collect();
       if (!steps.length) { close(); return; }
       at = Math.max(0, steps.findIndex(s => s.el === el));
-      render(false);
+      ui.hole.classList.remove('is-lit');
+      ui.card.classList.remove('is-in');
+      lay();
+      light();
     }, { passive: true });
   }
   initHelp();

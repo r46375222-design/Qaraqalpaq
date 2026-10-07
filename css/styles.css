@@ -256,8 +256,7 @@ input, select { font-family: inherit; }
 .nav-toggle { display: none; flex-direction: column; gap: 5px; width: 28px; }
 .nav-toggle span { display: block; height: 2.5px; width: 100%; background: var(--text); border-radius: 2px; }
 
-/* "?" — opens the short how-to-use guide (see GUIDE near the end of this file).
-   No animation here on purpose: nothing inside .nav animates (see the .nav rule in CLAUDE.md). */
+/* "?" — opens the tour of the page (see GUIDE near the end of this file). */
 .nav-links { margin-left: auto; } /* links stay on the right now that "?" follows them */
 .nav-help {
   position: relative;
@@ -270,18 +269,19 @@ input, select { font-family: inherit; }
   color: var(--teal-light);
   font-family: var(--font-display);
   font-weight: 800; font-size: 0.95rem; line-height: 1;
-  transition: background-color 0.18s ease, color 0.18s ease;
+  transition: background-color 0.18s ease, color 0.18s ease, opacity 0.3s ease;
 }
 .nav-help:hover, .nav-help[aria-expanded="true"] { background: var(--teal); color: var(--white); }
 .nav-help:focus-visible { outline: 2px solid var(--teal-light); outline-offset: 2px; }
-/* a quiet dot until the guide has been opened once */
-.nav-help.is-new::after {
-  content: '';
-  position: absolute; top: -1px; right: -1px;
-  width: 9px; height: 9px; border-radius: 50%;
-  background: #fbbf24;
-  border: 2px solid var(--bg-deep);
-}
+/* When the tours of all five pages have been opened, "?" is no longer needed
+   ("Guide" in the footer stays).
+   .is-done     set by app.js the moment the fifth tour closes: "?" fades but KEEPS ITS
+                PLACE, so the links next to it do not jump while the visitor is looking.
+   .guide-done  set on <html> by the small script in the <head> of every page, before
+                the first paint: "?" is not laid out at all and the links sit at the
+                right edge, as they did before "?" existed — no flash, no shift. */
+.nav-help.is-done { opacity: 0; pointer-events: none; }
+.guide-done .nav-help { display: none; }
 
 /* ===== NAV — scroll pill (index.html, dictionary.html only) =====
    Floats transparent and full-width by default; shrinks into a centered,
@@ -1436,6 +1436,15 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   font-weight: 600;
 }
 .footer-contact a:hover { text-decoration: underline; }
+/* "Guide" — starts the tour of the page; the way back once "?" has left the nav */
+.footer-sep { margin: 0 6px; opacity: 0.5; }
+.footer-guide {
+  font: inherit; font-weight: 600;
+  color: #A5B4FC;
+  padding: 6px 2px; margin: -6px -2px; /* a bigger target for a finger, same look */
+}
+.footer-guide:hover { text-decoration: underline; }
+.footer-guide:focus-visible { outline: 2px solid var(--teal-light); outline-offset: 2px; border-radius: 4px; }
 .proof-link { color: #A5B4FC; text-decoration: none; font-weight: 600; }
 .proof-link:hover { text-decoration: underline; }
 
@@ -2143,48 +2152,85 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
   .sozle-msg { min-height: 20px; margin-bottom: 6px; font-size: 0.85rem; }
 }
 
-/* ===== GUIDE (the "?" button in the nav) — a spotlight tour =====
+/* ===== GUIDE — a spotlight tour of the page (initHelp in app.js) =====
+   Layers, bottom to top:
    .tour-catch  an invisible sheet over the whole screen. It takes every click (a click
                 anywhere outside the caption closes the tour), so nothing on the page
                 under it can be pressed by accident.
-   .tour-hole   lies exactly over the element being explained. It is see-through;
-                its huge box-shadow is what dims the rest of the page.
+   .tour-veil   the dimming colour over the whole screen — shown only while the tour
+                fades in and out.
+   .tour-hole   lies exactly over the element being explained. It is see-through; its
+                huge box-shadow is what dims the rest of the page.
+     .tour-shade  the dimming colour again, inside the hole: "the light is off".
+     .tour-ring   the bright edge of the light.
    .tour-card   the caption with Next / Skip.
-   The hole and the caption are placed in DOCUMENT coordinates (position: absolute, set
-   from JS), so the browser itself moves them when the page scrolls. Do NOT turn them
-   into position: fixed + a scroll listener: on phones that runs a frame behind the
-   finger and the light slides off the element. */
-.tour-catch {
+
+   TWO RULES — both learned the hard way, do not undo them:
+   1. The hole and the caption are placed in DOCUMENT coordinates (position: absolute,
+      set from JS), so the browser itself moves them when the page scrolls. Do NOT turn
+      them into position: fixed + a scroll listener: on phones that runs a frame behind
+      the finger and the light slides off the element.
+   2. ONLY opacity and transform are animated (veil, shade, ring, card, the note).
+      The hole itself never animates: it jumps to the next element while its shade is
+      down, where the jump cannot be seen. Animating top / left / width / height (or
+      box-shadow) repaints the whole dimmed page on every frame and stutters on phones.
+
+   --tour-dim is the ONE place that sets how dark the page gets. The veil, the hole's
+   shadow and the shade must all use it, or the swaps between them become visible. */
+:root { --tour-dim: rgba(4, 5, 10, 0.65); }
+.tour-catch, .tour-veil {
   position: fixed; top: 0; right: 0; bottom: 0; left: 0;
   z-index: 1090; /* above the feedback card (1000) */
-  -webkit-tap-highlight-color: transparent;
 }
+.tour-catch { -webkit-tap-highlight-color: transparent; }
+.tour-veil {
+  pointer-events: none;
+  background: var(--tour-dim);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  will-change: opacity;
+}
+.tour-veil.is-on { opacity: 1; }
+.tour-veil.is-cut { transition: none; } /* swapped with the hole in one frame, no fade */
 .tour-hole {
   position: absolute;
   z-index: 1091;
   pointer-events: none;
   border-radius: 14px;
-  box-shadow: 0 0 0 var(--tour-spread, 9999px) rgba(4, 5, 10, 0);
-  transition: box-shadow 0.22s ease,
-    top 0.3s cubic-bezier(0.3, 0.9, 0.3, 1), left 0.3s cubic-bezier(0.3, 0.9, 0.3, 1),
-    width 0.3s cubic-bezier(0.3, 0.9, 0.3, 1), height 0.3s cubic-bezier(0.3, 0.9, 0.3, 1);
+  box-shadow: 0 0 0 var(--tour-spread, 9999px) var(--tour-dim);
 }
-.tour-hole.is-in { box-shadow: 0 0 0 var(--tour-spread, 9999px) rgba(4, 5, 10, 0.78); }
-.tour-hole.is-jump { transition: none; }
-.tour-hole::after { /* the bright edge of the light */
-  content: '';
+.tour-shade, .tour-ring {
   position: absolute; top: 0; right: 0; bottom: 0; left: 0;
   border-radius: inherit;
+}
+.tour-shade {
+  background: var(--tour-dim);
+  opacity: 1;
+  transition: opacity 0.15s ease;
+  will-change: opacity;
+}
+.tour-ring {
   border: 2px solid var(--teal-light);
   box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.26), 0 0 28px rgba(99, 102, 241, 0.4);
+  opacity: 0;
+  transform: scale(var(--tour-rx, 1.03), var(--tour-ry, 1.03)); /* set from JS: 7px outside the element */
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  will-change: opacity, transform;
+}
+.tour-hole.is-lit .tour-shade { opacity: 0; transition-duration: 0.28s; }
+.tour-hole.is-lit .tour-ring {
+  opacity: 1; transform: none;
+  transition: opacity 0.26s ease, transform 0.36s cubic-bezier(0.2, 0.9, 0.3, 1);
 }
 /* While the tour is open the nav stays ABOVE it. A lit element that the visitor scrolls
    up then slides under the nav like the rest of the page; with the nav under the tour,
    the light was drawn across the nav bar. The links are faded and switched off (a click
    on the nav closes the tour, like a click anywhere else); "?" stays lit.
-   No animation here — nothing on or inside .nav animates (see CLAUDE.md). */
+   Only the nav's CHILDREN fade. .nav itself must never get an opacity animation — it
+   breaks backdrop-filter inside it in Chromium (see CLAUDE.md). */
 .nav.tour-on { z-index: 1095; }
-.nav.tour-on .brand, .nav.tour-on .nav-links, .nav.tour-on .nav-toggle { opacity: 0.3; pointer-events: none; }
+.nav .brand, .nav .nav-links, .nav .nav-toggle { transition: opacity 0.22s ease; }
+.nav.tour-on .brand, .nav.tour-on .nav-links, .nav.tour-on .nav-toggle { opacity: 0.4; pointer-events: none; }
 .tour-card {
   position: absolute;
   z-index: 1092;
@@ -2196,9 +2242,14 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
   box-shadow: 0 18px 44px -12px rgba(0, 0, 0, 0.8);
   touch-action: manipulation; /* quick taps on Next must not zoom the page */
   opacity: 0;
-  transform: translateY(6px);
+  transform: translateY(8px);
+  transition: opacity 0.14s ease, transform 0.14s ease;
+  will-change: opacity, transform;
 }
-.tour-card.is-in { opacity: 1; transform: none; transition: opacity 0.2s ease, transform 0.2s ease; }
+.tour-card.is-in {
+  opacity: 1; transform: none;
+  transition: opacity 0.24s ease 0.05s, transform 0.34s cubic-bezier(0.2, 0.9, 0.3, 1) 0.05s;
+}
 /* the little pointer towards the element; --tour-caret is set from JS */
 .tour-card.is-below::before, .tour-card.is-above::before {
   content: '';
@@ -2228,26 +2279,81 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
   font-size: 0.74rem; font-weight: 700; letter-spacing: 0.4px;
   color: var(--text-faint);
 }
-.tour-skip, .tour-next {
+.tour-skip, .tour-next, .tour-ask-yes, .tour-ask-no {
   min-height: 36px; padding: 0 14px;
   border-radius: 999px;
   font-size: 0.86rem; font-weight: 700; line-height: 1;
+  transition: background-color 0.18s ease, color 0.18s ease;
 }
-.tour-skip { color: var(--text-dim); font-weight: 600; }
-.tour-skip:hover { color: var(--text); }
-.tour-next { padding: 0 18px; background: var(--teal); color: var(--white); }
-.tour-next:hover { background: var(--teal-dark); }
+.tour-skip, .tour-ask-no { color: var(--text-dim); font-weight: 600; }
+.tour-skip:hover, .tour-ask-no:hover { color: var(--text); }
+.tour-next, .tour-ask-yes { padding: 0 18px; background: var(--teal); color: var(--white); }
+.tour-next:hover, .tour-ask-yes:hover { background: var(--teal-dark); }
 .tour-skip:focus, .tour-next:focus { outline: none; }
 /* .by-keys is set from JS once the keyboard is used: "Next" is focused on every step
    (so Enter works), but a ring around it would only be noise for mouse and touch */
-.tour-card.by-keys .tour-skip:focus, .tour-card.by-keys .tour-next:focus { outline: 2px solid var(--teal-light); outline-offset: 2px; }
+.tour-card.by-keys .tour-skip:focus, .tour-card.by-keys .tour-next:focus,
+.tour-ask-yes:focus-visible, .tour-ask-no:focus-visible { outline: 2px solid var(--teal-light); outline-offset: 2px; }
+
+/* "Need a quick tour?" — the small note under "?" on the first visit to a page.
+   The outer box only carries the position (a transform, set from JS, so it can follow
+   "?" when the home nav shrinks into its pill); the inner box fades and settles in. */
+.tour-ask {
+  position: fixed; top: 0; left: 0;
+  z-index: 990; /* above the nav (100), below the feedback card and the tour */
+  width: 236px; max-width: calc(100vw - 24px);
+  pointer-events: none;
+}
+.tour-ask-box {
+  position: relative;
+  padding: 13px 14px 11px;
+  background: var(--bg-elevated-2);
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.75);
+  touch-action: manipulation;
+  opacity: 0;
+  transform: translateY(-8px) scale(0.96);
+  transform-origin: var(--ask-caret, 24px) top;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  will-change: opacity, transform;
+}
+.tour-ask.is-in { pointer-events: auto; }
+.tour-ask.is-in .tour-ask-box {
+  opacity: 1; transform: none;
+  transition: opacity 0.3s ease, transform 0.42s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+.tour-ask-box::before { /* pointer up to "?" */
+  content: '';
+  position: absolute; top: -7px; left: var(--ask-caret, 24px);
+  width: 12px; height: 12px; margin-left: -6px;
+  background: var(--bg-elevated-2);
+  border: 1px solid var(--border-strong);
+  border-right-color: transparent; border-bottom-color: transparent;
+  transform: rotate(45deg);
+}
+.tour-ask-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem; font-weight: 700; line-height: 1.3;
+  color: var(--text);
+}
+.tour-ask-sub { font-size: 0.8rem; line-height: 1.4; color: var(--text-dim); margin: 2px 0 10px; }
+.tour-ask-row { display: flex; align-items: center; gap: 4px; }
+.tour-ask-yes, .tour-ask-no { min-height: 34px; font-size: 0.82rem; }
+.tour-ask-yes { padding: 0 16px; }
+.tour-ask-no { padding: 0 12px; }
+
 @media (max-width: 768px) {
   .tour-text { font-size: 1rem; }
   .tour-skip, .tour-next { min-height: 44px; } /* finger-sized */
+  .tour-ask-yes, .tour-ask-no { min-height: 40px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .tour-hole, .tour-card.is-in { transition: none; }
-  .tour-card { transform: none; }
+  .tour-veil, .tour-shade, .tour-ring, .tour-card, .tour-card.is-in,
+  .tour-hole.is-lit .tour-shade, .tour-hole.is-lit .tour-ring,
+  .tour-ask-box, .tour-ask.is-in .tour-ask-box,
+  .nav .brand, .nav .nav-links, .nav .nav-toggle, .nav-help { transition: none; }
+  .tour-card, .tour-ring, .tour-ask-box { transform: none; }
 }
 
 /* ===== PAGINATION SCROLL TARGET =====

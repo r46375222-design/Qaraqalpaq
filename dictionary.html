@@ -11,7 +11,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=120">
+<link rel="stylesheet" href="css/styles.css?v=121">
+<script>/* the tours of all five pages have been opened → no "?" in the nav (before the first paint; same list as GUIDE_PAGES in app.js) */try{if(['index','dictionary','flashcards','quiz','game'].every(function(p){return localStorage.getItem('qaraqalpaq_guide_'+p)==='seen'}))document.documentElement.className+=' guide-done'}catch(e){}</script>
 </head>
 <body class="page-dictionary">
 
@@ -111,7 +112,7 @@
       <span>QARAQALPAQ TILI</span>
     </div>
     <p>Keeping the Karakalpak language alive, one word at a time.</p>
-    <p class="footer-contact">Questions? <a href="https://t.me/MusXD" target="_blank" rel="noopener">@MusXD</a></p>
+    <p class="footer-contact">Questions? <a href="https://t.me/MusXD" target="_blank" rel="noopener">@MusXD</a><span class="footer-sep" aria-hidden="true">·</span><button type="button" class="footer-guide" id="footerGuide" title="A quick tour of this page">Guide</button></p>
   </div>
 </footer>
 
