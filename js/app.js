@@ -1732,10 +1732,12 @@
 
   // ===== GUIDE — a spotlight tour of the page =====
   // The page dims and ONE real element at a time is lit, with a short caption next to
-  // it and Next / Skip. Who starts it:
-  //   - the very first visit to the site: the tour of that page starts by itself, once;
-  //   - the first visit to each of the other pages: a small note under "?" asks
-  //     "Need a quick tour?" — shown ONCE per page, whatever the visitor does with it;
+  // it and Next / Skip. THE TOUR NEVER STARTS BY ITSELF — on any page. (It did once, on
+  // the very first visit: the page dimmed and scrolled away under a visitor who had not
+  // asked for anything. Musa, 2026-10-07: "no auto-start at all".) What starts it:
+  //   - the first visit to each page: a small note under "?" asks "Need a quick tour?"
+  //     — shown ONCE per page, whatever the visitor does with it; the tour starts only
+  //     on "Show me";
   //   - "?" in the nav and "Guide" in the footer: any time.
   // When the tours of all five pages have been opened, "?" leaves the nav for good
   // (the footer link stays).
@@ -2183,11 +2185,7 @@
       if (active || recall(page) || root.classList.contains('guide-done')) return; // "?" was pressed meanwhile
       if (!appReady) { if (tries > 0) setTimeout(() => offer(tries - 1), 250); return; } // words still loading
       if (nav && nav.classList.contains('menu-open')) return; // busy with the menu — next time
-      const first = GUIDE_PAGES.every(p => !recall(p));
-      const a = document.activeElement;
-      const typing = !!a && /^(input|textarea|select)$/i.test(a.tagName);
-      if (first && !typing) open(false);
-      else if (visible(btn)) showAsk();
+      if (visible(btn)) showAsk(); // only ever the note: the tour itself waits for a yes
     }
     if (canRemember && HELP_TIPS[page] && !recall(page)) whenSettled(() => offer(24));
 

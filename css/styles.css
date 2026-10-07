@@ -1798,7 +1798,16 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   .feedback-card { right: 12px; bottom: 12px; left: 12px; width: auto; }
 }
 
-/* ===== TRANSLATOR V2 — two panes, like a real translator ===== */
+/* ===== TRANSLATOR V2 — two panes, like a real translator =====
+   --tr-size is the ONE type size of the translator: the word being typed and its
+   translation are always set in it, so neither side is bigger than the other
+   (Musa, 2026-10-07: the translation used to be larger than the typed word).
+   Change the size here, never on the textarea or on .tr-output-big directly. */
+.translator { --tr-size: 1.15rem; }
+@media (min-width: 769px) {
+  .translator { --tr-size: 1.25rem; }
+  .translator-section .translator { --tr-size: 1.55rem; } /* the home page: the flagship card */
+}
 .tr-langbar {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -1844,7 +1853,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   resize: none;
   padding: 16px 40px 16px 18px;
   font-family: inherit;
-  font-size: 1.15rem; font-weight: 600;
+  font-size: var(--tr-size); font-weight: 600;
   line-height: 1.45;
   color: var(--text);
 }
@@ -1861,7 +1870,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 .tr-output-big {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(1.25rem, 2.6vw, 1.7rem);
+  font-size: var(--tr-size);
   line-height: 1.25;
   color: var(--text);
   overflow-wrap: anywhere;
@@ -1883,40 +1892,60 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 @media (min-width: 769px) {
   .translator-section .translator { max-width: 880px; }
   .tr-pane, .tr-pane-src textarea, .tr-output { min-height: 178px; }
-  .tr-pane-src textarea { font-size: 1.25rem; padding: 20px 44px 20px 22px; }
+  .tr-pane-src textarea { padding: 20px 44px 20px 22px; }
   .tr-pane-src textarea::placeholder { font-size: 1rem; }
   .tr-output { padding: 20px 22px; }
-  .tr-output-big { font-size: clamp(1.4rem, 2.8vw, 1.9rem); }
+  .tr-output-big { line-height: 1.4; } /* side by side with the typed word: same baseline as it */
   .tr-output-sub { font-size: 0.98rem; }
 }
-/* The HOME-PAGE translator is the flagship feature, so it is the biggest block on the
-   page after the hero: wider card, taller panes, larger type. Home only — the
-   dictionary page keeps the compact card above its search. Phones (≤768px) untouched. */
+/* The HOME-PAGE translator is the flagship feature: wider card, larger type. Home
+   only — the dictionary page keeps the compact card above its search. Phones (≤768px)
+   untouched.
+   ONE FRAME ONLY (Musa's pick "B", 2026-10-07): the card keeps its outline, the two
+   panes have none — just a line under the language bar and a divider between typing
+   and translation. A frame around the panes inside the card's frame read as heavy.
+   The panes are exactly as tall as one translated word with its buttons (PANE below),
+   so a single word does not hang in an empty panel and the card does not change
+   height when the translation appears. */
 @media (min-width: 769px) {
-  .translator-section .translator { max-width: 1100px; padding: 34px 36px 36px; border-radius: 28px; }
-  .translator-section .tr-langbar { margin-bottom: 18px; }
+  .translator-section .translator {
+    max-width: 1100px; padding: 34px 36px 18px; border-radius: 28px;
+    border-color: rgba(99, 102, 241, 0.3);
+    transition: border-color 0.2s ease;
+  }
+  .translator-section .translator:focus-within { border-color: rgba(99, 102, 241, 0.6); }
+  .translator-section .tr-langbar { margin-bottom: 16px; }
   .translator-section .tr-lang { font-size: 0.84rem; padding: 8px 18px; }
   .translator-section .tr-swap { width: 42px; height: 42px; font-size: 1.3rem; }
-  .translator-section .tr-panes { border-radius: 20px; }
-  /* 270px tall, a little less on short laptop screens (768px-high displays) so the
-     whole card still fits under the title after the hero button jumps here */
+  .translator-section .tr-panes,
+  .translator-section .tr-panes:focus-within {
+    border: none; border-top: 1px solid var(--border);
+    border-radius: 0;
+    background: transparent;
+  }
   .translator-section .tr-pane,
   .translator-section .tr-pane-src textarea,
-  .translator-section .tr-output { min-height: clamp(200px, calc(100vh - 460px), 270px); }
-  .translator-section .tr-pane-src textarea { font-size: 1.55rem; padding: 28px 58px 28px 30px; }
+  .translator-section .tr-output { min-height: 176px; } /* PANE */
+  .translator-section .tr-pane-src textarea { padding: 28px 58px 28px 6px; }
   .translator-section .tr-pane-src textarea::placeholder { font-size: 1.2rem; }
   .translator-section .tr-pane-src .translator-clear { top: 22px; right: 16px; }
-  .translator-section .tr-output { padding: 28px 30px; }
+  .translator-section .tr-output { padding: 28px 6px 28px 30px; background: transparent; }
   .translator-section .tr-output-hint { font-size: 1.2rem; }
-  .translator-section .tr-output-big { font-size: clamp(1.8rem, 3.2vw, 2.5rem); }
   .translator-section .tr-output-sub { font-size: 1.15rem; }
   .translator-section .tr-output-meta { margin-top: 14px; gap: 14px; }
   .translator-section .tr-output-meta .tr-cat { font-size: 0.74rem; }
   .translator-section .tr-output .tr-find,
   .translator-section .tr-output .tr-report { font-size: 0.9rem; padding: 9px 18px; }
   /* "Try the Translator" in the hero jumps here: land with the title just under the
-     nav so the whole (now taller) card fits on a laptop screen */
+     nav so the whole card fits on a laptop screen */
   .translator-section { scroll-margin-top: 10px; }
+}
+/* Narrow tablets: a long category name pushes the button onto a second line there,
+   so the panes are one line taller from the start (no jump when the word appears) */
+@media (min-width: 769px) and (max-width: 899px) {
+  .translator-section .tr-pane,
+  .translator-section .tr-pane-src textarea,
+  .translator-section .tr-output { min-height: 208px; }
 }
 
 /* ===== WORD REQUESTS & CORRECTIONS ===== */
