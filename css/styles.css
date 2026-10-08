@@ -283,6 +283,31 @@ input, select { font-family: inherit; }
 .nav-help.is-done { opacity: 0; pointer-events: none; }
 .guide-done .nav-help { display: none; }
 
+/* EN / RU — the interface language (app.js, "INTERFACE LANGUAGE"). It lives inside
+   .nav-links: at the end of the links on a computer, at the bottom of the menu on a phone. */
+.ui-lang {
+  display: flex; align-items: center; flex-shrink: 0; align-self: center;
+  margin-left: 10px; padding: 3px; gap: 2px;
+  border-radius: 999px; border: 1px solid var(--border-strong); background: rgba(255, 255, 255, 0.03);
+}
+.ui-lang-btn {
+  font-family: var(--font-display); font-weight: 700; font-size: 0.7rem; letter-spacing: 0.04em; line-height: 1;
+  color: var(--text-dim); padding: 6px 8px; border-radius: 999px;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+.ui-lang-btn:hover { color: var(--text); }
+.ui-lang-btn.is-on { background: var(--teal); color: var(--white); }
+.ui-lang-btn:focus-visible { outline: 2px solid var(--teal-light); outline-offset: 1px; }
+/* room for it: the scrolled pill is a little wider, and on narrow computer screens the
+   links are a little tighter */
+@media (max-width: 1000px) and (min-width: 769px) {
+  .nav-link { padding-left: 11px; padding-right: 11px; }
+  .nav-links { gap: 2px; }
+}
+@media (max-width: 860px) and (min-width: 769px) {
+  .brand-name { display: none; }   /* 769–860px: the logo alone, or the links do not fit */
+}
+
 /* ===== NAV — scroll pill (index.html, dictionary.html only) =====
    Floats transparent and full-width by default; shrinks into a centered,
    blurred pill once the page scrolls past 50px. */
@@ -305,7 +330,7 @@ input, select { font-family: inherit; }
    .nav-inner — disable the clip while it's open so it isn't cut off. */
 .nav-pill.menu-open .nav-inner { overflow: visible; }
 .nav-pill.is-scrolled .nav-inner {
-  max-width: 800px;
+  max-width: 900px;   /* 800 before the EN / RU switch */
   margin: 0 auto;
   border-radius: 16px;
   -webkit-backdrop-filter: blur(18px) saturate(150%);
@@ -1072,9 +1097,37 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   transition: all 0.15s ease;
 }
 .quiz-option:hover:not(:disabled) { border-color: var(--teal); transform: translateY(-2px); }
-.quiz-option.correct { background: var(--teal-soft); border-color: var(--teal-soft-border); color: var(--teal-on-surface); }
-.quiz-option.wrong { background: var(--danger-soft); border-color: var(--danger-border); color: var(--danger-text); }
+/* An answer must read as an answer (Musa, 2026-10-09): the right option green with a tick,
+   a wrong pick red with a cross (the right one is then shown green anyway), the other two
+   step back. White on #15803d / #b91c1c passes WCAG AA for this text size. */
+.quiz-option .ico { width: 1.1em; height: 1.1em; stroke-width: 2.6; vertical-align: -0.2em; margin-right: 2px; }
+.quiz-option.correct { background: #15803d; border-color: #22c55e; color: #fff; }
+.quiz-option.wrong { background: #b91c1c; border-color: #ef4444; color: #fff; }
+.quiz-option.is-other { opacity: 0.45; }
 .quiz-option:disabled { cursor: default; }
+.quiz-feedback {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin: -10px 0 22px; font-weight: 700; font-size: 1rem; text-align: center;
+}
+.quiz-feedback .ico { width: 1.2em; height: 1.2em; stroke-width: 2.5; flex-shrink: 0; }
+.quiz-feedback.is-ok { color: #4ade80; }
+.quiz-feedback.is-wrong { color: #fca5a5; }
+.quiz-feedback.is-wrong strong { color: #4ade80; }
+/* the eye-catcher: the right option pops once and glows, its tick draws itself, the line fades in.
+   Only transform, filter, opacity and stroke-dashoffset. */
+@media (prefers-reduced-motion: no-preference) {
+  .quiz-option.correct { animation: quiz-right 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+  .quiz-option.correct .ico path { stroke-dasharray: 22; animation: quiz-tick 0.35s 0.12s ease-out both; }
+  .quiz-feedback:not([hidden]) { animation: quiz-line 0.3s ease-out both; }
+}
+@keyframes quiz-right {
+  0%   { transform: scale(1);     filter: drop-shadow(0 0 0 rgba(34, 197, 94, 0)); }
+  35%  { transform: scale(1.06);  filter: drop-shadow(0 0 16px rgba(34, 197, 94, 0.65)); }
+  65%  { transform: scale(0.985); }
+  100% { transform: scale(1);     filter: drop-shadow(0 0 7px rgba(34, 197, 94, 0.35)); }
+}
+@keyframes quiz-tick { from { stroke-dashoffset: 22; } to { stroke-dashoffset: 0; } }
+@keyframes quiz-line { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 
 /* ===== SOCIAL PROOF SECTION ===== */
 .social-proof { padding: 40px 0 0; }
@@ -1530,6 +1583,8 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
     padding: 14px 18px;
     text-align: left;
   }
+  .nav.menu-open .ui-lang { align-self: flex-start; margin: 10px 0 0 14px; }
+  .ui-lang-btn { font-size: 0.8rem; padding: 9px 14px; }   /* a finger-sized target in the menu */
   .word-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .quiz-options { grid-template-columns: 1fr; }
   .quiz-option { min-height: 48px; padding: 16px; }

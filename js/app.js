@@ -18,6 +18,140 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
+  // ===== INTERFACE LANGUAGE — EN / RU =====
+  // Every interface string lives HERE, in STRINGS. Phase 1 (2026-10-09): the mechanics and
+  // all the static strings of the five pages; the strings app.js builds itself (messages,
+  // tour captions, Sózle, …) move in phase 2.
+  // The html keeps the English text (what shows without JS, and what search engines read)
+  // and names its key:
+  //   data-i18n="key"                       → the element's text
+  //   data-i18n-html="key"                  → its inner HTML (strings with <strong>, <kbd>…)
+  //   data-i18n-attr="placeholder:key; …"   → attributes (placeholder, aria-label, title, alt)
+  //   data-i18n-cat="Animal World"          → a category name, shown through catLabel()
+  // In code: t('key') or t('key', { answer: 'Tie' }) for "{answer}" in the string.
+  // CATEGORY NAMES ARE KEYS: words.json, the dictionary filter (data-cat), the quiz and
+  // flashcards selects (option value) and wordId() all use the English name. Only what is
+  // SHOWN goes through catLabel(cat) — never put a translated name into a value, a data-*
+  // attribute, a filter or localStorage.
+  // <title> and the meta description stay English on purpose (Musa, 2026-10-08).
+  // PHASE 1: ru is a stand-in — "[RU] " + the English text — so a string that does not
+  // switch is easy to spot. Phase 2 replaces STRINGS.ru and CATEGORY_NAMES.ru with Russian.
+  const LANG_KEY = 'qaraqalpaq_lang';
+  const STRINGS_EN = {
+    // nav and footer (every page)
+    'nav.home': 'Home', 'nav.dictionary': 'Dictionary', 'nav.flashcards': 'Flashcards', 'nav.quiz': 'Quiz',
+    'a11y.logo': 'Qaraqalpaq Tili logo', 'a11y.help': 'How to use this site', 'a11y.menu': 'Menu', 'a11y.lang': 'Interface language',
+    'footer.tagline': 'Keeping the Karakalpak language alive, one word at a time.', 'footer.questions': 'Questions?',
+    'footer.guide': 'Guide', 'footer.guideTitle': 'A quick tour of this page',
+    // home
+    'hero.tag': 'Tili — your gateway to Karakalpak',
+    'hero.title': 'Learn <span class="hero-accent">Qaraqalpaq</span> the modern way.',
+    'hero.sub': 'An instant translator, dictionary, flashcards and quizzes built for a new generation of learners — fast, bold, and actually fun.',
+    'hero.try': 'Try the Translator', 'cta.exploreDict': 'Explore the Dictionary',
+    'stat.words': 'Words', 'stat.categories': 'Categories', 'stat.languages': 'Languages',
+    'home.exploreAll': 'Explore all 1,301 words in the dictionary →',
+    'home.sozle': "<strong>New — Sózle:</strong> the Karakalpak word game. Guess today's word in 6 tries →",
+    'proof.caption': 'Just launched — be among the <strong>first learners</strong> of Qaraqalpaq online',
+    'proof.words': 'Real words, checked by a native speaker', 'proof.waiting': 'Waiting for your feedback', 'proof.tell': 'Tell us what you think —',
+    'show.title': 'See it in action', 'show.sub': 'A quick look at the dictionary, flashcards and quiz.',
+    'show.dictTitle': 'Dictionary & Translator', 'show.dictSub': '1,301 words — instant translation both ways',
+    'show.flashTitle': 'Flashcards', 'show.flashSub': 'Flip to memorize faster', 'show.quizTitle': 'Quiz', 'show.quizSub': 'Test yourself instantly',
+    'phone.flashTitle': 'Master words with smart Flashcards',
+    'phone.flashText': 'Flip through real Karakalpak vocabulary and build recall with instant English & Russian translations.',
+    'phone.quizTitle': 'Test yourself with instant Quiz',
+    'phone.quizText': 'Four options, one right answer. Track your streak and score as you grow from beginner to fluent.',
+    'feat.title': 'Everything you need to learn Qaraqalpaq', 'feat.sub': 'One simple toolkit, built for fast progress.',
+    'feat.translator': 'Instant Translator', 'feat.translatorText': 'Auto-detects Qaraqalpaq, English or Russian.',
+    'feat.words': '1,301 Words', 'feat.wordsText': 'Karakalpak, English and Russian in one place.',
+    'feat.flash': 'Smart Flashcards', 'feat.flashText': 'Flip cards to memorize faster.',
+    'feat.quiz': 'Quick Quiz', 'feat.quizText': 'Test your knowledge instantly.',
+    'cta.title': 'Ready to start learning?',
+    // the little mock-ups on the home page (their English words are part of the picture)
+    'mock.hello': 'Hello', 'mock.heart': 'Heart', 'mock.whatIs': 'What is <strong>Suw</strong>?',
+    'mock.water': 'Water', 'mock.fire': 'Fire', 'mock.earth': 'Earth', 'mock.air': 'Air',
+    'mock.search': 'Search a word…', 'mock.all': 'All', 'mock.animals': 'Animals', 'mock.food': 'Food',
+    'mock.sky': 'sky', 'mock.flower': 'flower', 'mock.sun': 'Sun', 'mock.moon': 'Moon', 'mock.star': 'Star', 'mock.skyCap': 'Sky',
+    // translator (home + dictionary)
+    'tr.title': 'Instant Translator',
+    'tr.sub': 'Type any word in Qaraqalpaq, English or Russian — it detects the language and translates instantly, right in your browser.',
+    'tr.detect': 'Detect language', 'tr.translation': 'Translation', 'tr.hint': 'Translation appears here',
+    'tr.placeholder': 'Type in Qaraqalpaq, English or Russian…', 'a11y.clear': 'Clear',
+    // word request (home + dictionary)
+    'req.title': 'Missing a word? Spotted a mistake?', 'req.text': 'Tell us the word — we read every message and keep the dictionary growing.',
+    'req.word': 'Word or phrase in any language', 'req.note': 'Correct spelling, meaning or context (optional)', 'req.send': 'Send it in',
+    // dictionary
+    'dict.title': 'Explore the Dictionary', 'dict.sub': 'Search across Karakalpak, English and Russian — instantly.',
+    'dict.search': 'Search a word in any language...', 'dict.empty': 'No words found. Try a different search or category.',
+    'a11y.scrollLeft': 'scroll left', 'a11y.scrollRight': 'scroll right',
+    'cats.all': 'All Categories', 'cats.allPill': 'All',
+    // word cards and flashcards
+    'card.tapReveal': 'Tap to reveal', 'card.tapBack': 'Tap to go back', 'btn.markLearned': 'Mark as Learned', 'btn.learned': 'Learned',
+    'flash.title': 'Flashcard Mode', 'flash.sub': 'Tap the card to flip. Swipe through and lock in new words.',
+    'flash.shuffle': 'Shuffle', 'flash.flip': 'Flip Card', 'a11y.prev': 'previous', 'a11y.next': 'next',
+    // quiz
+    'quiz.title': 'Quiz Mode', 'quiz.sub': 'Pick the right translation. Four options, one correct answer.',
+    'a11y.quizLang': 'Quiz answer language', 'quiz.ansEn': 'English', 'quiz.ansRu': 'Русский',
+    'quiz.score': 'Score', 'quiz.streak': 'Streak', 'quiz.answered': 'Answered', 'quiz.start': 'Start Quiz',
+    'quiz.whatMean': 'What does this mean?', 'quiz.next': 'Next Question',
+    'quiz.correct': 'Correct!', 'quiz.wrong': 'Not quite — the answer is {answer}',
+    // Sózle
+    'game.how': "Guess the Karakalpak word in 6 tries. Green = right spot, yellow = wrong spot. New word every day — and you learn its meaning when you're done.",
+    'sozle.hint': 'Hint', 'sozle.random': 'Random word', 'a11y.board': 'Game board', 'a11y.keyboard': 'Keyboard',
+    'game.letters': "Letters á, ǵ, ı, ń, ó, ú are on the keyboard above — that's what makes it Qaraqalpaq",
+    'game.kbd': "You can type on your own keyboard too, in any layout. For á ǵ ı ń ó ú type the letter, then <kbd>'</kbd> — <kbd>a</kbd><kbd>'</kbd> gives á.",
+  };
+  const stub = o => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, '[RU] ' + v]));   // phase 1 only
+  const STRINGS = { en: STRINGS_EN, ru: stub(STRINGS_EN) };
+  // display names of the 48 categories, by their English key; a missing one shows the key
+  const CATEGORY_NAMES = { en: {}, ru: null };   // ru: null = phase 1, "[RU] " + the key
+  let LANG = 'en';
+  try { const v = localStorage.getItem(LANG_KEY); if (STRINGS[v]) LANG = v; } catch (e) {}
+
+  function t(key, vars) {
+    let s = STRINGS[LANG][key] ?? STRINGS.en[key] ?? key;
+    if (vars) s = s.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m));
+    return s;
+  }
+  function catLabel(cat) {
+    const names = CATEGORY_NAMES[LANG];
+    if (names === null) return '[RU] ' + cat;
+    return (names && names[cat]) || cat;
+  }
+  // write the strings into the static markup (all of it, or one part of the page)
+  function applyStrings(root = document) {
+    $$('[data-i18n]', root).forEach(el => { el.textContent = t(el.dataset.i18n); });
+    $$('[data-i18n-html]', root).forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+    $$('[data-i18n-cat]', root).forEach(el => { el.textContent = catLabel(el.dataset.i18nCat); });
+    $$('[data-i18n-attr]', root).forEach(el => {
+      el.dataset.i18nAttr.split(';').forEach(pair => {
+        const [attr, key] = pair.split(':').map(s => s.trim());
+        if (attr && key) el.setAttribute(attr, t(key));
+      });
+    });
+    document.documentElement.lang = LANG;
+    $$('.ui-lang-btn').forEach(b => {
+      const on = b.dataset.uiLang === LANG;
+      b.classList.toggle('is-on', on);
+      b.setAttribute('aria-pressed', String(on));
+    });
+  }
+  // the parts of a page that app.js draws itself register here and are redrawn on a switch
+  const LANG_REDRAW = [];
+  function setLang(lang) {
+    if (!STRINGS[lang] || lang === LANG) return;
+    LANG = lang;
+    try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
+    applyStrings();
+    LANG_REDRAW.forEach(fn => { try { fn(); } catch (e) { console.error(e); } });
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('.ui-lang-btn');
+    if (b) setLang(b.dataset.uiLang);
+  });
+  // first thing on every page, before words.json arrives, so a Russian page does not
+  // stay English for a moment (for English it rewrites the same text and lights "EN")
+  applyStrings();
+
   function norm(s) {
     return (s || '').toLowerCase();
   }
@@ -373,6 +507,7 @@
     navLinks.addEventListener('mouseleave', returnToActive);
 
     window.addEventListener('resize', returnToActive, { passive: true });
+    LANG_REDRAW.push(returnToActive);   // the links change width with the language
   }
 
   // ===== NAV =====
@@ -691,8 +826,8 @@
     const srcEl = $('#trLangSrc');
     const dstEl = $('#trLangDst');
     if (!srcEl || !dstEl) return;
-    srcEl.textContent = src ? LANG_NAMES[src] : 'Detect language';
-    dstEl.textContent = src ? TARGET_LABELS[src] : 'Translation';
+    srcEl.textContent = src ? LANG_NAMES[src] : t('tr.detect');
+    dstEl.textContent = src ? TARGET_LABELS[src] : t('tr.translation');
   }
 
   function trMatchHtml(w) {
@@ -705,7 +840,7 @@
           <span class="tr-match-ru">${escapeHtml(w.ru)}</span>
         </div>
         <div class="tr-match-side">
-          <span class="tr-cat">${escapeHtml(w.category)}</span>
+          <span class="tr-cat">${escapeHtml(catLabel(w.category))}</span>
           <button class="tr-find" data-kk="${escapeAttr(w.kk)}">Find in dictionary →</button>
         </div>
       </div>`;
@@ -726,7 +861,7 @@
       </div>`;
   }
 
-  const TR_OUTPUT_HINT = '<span class="tr-output-hint">Translation appears here</span>';
+  const trOutputHint = () => `<span class="tr-output-hint" data-i18n="tr.hint">${t('tr.hint')}</span>`;
 
   function renderTranslation(raw) {
     const results = $('#translatorResults');
@@ -734,7 +869,7 @@
     const res = translateQuery(raw);
     if (!res) {
       results.hidden = true; results.innerHTML = '';
-      out.innerHTML = TR_OUTPUT_HINT;
+      out.innerHTML = trOutputHint();
       trSetLangs(null);
       return;
     }
@@ -751,7 +886,7 @@
           <span class="tr-output-big">${escapeHtml(big)}</span>
           <span class="tr-output-sub">${escapeHtml(sub)}</span>
           <div class="tr-output-meta">
-            <span class="tr-cat">${escapeHtml(m.category)}</span>
+            <span class="tr-cat">${escapeHtml(catLabel(m.category))}</span>
             <button class="tr-find" data-kk="${escapeAttr(m.kk)}">Find in dictionary →</button>
           </div>
         </div>`;
@@ -801,7 +936,7 @@
       clearBtn.hidden = raw === '';
       if (!raw) {
         results.hidden = true; results.innerHTML = '';
-        out.innerHTML = TR_OUTPUT_HINT;
+        out.innerHTML = trOutputHint();
         trSetLangs(null);
         return;
       }
@@ -812,6 +947,7 @@
     input.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(run, 160); });
     input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); clearTimeout(timer); run(); } });
     clearBtn.addEventListener('click', () => { input.value = ''; run(); input.focus(); });
+    LANG_REDRAW.push(run);
 
     // One listener on the whole card: "Find in dictionary" now also lives in the output pane
     $('#translator').addEventListener('click', e => {
@@ -1005,7 +1141,7 @@
         <span class="sozle-answer-kk">${escapeHtml(w.kk)}</span>
         <span class="sozle-answer-en">${escapeHtml(w.en)}</span>
         <span class="sozle-answer-ru">${escapeHtml(w.ru)}</span>
-        <span class="tr-cat">${escapeHtml(w.category)}</span>
+        <span class="tr-cat">${escapeHtml(catLabel(w.category))}</span>
       </div>
       <p class="sozle-learned">You just learned a Karakalpak word ${icon('school')}</p>
       <div class="sozle-share">
@@ -1024,6 +1160,8 @@
       else done();
     });
   }
+
+  LANG_REDRAW.push(() => { if (typeof sozle !== 'undefined' && sozle && sozle.done && $('#sozlePanel') && !$('#sozlePanel').hidden) sozleEndPanel(); });
 
   function sozleFinish(win) {
     sozle.done = true;
@@ -1222,13 +1360,14 @@
       if (card) card.classList.toggle('flipped');
     });
     renderDictionary();
+    LANG_REDRAW.push(() => { buildCategoryPills(); renderDictionary(); });
   }
 
   function buildCategoryPills() {
     const wrap = $('#categoryPills');
     const all = ['All', ...CATEGORIES];
     wrap.innerHTML = all.map(cat =>
-      `<button class="pill ${cat === 'All' ? 'active' : ''}" data-cat="${escapeAttr(cat)}">${escapeHtml(cat)}</button>`
+      `<button class="pill ${cat === state.category ? 'active' : ''}" data-cat="${escapeAttr(cat)}">${escapeHtml(cat === 'All' ? t('cats.allPill') : catLabel(cat))}</button>`
     ).join('');
     $$('.pill', wrap).forEach(pill => {
       pill.addEventListener('click', () => {
@@ -1312,7 +1451,7 @@
             <span class="wotd-ru">${escapeHtml(w.ru)}</span>
           </div>
         </div>
-        <span class="wotd-cat">${escapeHtml(w.category)}</span>
+        <span class="wotd-cat">${escapeHtml(catLabel(w.category))}</span>
       </div>`;
   }
 
@@ -1322,7 +1461,7 @@
     const learned = isLearned(id);
     const card = btn.closest('.word-card');
     card.classList.toggle('is-learned', learned);
-    $$('.learn-btn', card).forEach(b => { b.innerHTML = learned ? `${icon('check')} Learned` : 'Mark as Learned'; });
+    $$('.learn-btn', card).forEach(b => { b.innerHTML = learned ? `${icon('check')} ${t('btn.learned')}` : t('btn.markLearned'); });
     renderProgressBar();
     renderProgressWidget();
   }
@@ -1366,7 +1505,7 @@
     const catIcon = bigIcon(categoryIcon(w.category));
     const id = wordId(w);
     const learned = isLearned(id);
-    const learnBtnHtml = `<button class="learn-btn" data-id="${escapeAttr(id)}">${learned ? `${icon('check')} Learned` : 'Mark as Learned'}</button>`;
+    const learnBtnHtml = `<button class="learn-btn" data-id="${escapeAttr(id)}">${learned ? `${icon('check')} ${t('btn.learned')}` : t('btn.markLearned')}</button>`;
     // The ✓ badge lives INSIDE each face, so it turns with the card (as a child of
     // .word-card it stayed put in the corner while the card rotated under it), and it
     // is the LAST ITEM OF THE TOP ROW, so a long category pill shortens with "…"
@@ -1378,11 +1517,11 @@
           <div class="word-card-face word-card-front">
             <div class="word-card-top">
               <span class="word-card-icon">${catIcon}</span>
-              <span class="word-cat-badge" title="${escapeAttr(w.category)}">${escapeHtml(w.category)}</span>
+              <span class="word-cat-badge" title="${escapeAttr(catLabel(w.category))}">${escapeHtml(catLabel(w.category))}</span>
               ${badgeHtml}
             </div>
             <span class="word-kk">${escapeHtml(w.kk)}</span>
-            <span class="word-flip-hint">Tap to reveal ${icon('rotate-clockwise')}</span>
+            <span class="word-flip-hint">${t('card.tapReveal')} ${icon('rotate-clockwise')}</span>
             ${learnBtnHtml}
           </div>
           <div class="word-card-face word-card-back">
@@ -1391,7 +1530,7 @@
               <span class="word-en">${escapeHtml(w.en)}</span>
               <span class="word-ru">${escapeHtml(w.ru)}</span>
             </div>
-            <span class="word-flip-hint">Tap to go back ${icon('rotate')}</span>
+            <span class="word-flip-hint">${t('card.tapBack')} ${icon('rotate')}</span>
             ${learnBtnHtml}
           </div>
         </div>
@@ -1438,9 +1577,11 @@
 
   // ===== FLASHCARDS PAGE =====
   function buildSelectOptions(select) {
+    const keep = select.value;
     select.innerHTML = ['All Categories', ...CATEGORIES]
-      .map(cat => `<option value="${escapeAttr(cat === 'All Categories' ? 'All' : cat)}">${escapeHtml(cat)}</option>`)
+      .map(cat => `<option value="${escapeAttr(cat === 'All Categories' ? 'All' : cat)}">${escapeHtml(cat === 'All Categories' ? t('cats.all') : catLabel(cat))}</option>`)
       .join('');
+    if (keep) select.value = keep;
   }
 
   function initFlashcardsPage() {
@@ -1506,6 +1647,11 @@
     });
     renderProgressBar();
     refreshFlashList();
+    LANG_REDRAW.push(() => {
+      buildSelectOptions($('#flashCategory'));
+      const w = state.flash.list[state.flash.index];
+      if (w) { $('#flashCatBadge').textContent = catLabel(w.category); renderFlashLearned(w); }
+    });
   }
 
   function renderFlashLearned(w) {
@@ -1513,7 +1659,7 @@
     const learned = isLearned(wordId(w));
     if (learnBtn) {
       learnBtn.hidden = false;
-      learnBtn.innerHTML = `${icon('check')} ${learned ? 'Learned' : 'Mark as Learned'}`;
+      learnBtn.innerHTML = `${icon('check')} ${learned ? t('btn.learned') : t('btn.markLearned')}`;
       learnBtn.classList.toggle('is-learned', learned);
     }
     // one badge on each face of the card (see flashcards.html)
@@ -1544,7 +1690,7 @@
       return;
     }
     const w = list[index];
-    $('#flashCatBadge').textContent = w.category;
+    $('#flashCatBadge').textContent = catLabel(w.category);
     $('#flashWordKK').textContent = w.kk;
     $('#flashWordEN').textContent = w.en;
     $('#flashWordRU').textContent = w.ru;
@@ -1571,6 +1717,7 @@
     $('#quizStart').addEventListener('click', startQuiz);
     $('#quizNext').addEventListener('click', nextQuizQuestion);
     setupQuizLangToggle();
+    LANG_REDRAW.push(() => { buildSelectOptions($('#quizCategory')); renderQuizFeedback(); });
   }
 
   function setupQuizLangToggle() {
@@ -1611,6 +1758,8 @@
     const correct = pool[Math.floor(Math.random() * pool.length)];
     $('#quizQuestionWord').textContent = correct.kk;
     $('#quizNext').hidden = true;
+    state.quiz.feedback = null;
+    renderQuizFeedback();
     renderQuizOptions(correct);
   }
 
@@ -1653,11 +1802,18 @@
     const chosen = btn.dataset.val;
     const isCorrect = chosen === correctVal;
 
+    // Musa, 2026-10-09: an answer must READ as an answer. The right option turns green with a
+    // tick (and plays a short pop, see .quiz-option.correct), a wrong pick turns red with a
+    // cross, the right one is shown green anyway, the other two step back; a line under the
+    // options says it in words.
     $$('.quiz-option').forEach(b => {
       b.disabled = true;
-      if (b.dataset.val === correctVal) b.classList.add('correct');
-      else if (b === btn) b.classList.add('wrong');
+      if (b.dataset.val === correctVal) { b.classList.add('correct'); b.insertAdjacentHTML('afterbegin', icon('check') + ' '); }
+      else if (b === btn) { b.classList.add('wrong'); b.insertAdjacentHTML('afterbegin', icon('x') + ' '); }
+      else b.classList.add('is-other');
     });
+    state.quiz.feedback = { ok: isCorrect, answer: correctVal };
+    renderQuizFeedback();
 
     state.quiz.answered++;
     if (isCorrect) {
@@ -1670,6 +1826,26 @@
     updateQuizBestScore(state.quiz.score);
     updateQuizScoreboard();
     $('#quizNext').hidden = false;
+    // on a phone the line and "Next Question" can sit under the fold: bring them up, but only
+    // as far as needed, and only right after the tap (never by itself)
+    const next = $('#quizNext');
+    if (next.getBoundingClientRect().bottom > innerHeight) {
+      next.scrollIntoView({ block: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    }
+  }
+
+  // "Correct!" or "Not quite — the answer is Tie" under the options
+  function renderQuizFeedback() {
+    const el = $('#quizFeedback');
+    if (!el) return;
+    const f = state.quiz.feedback;
+    if (!f) { el.hidden = true; el.innerHTML = ''; return; }
+    const [before, after = ''] = t('quiz.wrong').split('{answer}');
+    el.className = 'quiz-feedback ' + (f.ok ? 'is-ok' : 'is-wrong');
+    el.innerHTML = f.ok
+      ? `${icon('check')} <span>${escapeHtml(t('quiz.correct'))}</span>`
+      : `${icon('x')} <span>${escapeHtml(before)}<strong>${escapeHtml(f.answer)}</strong>${escapeHtml(after)}</span>`;
+    el.hidden = false;
   }
 
   function updateQuizScoreboard() {

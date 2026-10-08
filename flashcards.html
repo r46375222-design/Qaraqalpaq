@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=123">
+<link rel="stylesheet" href="css/styles.css?v=124">
 <script>/* the tours of all five pages have been opened → no "?" in the nav (before the first paint; same list as GUIDE_PAGES in app.js) */try{if(['index','dictionary','flashcards','quiz','game'].every(function(p){return localStorage.getItem('qaraqalpaq_guide_'+p)==='seen'}))document.documentElement.className+=' guide-done'}catch(e){}</script>
 </head>
 <body>
@@ -19,18 +19,19 @@
 <header class="nav">
   <div class="nav-inner">
     <a href="index.html" class="brand">
-      <img src="public/assets/logo.png" alt="Qaraqalpaq Tili logo" class="brand-mark">
+      <img src="public/assets/logo.png" alt="Qaraqalpaq Tili logo" data-i18n-attr="alt:a11y.logo" class="brand-mark">
       <span class="brand-name">QARAQALPAQ <strong>TILI</strong></span>
     </a>
     <nav class="nav-links" id="navLinks">
-      <a href="index.html" class="nav-link" data-page="index">Home</a>
-      <a href="dictionary.html" class="nav-link" data-page="dictionary">Dictionary</a>
-      <a href="flashcards.html" class="nav-link" data-page="flashcards">Flashcards</a>
-      <a href="quiz.html" class="nav-link" data-page="quiz">Quiz</a>
+      <a href="index.html" class="nav-link" data-page="index" data-i18n="nav.home">Home</a>
+      <a href="dictionary.html" class="nav-link" data-page="dictionary" data-i18n="nav.dictionary">Dictionary</a>
+      <a href="flashcards.html" class="nav-link" data-page="flashcards" data-i18n="nav.flashcards">Flashcards</a>
+      <a href="quiz.html" class="nav-link" data-page="quiz" data-i18n="nav.quiz">Quiz</a>
       <a href="game.html" class="nav-link" data-page="game">Sózle</a>
+      <div class="ui-lang" id="uiLang" role="group" aria-label="Interface language" data-i18n-attr="aria-label:a11y.lang"><button type="button" class="ui-lang-btn" data-ui-lang="en" aria-pressed="true">EN</button><button type="button" class="ui-lang-btn" data-ui-lang="ru" aria-pressed="false">RU</button></div>
     </nav>
-    <button class="nav-help" id="navHelp" type="button" aria-label="How to use this site" aria-expanded="false">?</button>
-    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+    <button class="nav-help" id="navHelp" type="button" aria-label="How to use this site" data-i18n-attr="aria-label:a11y.help" aria-expanded="false">?</button>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" data-i18n-attr="aria-label:a11y.menu">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -40,8 +41,8 @@
   <section class="view view-active" id="view-flashcards">
     <div class="container container-narrow">
       <div class="section-head">
-        <h1>Flashcard Mode</h1>
-        <p>Tap the card to flip. Swipe through and lock in new words.</p>
+        <h1 data-i18n="flash.title">Flashcard Mode</h1>
+        <p data-i18n="flash.sub">Tap the card to flip. Swipe through and lock in new words.</p>
       </div>
 
       <div class="progress-bar-wrap" id="progressBarWrap"></div>
@@ -52,14 +53,14 @@
       </div>
 
       <div class="flash-stage">
-        <button class="flash-nav flash-prev" id="flashPrev" aria-label="previous">‹</button>
+        <button class="flash-nav flash-prev" id="flashPrev" aria-label="previous" data-i18n-attr="aria-label:a11y.prev">‹</button>
         <div class="flashcard" id="flashcard">
           <div class="flashcard-inner">
             <div class="flashcard-face flashcard-front">
               <span class="learned-badge" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12l5 5l10 -10"/></svg></span>
               <span class="flash-badge" id="flashCatBadge">Category</span>
               <span class="flash-word" id="flashWordKK">Word</span>
-              <span class="flash-hint">Tap to reveal</span>
+              <span class="flash-hint" data-i18n="card.tapReveal">Tap to reveal</span>
             </div>
             <div class="flashcard-face flashcard-back">
               <span class="learned-badge" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12l5 5l10 -10"/></svg></span>
@@ -68,13 +69,13 @@
             </div>
           </div>
         </div>
-        <button class="flash-nav flash-next" id="flashNext" aria-label="next">›</button>
+        <button class="flash-nav flash-next" id="flashNext" aria-label="next" data-i18n-attr="aria-label:a11y.next">›</button>
       </div>
 
       <div class="flash-actions">
-        <button class="btn btn-outline" id="flashShuffle"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 4l3 3l-3 3"/><path d="M18 20l3 -3l-3 -3"/><path d="M3 7h3a5 5 0 0 1 5 5a5 5 0 0 0 5 5h5"/><path d="M21 7h-5a4.978 4.978 0 0 0 -3 1m-4 8a4.984 4.984 0 0 1 -3 1h-3"/></svg> Shuffle</button>
-        <button class="btn btn-primary" id="flashFlipBtn">Flip Card</button>
-        <button class="btn btn-outline" id="flashLearnBtn"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12l5 5l10 -10"/></svg> Mark as Learned</button>
+        <button class="btn btn-outline" id="flashShuffle"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 4l3 3l-3 3"/><path d="M18 20l3 -3l-3 -3"/><path d="M3 7h3a5 5 0 0 1 5 5a5 5 0 0 0 5 5h5"/><path d="M21 7h-5a4.978 4.978 0 0 0 -3 1m-4 8a4.984 4.984 0 0 1 -3 1h-3"/></svg> <span data-i18n="flash.shuffle">Shuffle</span></button>
+        <button class="btn btn-primary" id="flashFlipBtn" data-i18n="flash.flip">Flip Card</button>
+        <button class="btn btn-outline" id="flashLearnBtn"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12l5 5l10 -10"/></svg> <span data-i18n="btn.markLearned">Mark as Learned</span></button>
       </div>
     </div>
   </section>
@@ -83,11 +84,11 @@
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-brand">
-      <img src="public/assets/logo.png" alt="Qaraqalpaq Tili logo" class="brand-mark small">
+      <img src="public/assets/logo.png" alt="Qaraqalpaq Tili logo" data-i18n-attr="alt:a11y.logo" class="brand-mark small">
       <span>QARAQALPAQ TILI</span>
     </div>
-    <p>Keeping the Karakalpak language alive, one word at a time.</p>
-    <p class="footer-contact">Questions? <a href="https://t.me/MusXD" target="_blank" rel="noopener">@MusXD</a><span class="footer-sep" aria-hidden="true">·</span><button type="button" class="footer-guide" id="footerGuide" title="A quick tour of this page">Guide</button></p>
+    <p data-i18n="footer.tagline">Keeping the Karakalpak language alive, one word at a time.</p>
+    <p class="footer-contact"><span data-i18n="footer.questions">Questions?</span> <a href="https://t.me/MusXD" target="_blank" rel="noopener">@MusXD</a><span class="footer-sep" aria-hidden="true">·</span><button type="button" class="footer-guide" id="footerGuide" title="A quick tour of this page" data-i18n-attr="title:footer.guideTitle" data-i18n="footer.guide">Guide</button></p>
   </div>
 </footer>
 

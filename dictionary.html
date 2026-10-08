@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=123">
+<link rel="stylesheet" href="css/styles.css?v=124">
 <script>/* the tours of all five pages have been opened → no "?" in the nav (before the first paint; same list as GUIDE_PAGES in app.js) */try{if(['index','dictionary','flashcards','quiz','game'].every(function(p){return localStorage.getItem('qaraqalpaq_guide_'+p)==='seen'}))document.documentElement.className+=' guide-done'}catch(e){}</script>
 </head>
 <body class="page-dictionary">
@@ -19,18 +19,19 @@
 <header class="nav nav-pill">
   <div class="nav-inner">
     <a href="index.html" class="brand">
-      <img src="public/assets/logo.png" alt="Qaraqalpaq Tili logo" class="brand-mark">
+      <img src="public/assets/logo.png" alt="Qaraqalpaq Tili logo" data-i18n-attr="alt:a11y.logo" class="brand-mark">
       <span class="brand-name">QARAQALPAQ <strong>TILI</strong></span>
     </a>
     <nav class="nav-links" id="navLinks">
-      <a href="index.html" class="nav-link" data-page="index">Home</a>
-      <a href="dictionary.html" class="nav-link" data-page="dictionary">Dictionary</a>
-      <a href="flashcards.html" class="nav-link" data-page="flashcards">Flashcards</a>
-      <a href="quiz.html" class="nav-link" data-page="quiz">Quiz</a>
+      <a href="index.html" class="nav-link" data-page="index" data-i18n="nav.home">Home</a>
+      <a href="dictionary.html" class="nav-link" data-page="dictionary" data-i18n="nav.dictionary">Dictionary</a>
+      <a href="flashcards.html" class="nav-link" data-page="flashcards" data-i18n="nav.flashcards">Flashcards</a>
+      <a href="quiz.html" class="nav-link" data-page="quiz" data-i18n="nav.quiz">Quiz</a>
       <a href="game.html" class="nav-link" data-page="game">Sózle</a>
+      <div class="ui-lang" id="uiLang" role="group" aria-label="Interface language" data-i18n-attr="aria-label:a11y.lang"><button type="button" class="ui-lang-btn" data-ui-lang="en" aria-pressed="true">EN</button><button type="button" class="ui-lang-btn" data-ui-lang="ru" aria-pressed="false">RU</button></div>
     </nav>
-    <button class="nav-help" id="navHelp" type="button" aria-label="How to use this site" aria-expanded="false">?</button>
-    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+    <button class="nav-help" id="navHelp" type="button" aria-label="How to use this site" data-i18n-attr="aria-label:a11y.help" aria-expanded="false">?</button>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" data-i18n-attr="aria-label:a11y.menu">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -40,8 +41,8 @@
   <section class="view view-active" id="view-dictionary">
     <div class="container">
       <div class="section-head">
-        <h1>Explore the Dictionary</h1>
-        <p>Search across Karakalpak, English and Russian — instantly.</p>
+        <h1 data-i18n="dict.title">Explore the Dictionary</h1>
+        <p data-i18n="dict.sub">Search across Karakalpak, English and Russian — instantly.</p>
       </div>
 
       <div class="progress-bar-wrap" id="progressBarWrap"></div>
@@ -51,17 +52,17 @@
 
       <div class="translator translator-panes" id="translator">
         <div class="tr-langbar">
-          <span class="tr-lang" id="trLangSrc">Detect language</span>
+          <span class="tr-lang" id="trLangSrc" data-i18n="tr.detect">Detect language</span>
           <span class="tr-swap" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 10h14l-4 -4"/><path d="M17 14h-14l4 4"/></svg></span>
-          <span class="tr-lang tr-lang-dst" id="trLangDst">Translation</span>
+          <span class="tr-lang tr-lang-dst" id="trLangDst" data-i18n="tr.translation">Translation</span>
         </div>
         <div class="tr-panes">
           <div class="tr-pane tr-pane-src">
-            <textarea id="translatorInput" rows="3" placeholder="Type in Qaraqalpaq, English or Russian…" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
-            <button class="translator-clear" id="translatorClear" aria-label="Clear" hidden><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6l-12 12"/><path d="M6 6l12 12"/></svg></button>
+            <textarea id="translatorInput" rows="3" placeholder="Type in Qaraqalpaq, English or Russian…" data-i18n-attr="placeholder:tr.placeholder" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+            <button class="translator-clear" id="translatorClear" aria-label="Clear" data-i18n-attr="aria-label:a11y.clear" hidden><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6l-12 12"/><path d="M6 6l12 12"/></svg></button>
           </div>
           <div class="tr-pane tr-pane-dst">
-            <div class="tr-output" id="translatorOutput"><span class="tr-output-hint">Translation appears here</span></div>
+            <div class="tr-output" id="translatorOutput"><span class="tr-output-hint" data-i18n="tr.hint">Translation appears here</span></div>
           </div>
         </div>
         <div class="translator-results" id="translatorResults" hidden></div>
@@ -69,19 +70,19 @@
 
       <div class="search-wrap">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <input type="text" id="searchInput" placeholder="Search a word in any language..." autocomplete="off">
+        <input type="text" id="searchInput" placeholder="Search a word in any language..." data-i18n-attr="placeholder:dict.search" autocomplete="off">
         <span class="search-count" id="searchCount"></span>
       </div>
 
       <div class="pills-wrap">
-        <button class="pills-arrow pills-arrow-left" id="pillsLeft" aria-label="scroll left">‹</button>
+        <button class="pills-arrow pills-arrow-left" id="pillsLeft" aria-label="scroll left" data-i18n-attr="aria-label:a11y.scrollLeft">‹</button>
         <div class="pills" id="categoryPills"></div>
-        <button class="pills-arrow pills-arrow-right" id="pillsRight" aria-label="scroll right">›</button>
+        <button class="pills-arrow pills-arrow-right" id="pillsRight" aria-label="scroll right" data-i18n-attr="aria-label:a11y.scrollRight">›</button>
       </div>
 
       <div class="word-grid" id="wordGrid"></div>
       <div class="empty-state" id="emptyState" hidden>
-        <p>No words found. Try a different search or category.</p>
+        <p data-i18n="dict.empty">No words found. Try a different search or category.</p>
       </div>
 
       <div class="pagination" id="pagination"></div>
@@ -90,13 +91,13 @@
       <div class="wordreq-section" id="wordReq">
         <div class="wordreq">
           <div class="wordreq-head">
-            <h3>Missing a word? Spotted a mistake?</h3>
-            <p>Tell us the word — we read every message and keep the dictionary growing.</p>
+            <h3 data-i18n="req.title">Missing a word? Spotted a mistake?</h3>
+            <p data-i18n="req.text">Tell us the word — we read every message and keep the dictionary growing.</p>
           </div>
           <form class="wordreq-form" id="wordReqForm" novalidate>
-            <input type="text" id="wordReqWord" placeholder="Word or phrase in any language" autocomplete="off">
-            <textarea id="wordReqNote" rows="2" placeholder="Correct spelling, meaning or context (optional)"></textarea>
-            <button type="submit" class="btn btn-primary">Send it in <span class="btn-arrow" aria-hidden="true">→</span></button>
+            <input type="text" id="wordReqWord" placeholder="Word or phrase in any language" data-i18n-attr="placeholder:req.word" autocomplete="off">
+            <textarea id="wordReqNote" rows="2" placeholder="Correct spelling, meaning or context (optional)" data-i18n-attr="placeholder:req.note"></textarea>
+            <button type="submit" class="btn btn-primary"><span data-i18n="req.send">Send it in</span> <span class="btn-arrow" aria-hidden="true">→</span></button>
           </form>
           <p class="wordreq-msg" id="wordReqMsg" hidden></p>
         </div>
@@ -108,11 +109,11 @@
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-brand">
-      <img src="public/assets/logo.png" alt="Qaraqalpaq Tili logo" class="brand-mark small">
+      <img src="public/assets/logo.png" alt="Qaraqalpaq Tili logo" data-i18n-attr="alt:a11y.logo" class="brand-mark small">
       <span>QARAQALPAQ TILI</span>
     </div>
-    <p>Keeping the Karakalpak language alive, one word at a time.</p>
-    <p class="footer-contact">Questions? <a href="https://t.me/MusXD" target="_blank" rel="noopener">@MusXD</a><span class="footer-sep" aria-hidden="true">·</span><button type="button" class="footer-guide" id="footerGuide" title="A quick tour of this page">Guide</button></p>
+    <p data-i18n="footer.tagline">Keeping the Karakalpak language alive, one word at a time.</p>
+    <p class="footer-contact"><span data-i18n="footer.questions">Questions?</span> <a href="https://t.me/MusXD" target="_blank" rel="noopener">@MusXD</a><span class="footer-sep" aria-hidden="true">·</span><button type="button" class="footer-guide" id="footerGuide" title="A quick tour of this page" data-i18n-attr="title:footer.guideTitle" data-i18n="footer.guide">Guide</button></p>
   </div>
 </footer>
 
