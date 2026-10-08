@@ -122,10 +122,10 @@
     if (!el) return;
     el.innerHTML = `
       <div class="progress-widget-grid">
-        <div class="pw-stat"><span class="pw-icon" aria-hidden="true">✅</span><span class="pw-num">${wordsLearnedToday()}</span><span class="pw-label">Learned Today</span></div>
-        <div class="pw-stat"><span class="pw-icon" aria-hidden="true">🧠</span><span class="pw-num">${totalWordsLearned()}</span><span class="pw-label">Total Learned</span></div>
-        <div class="pw-stat"><span class="pw-icon" aria-hidden="true">🔥</span><span class="pw-num">${currentStreak()}</span><span class="pw-label">Day Streak</span></div>
-        <div class="pw-stat"><span class="pw-icon" aria-hidden="true">🏆</span><span class="pw-num">${PROGRESS.quizBestScore || 0}</span><span class="pw-label">Quiz Best</span></div>
+        <div class="pw-stat"><span class="pw-icon pw-icon-check" aria-hidden="true">${TILE_ICONS.check}</span><span class="pw-num">${wordsLearnedToday()}</span><span class="pw-label">Learned Today</span></div>
+        <div class="pw-stat"><span class="pw-icon pw-icon-brain" aria-hidden="true">${TILE_ICONS.brain}</span><span class="pw-num">${totalWordsLearned()}</span><span class="pw-label">Total Learned</span></div>
+        <div class="pw-stat"><span class="pw-icon pw-icon-flame" aria-hidden="true">${TILE_ICONS.flame}</span><span class="pw-num">${currentStreak()}</span><span class="pw-label">Day Streak</span></div>
+        <div class="pw-stat"><span class="pw-icon pw-icon-trophy" aria-hidden="true">${TILE_ICONS.trophy}</span><span class="pw-num">${PROGRESS.quizBestScore || 0}</span><span class="pw-label">Quiz Best</span></div>
       </div>`;
   }
 
@@ -141,29 +141,127 @@
   }
 
   // ===== CATEGORY ICONS & ACCENT COLORS =====
+  // ===== ICONS — one set for the whole site =====
+  // Tabler Icons 3.49 (https://tabler.io/icons), outline style, MIT licence. The paths are
+  // copied from that set unchanged; nothing is loaded from the network (the site has no
+  // build step and must work without outside requests).
+  // Every icon is an inline <svg> drawn in currentColor, so it takes the colour of the
+  // text around it — or the accent colour of its category on a word card.
+  // Sizes and the line thickness live in the stylesheet (block "ICONS").
+  // The icons that sit in the html files are the same svgs pasted into the markup.
+  // EMOJI ARE KEPT IN ONE PLACE ONLY: the Sózle result that is copied as text
+  // (sozleShareText) — a chat message cannot carry an svg.
+  const ICON_PATHS = {
+    'sparkles': '<path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/>',
+    'flame': '<path d="M12 10.941c2.333 -3.308 .167 -7.823 -1 -8.941c0 3.395 -2.235 5.299 -3.667 6.706c-1.43 1.408 -2.333 3.294 -2.333 5.588c0 3.704 3.134 6.706 7 6.706c3.866 0 7 -3.002 7 -6.706c0 -1.712 -1.232 -4.403 -2.333 -5.588c-2.084 3.353 -3.257 3.353 -4.667 2.235"/>',
+    'bulb': '<path d="M3 12h1m8 -9v1m8 8h1m-15.4 -6.4l.7 .7m12.1 -.7l-.7 .7"/><path d="M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0 -1 3a2 2 0 0 1 -4 0a3.5 3.5 0 0 0 -1 -3"/><path d="M9.7 17l4.6 0"/>',
+    'heart': '<path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/>',
+    'north-star': '<path d="M3 12h18"/><path d="M12 21v-18"/><path d="M7.5 7.5l9 9"/><path d="M7.5 16.5l9 -9"/>',
+    'arrows-exchange': '<path d="M7 10h14l-4 -4"/><path d="M17 14h-14l4 4"/>',
+    'search': '<path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/>',
+    'dice-5': '<path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14"/><path d="M8 8.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor"/><path d="M15 8.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor"/><path d="M15 15.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor"/><path d="M8 15.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor"/><path d="M11.5 12a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor"/>',
+    'keyboard': '<path d="M2 8a2 2 0 0 1 2 -2h16a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-16a2 2 0 0 1 -2 -2l0 -8"/><path d="M6 10l0 .01"/><path d="M10 10l0 .01"/><path d="M14 10l0 .01"/><path d="M18 10l0 .01"/><path d="M6 14l0 .01"/><path d="M18 14l0 .01"/><path d="M10 14l4 .01"/>',
+    'confetti': '<path d="M4 5h2"/><path d="M5 4v2"/><path d="M11.5 4l-.5 2"/><path d="M18 5h2"/><path d="M19 4v2"/><path d="M15 9l-1 1"/><path d="M18 13l2 -.5"/><path d="M18 19h2"/><path d="M19 18v2"/><path d="M14 16.518l-6.518 -6.518l-4.39 9.58a1 1 0 0 0 1.329 1.329l9.579 -4.39"/>',
+    'thumb-up': '<path d="M7 11v8a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-7a1 1 0 0 1 1 -1h3a4 4 0 0 0 4 -4v-1a2 2 0 0 1 4 0v5h3a2 2 0 0 1 2 2l-1 5a2 3 0 0 1 -2 2h-7a3 3 0 0 1 -3 -3"/>',
+    'mood-smile': '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M9 10l.01 0"/><path d="M15 10l.01 0"/><path d="M9.5 15a3.5 3.5 0 0 0 5 0"/>',
+    'mood-crazy-happy': '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M7 8.5l3 3"/><path d="M7 11.5l3 -3"/><path d="M14 8.5l3 3"/><path d="M14 11.5l3 -3"/><path d="M9.5 15a3.5 3.5 0 0 0 5 0"/>',
+    'mood-nervous': '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M9 10h.01"/><path d="M15 10h.01"/><path d="M8 16l2 -2l2 2l2 -2l2 2"/>',
+    'school': '<path d="M22 9l-10 -4l-10 4l10 4l10 -4v6"/><path d="M6 10.6v5.4a6 3 0 0 0 12 0v-5.4"/>',
+    'arrows-shuffle': '<path d="M18 4l3 3l-3 3"/><path d="M18 20l3 -3l-3 -3"/><path d="M3 7h3a5 5 0 0 1 5 5a5 5 0 0 0 5 5h5"/><path d="M21 7h-5a4.978 4.978 0 0 0 -3 1m-4 8a4.984 4.984 0 0 1 -3 1h-3"/>',
+    'backspace': '<path d="M20 6a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-11l-5 -5a1.5 1.5 0 0 1 0 -2l5 -5l11 0"/><path d="M12 10l4 4m0 -4l-4 4"/>',
+    'x': '<path d="M18 6l-12 12"/><path d="M6 6l12 12"/>',
+    'check': '<path d="M5 12l5 5l10 -10"/>',
+    'star': '<path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873l-6.158 -3.245"/>',
+    'rotate-clockwise': '<path d="M4.05 11a8 8 0 1 1 .5 4m-.5 5v-5h5"/>',
+    'rotate': '<path d="M19.95 11a8 8 0 1 0 -.5 4m.5 5v-5h-5"/>',
+  };
+  const ICON_ATTRS = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"';
+  function icon(name, cls) {
+    return `<svg class="ico${cls ? ' ' + cls : ''}" ${ICON_ATTRS}>${ICON_PATHS[name] || ''}</svg>`;
+  }
+  // ===== BIG ICONS — Phosphor Icons 2.1 (MIT, phosphoricons.com), weight "duotone" =====
+  // Where the icon IS the picture of a place — the progress tiles, the home counters and
+  // features, Word of the Day, the category icon on a card or a translator match — it is a
+  // coloured shape: Phosphor duotone — the outline over a 35% tint of the same shape. Grid 256, fill = currentColor.
+  // Small icons inside buttons and text stay Tabler outline (ICON_PATHS above).
+  const PH = {
+    'bank': '<path d="M232,96H24L128,32Z" class="ph-tint"/><path d="M24,104H48v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16H208V104h24a8,8,0,0,0,4.19-14.81l-104-64a8,8,0,0,0-8.38,0l-104,64A8,8,0,0,0,24,104Zm40,0H96v64H64Zm80,0v64H112V104Zm48,64H160V104h32ZM128,41.39,203.74,88H52.26ZM248,208a8,8,0,0,1-8,8H16a8,8,0,0,1,0-16H240A8,8,0,0,1,248,208Z"/>',
+    'book': '<path d="M208,32V192H72a24,24,0,0,0-24,24V56A24,24,0,0,1,72,32Z" class="ph-tint"/><path d="M208,24H72A32,32,0,0,0,40,56V224a8,8,0,0,0,8,8H192a8,8,0,0,0,0-16H56a16,16,0,0,1,16-16H208a8,8,0,0,0,8-8V32A8,8,0,0,0,208,24Zm-8,160H72a31.82,31.82,0,0,0-16,4.29V56A16,16,0,0,1,72,40H200Z"/>',
+    'books': '<path d="M48,72h64V184H48ZM190.64,38.39a8,8,0,0,0-9.5-6.21l-46.81,10a8.07,8.07,0,0,0-6.15,9.57L139.79,107l62.46-13.42Z" class="ph-tint"/><path d="M231.65,194.55,198.46,36.75a16,16,0,0,0-19-12.39L132.65,34.42a16.08,16.08,0,0,0-12.3,19l33.19,157.8A16,16,0,0,0,169.16,224a16.25,16.25,0,0,0,3.38-.36l46.81-10.06A16.09,16.09,0,0,0,231.65,194.55ZM136,50.15c0-.06,0-.09,0-.09l46.8-10,3.33,15.87L139.33,66Zm6.62,31.47,46.82-10.05,3.34,15.9L146,97.53Zm6.64,31.57,46.82-10.06,13.3,63.24-46.82,10.06ZM216,197.94l-46.8,10-3.33-15.87L212.67,182,216,197.85C216,197.91,216,197.94,216,197.94ZM104,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V48A16,16,0,0,0,104,32ZM56,48h48V64H56Zm0,32h48v96H56Zm48,128H56V192h48v16Z"/>',
+    'buildings': '<path d="M136,32V216H40V85.35a8,8,0,0,1,3.56-6.66l80-53.33A8,8,0,0,1,136,32Z" class="ph-tint"/><path d="M240,208H224V96a16,16,0,0,0-16-16H144V32a16,16,0,0,0-24.88-13.32L39.12,72A16,16,0,0,0,32,85.34V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM208,96V208H144V96ZM48,85.34,128,32V208H48ZM112,112v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm-32,0v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm0,56v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Zm32,0v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Z"/>',
+    'chat-circle-dots': '<path d="M224,128A96,96,0,0,1,79.93,211.11h0L42.54,223.58a8,8,0,0,1-10.12-10.12l12.47-37.39h0A96,96,0,1,1,224,128Z" class="ph-tint"/><path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-4-1.08,7.85,7.85,0,0,0-2.53.42L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Zm12-88a12,12,0,1,1-12-12A12,12,0,0,1,140,128Zm-44,0a12,12,0,1,1-12-12A12,12,0,0,1,96,128Zm88,0a12,12,0,1,1-12-12A12,12,0,0,1,184,128Z"/>',
+    'clock': '<path d="M224,128a96,96,0,1,1-96-96A96,96,0,0,1,224,128Z" class="ph-tint"/><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z"/>',
+    'cloud-sun': '<path d="M139.84,84.41v0a68.22,68.22,0,0,0-41.65,46v-.11a44.08,44.08,0,0,0-38.54,5h0a48,48,0,1,1,80.19-50.94Z" class="ph-tint"/><path d="M164,72a76.2,76.2,0,0,0-20.26,2.73,55.63,55.63,0,0,0-9.41-11.54l9.51-13.57a8,8,0,1,0-13.11-9.18L121.22,54A55.9,55.9,0,0,0,96,48c-.58,0-1.16,0-1.74,0L91.37,31.71a8,8,0,1,0-15.75,2.77L78.5,50.82A56.1,56.1,0,0,0,55.23,65.67L41.61,56.14a8,8,0,1,0-9.17,13.11L46,78.77A55.55,55.55,0,0,0,40,104c0,.57,0,1.15,0,1.72L23.71,108.6a8,8,0,0,0,1.38,15.88,8.24,8.24,0,0,0,1.39-.12l16.32-2.88a55.74,55.74,0,0,0,5.86,12.42A52,52,0,0,0,84,224h80a76,76,0,0,0,0-152ZM56,104a40,40,0,0,1,72.54-23.24,76.26,76.26,0,0,0-35.62,40,52.14,52.14,0,0,0-31,4.17A40,40,0,0,1,56,104ZM164,208H84a36,36,0,1,1,4.78-71.69c-.37,2.37-.63,4.79-.77,7.23a8,8,0,0,0,16,.92,58.91,58.91,0,0,1,1.88-11.81c0-.16.09-.32.12-.48A60.06,60.06,0,1,1,164,208Z"/>',
+    'folders': '<path d="M232,80v88.89a7.11,7.11,0,0,1-7.11,7.11H200V112a8,8,0,0,0-8-8H120L90.13,81.6a8,8,0,0,0-4.8-1.6H64V56a8,8,0,0,1,8-8h45.33a8,8,0,0,1,4.8,1.6L152,72h72A8,8,0,0,1,232,80Z" class="ph-tint"/><path d="M224,64H154.67L126.93,43.2a16.12,16.12,0,0,0-9.6-3.2H72A16,16,0,0,0,56,56V72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H192.89A15.13,15.13,0,0,0,208,200.89V184h16.89A15.13,15.13,0,0,0,240,168.89V80A16,16,0,0,0,224,64ZM192,200H40V88H85.33l29.87,22.4A8,8,0,0,0,120,112h72Zm32-32H208V112a16,16,0,0,0-16-16H122.67L94.93,75.2a16.12,16.12,0,0,0-9.6-3.2H72V56h45.33L147.2,78.4A8,8,0,0,0,152,80h72Z"/>',
+    'globe-hemisphere-west': '<path d="M213.09,172.48a96,96,0,0,1-80.41,51.41l3.17-16.44a8,8,0,0,0-2-6.95l-19.74-20.33a8,8,0,0,1-1.44-8.69l13.7-30.74a8,8,0,0,1,8.38-4.67l22.82,3.08a8.11,8.11,0,0,1,3.12,1.11ZM116.71,95,129,88.24a7.46,7.46,0,0,0,1.5-1.07l26.91-24.33A8,8,0,0,0,159,53l-10.5-18.81A96.62,96.62,0,0,0,128,32,95.61,95.61,0,0,0,67.78,53.23L56,81.08A8,8,0,0,0,55.88,87l11.5,30.67a8,8,0,0,0,5.81,5l2.69.58L89.2,100a8,8,0,0,1,6.94-4h16.71A7.9,7.9,0,0,0,116.71,95Z" class="ph-tint"/><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z"/>',
+    'house': '<path d="M216,120v96H152V152H104v64H40V120a8,8,0,0,1,2.34-5.66l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,216,120Z" class="ph-tint"/><path d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z"/>',
+    'laptop': '<path d="M216,72V176H40V72A16,16,0,0,1,56,56H200A16,16,0,0,1,216,72Z" class="ph-tint"/><path d="M232,168h-8V72a24,24,0,0,0-24-24H56A24,24,0,0,0,32,72v96H24a8,8,0,0,0-8,8v16a24,24,0,0,0,24,24H216a24,24,0,0,0,24-24V176A8,8,0,0,0,232,168ZM48,72a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8v96H48ZM224,192a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8v-8H224ZM152,88a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h32A8,8,0,0,1,152,88Z"/>',
+    'lightbulb': '<path d="M208,104a79.86,79.86,0,0,1-30.59,62.92A24.29,24.29,0,0,0,168,186v6a8,8,0,0,1-8,8H96a8,8,0,0,1-8-8v-6a24.11,24.11,0,0,0-9.3-19A79.87,79.87,0,0,1,48,104.45C47.76,61.09,82.72,25,126.07,24A80,80,0,0,1,208,104Z" class="ph-tint"/><path d="M176,232a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h80A8,8,0,0,1,176,232Zm40-128a87.55,87.55,0,0,1-33.64,69.21A16.24,16.24,0,0,0,176,186v6a16,16,0,0,1-16,16H96a16,16,0,0,1-16-16v-6a16,16,0,0,0-6.23-12.66A87.59,87.59,0,0,1,40,104.49C39.74,56.83,78.26,17.14,125.88,16A88,88,0,0,1,216,104Zm-16,0a72,72,0,0,0-73.74-72c-39,.92-70.47,33.39-70.26,72.39a71.65,71.65,0,0,0,27.64,56.3A32,32,0,0,1,96,186v6h64v-6a32.15,32.15,0,0,1,12.47-25.35A71.65,71.65,0,0,0,200,104Zm-16.11-9.34a57.6,57.6,0,0,0-46.56-46.55,8,8,0,0,0-2.66,15.78c16.57,2.79,30.63,16.85,33.44,33.45A8,8,0,0,0,176,104a9,9,0,0,0,1.35-.11A8,8,0,0,0,183.89,94.66Z"/>',
+    'list-numbers': '<path d="M216,64V192H104V64Z" class="ph-tint"/><path d="M224,128a8,8,0,0,1-8,8H104a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM104,72H216a8,8,0,0,0,0-16H104a8,8,0,0,0,0,16ZM216,184H104a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16ZM43.58,55.16,48,52.94V104a8,8,0,0,0,16,0V40a8,8,0,0,0-11.58-7.16l-16,8a8,8,0,0,0,7.16,14.32ZM79.77,156.72a23.73,23.73,0,0,0-9.6-15.95,24.86,24.86,0,0,0-34.11,4.7,23.63,23.63,0,0,0-3.57,6.46,8,8,0,1,0,15,5.47,7.84,7.84,0,0,1,1.18-2.13,8.76,8.76,0,0,1,12-1.59A7.91,7.91,0,0,1,63.93,159a7.64,7.64,0,0,1-1.57,5.78,1,1,0,0,0-.08.11L33.59,203.21A8,8,0,0,0,40,216H72a8,8,0,0,0,0-16H56l19.08-25.53A23.47,23.47,0,0,0,79.77,156.72Z"/>',
+    'mask-happy': '<path d="M216,48v55.77C216,174.6,176.6,232,128,232S40,174.6,40,103.79V48a8,8,0,0,1,10.89-7.47C66,46.41,95.11,55.71,128,55.71s62-9.3,77.11-15.16A8,8,0,0,1,216,48Z" class="ph-tint"/><path d="M217,34.8a15.94,15.94,0,0,0-14.82-1.71C188.15,38.55,159.82,47.71,128,47.71S67.84,38.55,53.79,33.09A16,16,0,0,0,32,48v55.77c0,35.84,9.65,69.65,27.18,95.18,18.16,26.46,42.6,41,68.82,41s50.66-14.57,68.82-41C214.35,173.44,224,139.63,224,103.79V48A16,16,0,0,0,217,34.8Zm-9,69c0,32.64-8.66,63.23-24.37,86.13C168.54,211.9,148.79,224,128,224s-40.54-12.1-55.63-34.08C56.66,167,48,136.43,48,103.79V48c15.11,5.87,45.58,15.71,80,15.71S192.9,53.87,208,48v55.81Zm-18,18.87A8,8,0,1,1,178,133.33c-2.68-3-8.85-5.33-14-5.33s-11.36,2.34-14,5.33A8,8,0,1,1,138,122.66c5.71-6.38,16.14-10.66,26-10.66S184.25,116.28,190,122.66ZM92,128c-5.19,0-11.36,2.34-14,5.33A8,8,0,1,1,66,122.66C71.75,116.28,82.18,112,92,112s20.25,4.28,26,10.66A8,8,0,1,1,106,133.33C103.36,130.34,97.19,128,92,128Zm76.45,45.19a52.9,52.9,0,0,1-80.9,0A8,8,0,1,1,99.72,162.8a36.89,36.89,0,0,0,56.56,0,8,8,0,0,1,12.17,10.39Z"/>',
+    'orange': '<path d="M208,152a80,80,0,1,1-80-80A80,80,0,0,1,208,152Z" class="ph-tint"/><path d="M165.87,72.58A64.06,64.06,0,0,0,200,16a8,8,0,0,0-8-8h-8a64,64,0,0,0-56,33.06A64,64,0,0,0,72,8H64a8,8,0,0,0,0,16h8a48.08,48.08,0,0,1,47.4,40.42,88,88,0,1,0,46.47,8.16ZM183.33,24a48.09,48.09,0,0,1-46.66,40A48.09,48.09,0,0,1,183.33,24ZM128,224a72,72,0,1,1,72-72A72.08,72.08,0,0,1,128,224Zm55.89-62.68a57.5,57.5,0,0,1-46.57,46.57A8.52,8.52,0,0,1,136,208a8,8,0,0,1-1.31-15.89,41.29,41.29,0,0,0,33.43-33.43,8,8,0,0,1,15.78,2.64Z"/>',
+    'palette': '<path d="M224,127.17a96.48,96.48,0,0,1-2.39,22.18A24,24,0,0,1,198.21,168H152a24,24,0,0,0-24,24,24,24,0,0,1-32,22.61C58.73,201.44,32,169.81,32,128a96,96,0,0,1,95-96C179.84,31.47,223.55,74.35,224,127.17Z" class="ph-tint"/><path d="M200.77,53.89A103.27,103.27,0,0,0,128,24h-1.07A104,104,0,0,0,24,128c0,43,26.58,79.06,69.36,94.17A32,32,0,0,0,136,192a16,16,0,0,1,16-16h46.21a31.81,31.81,0,0,0,31.2-24.88,104.43,104.43,0,0,0,2.59-24A103.28,103.28,0,0,0,200.77,53.89Zm13,93.71A15.89,15.89,0,0,1,198.21,160H152a32,32,0,0,0-32,32,16,16,0,0,1-21.31,15.07C62.49,194.3,40,164,40,128a88,88,0,0,1,87.09-88h.9a88.35,88.35,0,0,1,88,87.25A88.86,88.86,0,0,1,213.81,147.6ZM140,76a12,12,0,1,1-12-12A12,12,0,0,1,140,76ZM96,100A12,12,0,1,1,84,88,12,12,0,0,1,96,100Zm0,56a12,12,0,1,1-12-12A12,12,0,0,1,96,156Zm88-56a12,12,0,1,1-12-12A12,12,0,0,1,184,100Z"/>',
+    'paw-print': '<path d="M232,108a20,20,0,1,1-20-20A20,20,0,0,1,232,108ZM64,108a20,20,0,1,0-20,20A20,20,0,0,0,64,108ZM92,80A20,20,0,1,0,72,60,20,20,0,0,0,92,80Zm72,0a20,20,0,1,0-20-20A20,20,0,0,0,164,80Zm19.24,75.85A43.46,43.46,0,0,1,162.57,130a36,36,0,0,0-69.14,0,43.49,43.49,0,0,1-20.67,25.9,32,32,0,0,0,27.73,57.62,72.49,72.49,0,0,1,55,0,32,32,0,0,0,27.73-57.62Z" class="ph-tint"/><path d="M212,80a28,28,0,1,0,28,28A28,28,0,0,0,212,80Zm0,40a12,12,0,1,1,12-12A12,12,0,0,1,212,120ZM72,108a28,28,0,1,0-28,28A28,28,0,0,0,72,108ZM44,120a12,12,0,1,1,12-12A12,12,0,0,1,44,120ZM92,88A28,28,0,1,0,64,60,28,28,0,0,0,92,88Zm0-40A12,12,0,1,1,80,60,12,12,0,0,1,92,48Zm72,40a28,28,0,1,0-28-28A28,28,0,0,0,164,88Zm0-40a12,12,0,1,1-12,12A12,12,0,0,1,164,48Zm23.12,100.86a35.3,35.3,0,0,1-16.87-21.14,44,44,0,0,0-84.5,0A35.25,35.25,0,0,1,69,148.82,40,40,0,0,0,88,224a39.48,39.48,0,0,0,15.52-3.13,64.09,64.09,0,0,1,48.87,0,40,40,0,0,0,34.73-72ZM168,208a24,24,0,0,1-9.45-1.93,80.14,80.14,0,0,0-61.19,0,24,24,0,0,1-20.71-43.26,51.22,51.22,0,0,0,24.46-30.67,28,28,0,0,1,53.78,0,51.27,51.27,0,0,0,24.53,30.71A24,24,0,0,1,168,208Z"/>',
+    'person-simple-run': '<path d="M176,56a24,24,0,1,1-24-24A24,24,0,0,1,176,56Z" class="ph-tint"/><path d="M152,88a32,32,0,1,0-32-32A32,32,0,0,0,152,88Zm0-48a16,16,0,1,1-16,16A16,16,0,0,1,152,40Zm67.31,100.68c-.61.28-7.49,3.28-19.67,3.28-13.85,0-34.55-3.88-60.69-20a169.31,169.31,0,0,1-15.41,32.34,104.29,104.29,0,0,1,31.31,15.81C173.92,186.65,184,207.35,184,232a8,8,0,0,1-16,0c0-41.7-34.69-56.71-54.14-61.85-.55.7-1.12,1.41-1.69,2.1-19.64,23.8-44.25,36.18-71.63,36.18A92.29,92.29,0,0,1,31.2,208,8,8,0,0,1,32.8,192c25.92,2.59,48.47-7.49,67-30,12.49-15.14,21-33.61,25.25-47C86.13,92.34,61.27,111.63,61,111.84A8,8,0,1,1,51,99.36c1.5-1.2,37.22-29,89.51,6.57,45.47,30.91,71.93,20.31,72.18,20.19a8,8,0,1,1,6.63,14.56Z"/>',
+    'rocket': '<path d="M94.81,192,65.36,214.24a8,8,0,0,1-12.81-4.51L40.19,154.1a8,8,0,0,1,1.66-6.86l30.31-36.33C71,134.25,76.7,161.43,94.81,192Zm119.34-44.76-30.31-36.33c1.21,23.34-4.54,50.52-22.65,81.09l29.45,22.24a8,8,0,0,0,12.81-4.51l12.36-55.63A8,8,0,0,0,214.15,147.24Z" class="ph-tint"/><path d="M152,224a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h32A8,8,0,0,1,152,224ZM128,112a12,12,0,1,0-12-12A12,12,0,0,0,128,112Zm95.62,43.83-12.36,55.63a16,16,0,0,1-25.51,9.11L158.51,200h-61L70.25,220.57a16,16,0,0,1-25.51-9.11L32.38,155.83a16.09,16.09,0,0,1,3.32-13.71l28.56-34.26a123.07,123.07,0,0,1,8.57-36.67c12.9-32.34,36-52.63,45.37-59.85a16,16,0,0,1,19.6,0c9.34,7.22,32.47,27.51,45.37,59.85a123.07,123.07,0,0,1,8.57,36.67l28.56,34.26A16.09,16.09,0,0,1,223.62,155.83ZM99.43,184h57.14c21.12-37.54,25.07-73.48,11.74-106.88C156.55,47.64,134.49,29,128,24c-6.51,5-28.57,23.64-40.33,53.12C74.36,110.52,78.31,146.46,99.43,184Zm-15,5.85Q68.28,160.5,64.83,132.16L48,152.36,60.36,208l.18-.13ZM208,152.36l-16.83-20.2q-3.42,28.28-19.56,57.69l23.85,18,.18.13Z"/>',
+    'sparkle': '<path d="M194.82,151.43l-55.09,20.3-20.3,55.09a7.92,7.92,0,0,1-14.86,0l-20.3-55.09-55.09-20.3a7.92,7.92,0,0,1,0-14.86l55.09-20.3,20.3-55.09a7.92,7.92,0,0,1,14.86,0l20.3,55.09,55.09,20.3A7.92,7.92,0,0,1,194.82,151.43Z" class="ph-tint"/><path d="M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z"/>',
+    'stethoscope': '<path d="M240,160a32,32,0,1,1-32-32A32,32,0,0,1,240,160Z" class="ph-tint"/><path d="M220,160a12,12,0,1,1-12-12A12,12,0,0,1,220,160Zm-4.55,39.29A48.08,48.08,0,0,1,168,240H144a48.05,48.05,0,0,1-48-48V151.49A64,64,0,0,1,40,88V40a8,8,0,0,1,8-8H72a8,8,0,0,1,0,16H56V88a48,48,0,0,0,48.64,48c26.11-.34,47.36-22.25,47.36-48.83V48H136a8,8,0,0,1,0-16h24a8,8,0,0,1,8,8V87.17c0,32.84-24.53,60.29-56,64.31V192a32,32,0,0,0,32,32h24a32.06,32.06,0,0,0,31.22-25,40,40,0,1,1,16.23.27ZM232,160a24,24,0,1,0-24,24A24,24,0,0,0,232,160Z"/>',
+    't-shirt': '<path d="M247.11,78.77l-19.27,36.81a8.44,8.44,0,0,1-7.5,4.42H192V40l51.78,28.25A7.81,7.81,0,0,1,247.11,78.77Zm-238.22,0,19.27,36.81a8.44,8.44,0,0,0,7.5,4.42H64V40L12.22,68.25A7.81,7.81,0,0,0,8.89,78.77Z" class="ph-tint"/><path d="M247.59,61.22,195.83,33A8,8,0,0,0,192,32H160a8,8,0,0,0-8,8,24,24,0,0,1-48,0,8,8,0,0,0-8-8H64a8,8,0,0,0-3.84,1L8.41,61.22A15.76,15.76,0,0,0,1.82,82.48l19.27,36.81A16.37,16.37,0,0,0,35.67,128H56v80a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V128h20.34a16.37,16.37,0,0,0,14.58-8.71l19.27-36.81A15.76,15.76,0,0,0,247.59,61.22ZM35.67,112a.62.62,0,0,1-.41-.13L16.09,75.26,56,53.48V112ZM184,208H72V48h16.8a40,40,0,0,0,78.38,0H184Zm36.75-96.14a.55.55,0,0,1-.41.14H200V53.48l39.92,21.78Z"/>',
+    'text-aa': '<path d="M232,164c0,15.46-14.33,28-32,28s-32-12.54-32-28,14.33-28,32-28S232,148.54,232,164ZM34.82,152h90.36L80,56Z" class="ph-tint"/><path d="M87.24,52.59a8,8,0,0,0-14.48,0l-64,136a8,8,0,1,0,14.48,6.81L39.9,160h80.2l16.66,35.4a8,8,0,1,0,14.48-6.81ZM47.43,144,80,74.79,112.57,144ZM200,96c-12.76,0-22.73,3.47-29.63,10.32a8,8,0,0,0,11.26,11.36c3.8-3.77,10-5.68,18.37-5.68,13.23,0,24,9,24,20v3.22A42.76,42.76,0,0,0,200,128c-22.06,0-40,16.15-40,36s17.94,36,40,36a42.73,42.73,0,0,0,24-7.25,8,8,0,0,0,16-.75V132C240,112.15,222.06,96,200,96Zm0,88c-13.23,0-24-9-24-20s10.77-20,24-20,24,9,24,20S213.23,184,200,184Z"/>',
+    'users': '<path d="M136,108A52,52,0,1,1,84,56,52,52,0,0,1,136,108Z" class="ph-tint"/><path d="M117.25,157.92a60,60,0,1,0-66.5,0A95.83,95.83,0,0,0,3.53,195.63a8,8,0,1,0,13.4,8.74,80,80,0,0,1,134.14,0,8,8,0,0,0,13.4-8.74A95.83,95.83,0,0,0,117.25,157.92ZM40,108a44,44,0,1,1,44,44A44.05,44.05,0,0,1,40,108Zm210.14,98.7a8,8,0,0,1-11.07-2.33A79.83,79.83,0,0,0,172,168a8,8,0,0,1,0-16,44,44,0,1,0-16.34-84.87,8,8,0,1,1-5.94-14.85,60,60,0,0,1,55.53,105.64,95.83,95.83,0,0,1,47.22,37.71A8,8,0,0,1,250.14,206.7Z"/>',
+    'wrench': '<path d="M224,96a64,64,0,0,1-94.94,56L73,217A24,24,0,0,1,39,183L104,126.94a64,64,0,0,1,80-90.29L144,80l5.66,26.34L176,112l43.35-40A63.8,63.8,0,0,1,224,96Z" class="ph-tint"/><path d="M226.76,69a8,8,0,0,0-12.84-2.88l-40.3,37.19-17.23-3.7-3.7-17.23,37.19-40.3A8,8,0,0,0,187,29.24,72,72,0,0,0,88,96,72.34,72.34,0,0,0,94,124.94L33.79,177c-.15.12-.29.26-.43.39a32,32,0,0,0,45.26,45.26c.13-.13.27-.28.39-.42L131.06,162A72,72,0,0,0,232,96,71.56,71.56,0,0,0,226.76,69ZM160,152a56.14,56.14,0,0,1-27.07-7,8,8,0,0,0-9.92,1.77L67.11,211.51a16,16,0,0,1-22.62-22.62L109.18,133a8,8,0,0,0,1.77-9.93,56,56,0,0,1,58.36-82.31l-31.2,33.81a8,8,0,0,0-1.94,7.1L141.83,108a8,8,0,0,0,6.14,6.14l26.35,5.66a8,8,0,0,0,7.1-1.94l33.81-31.2A56.06,56.06,0,0,1,160,152Z"/>',
+  };
+  function bigIcon(name, cls) {
+    return `<svg class="ph${cls ? ' ' + cls : ''}" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false">${PH[name] || ''}</svg>`;
+  }
+  // The four progress tiles: the same Phosphor icons plus the layers their hover show needs
+  // (all invisible at rest: the ring, the core of the flame, the glint on the cup).
+  // The show itself is CSS (styles.css, "progress tiles: each icon has its own little show").
+  const TILE_SVG = inner => `<svg class="ph" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false">${inner}</svg>`;
+  const TILE_ICONS = {
+    check: TILE_SVG('<circle class="ph-tint" cx="128" cy="128" r="96"/><path d="M232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/><circle class="tk-ripple" cx="128" cy="128" r="104"/><path class="tk-mark" d="M88 136l24 24 56-56" pathLength="1"/>'),
+    brain: TILE_SVG('<path d="M240,124a48,48,0,0,1-32,45.27h0V176a40,40,0,0,1-80,0,40,40,0,0,1-80,0v-6.73h0a48,48,0,0,1,0-90.54V72a40,40,0,0,1,80,0,40,40,0,0,1,80,0v6.73A48,48,0,0,1,240,124Z" class="ph-tint"/><path d="M248,124a56.11,56.11,0,0,0-32-50.61V72a48,48,0,0,0-88-26.49A48,48,0,0,0,40,72v1.39a56,56,0,0,0,0,101.2V176a48,48,0,0,0,88,26.49A48,48,0,0,0,216,176v-1.41A56.09,56.09,0,0,0,248,124ZM88,208a32,32,0,0,1-31.81-28.56A55.87,55.87,0,0,0,64,180h8a8,8,0,0,0,0-16H64A40,40,0,0,1,50.67,86.27,8,8,0,0,0,56,78.73V72a32,32,0,0,1,64,0v68.26A47.8,47.8,0,0,0,88,128a8,8,0,0,0,0,16,32,32,0,0,1,0,64Zm104-44h-8a8,8,0,0,0,0,16h8a55.87,55.87,0,0,0,7.81-.56A32,32,0,1,1,168,144a8,8,0,0,0,0-16,47.8,47.8,0,0,0-32,12.26V72a32,32,0,0,1,64,0v6.73a8,8,0,0,0,5.33,7.54A40,40,0,0,1,192,164Zm16-52a8,8,0,0,1-8,8h-4a36,36,0,0,1-36-36V80a8,8,0,0,1,16,0v4a20,20,0,0,0,20,20h4A8,8,0,0,1,208,112ZM60,120H56a8,8,0,0,1,0-16h4A20,20,0,0,0,80,84V80a8,8,0,0,1,16,0v4A36,36,0,0,1,60,120Z"/>'),
+    flame: TILE_SVG('<g class="fl-sway"><g class="fl-flick"><path class="ph-tint" d="M208,144a80,80,0,0,1-160,0c0-30.57,14.42-58.26,31-80l33,32,26.27-72C159.86,41.92,208,88.15,208,144Z"/><path d="M216,144a88,88,0,0,1-176,0c0-27.92,11-56.47,32.66-84.85a8,8,0,0,1,11.93-.89l24.12,23.41,22-60.41a8,8,0,0,1,12.63-3.41C165.21,36,216,84.55,216,144Zm-16,0c0-46.09-35.79-85.92-58.21-106.33L119.52,98.74a8,8,0,0,1-13.09,3L80.06,76.16C64.09,99.21,56,122,56,144a72,72,0,0,0,144,0Z"/><path d="M183.89,153.34a57.6,57.6,0,0,1-46.56,46.55A8.75,8.75,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68Z"/></g><g class="fl-core"><path transform="translate(64 112) scale(0.5)" d="M208,144a80,80,0,0,1-160,0c0-30.57,14.42-58.26,31-80l33,32,26.27-72C159.86,41.92,208,88.15,208,144Z"/></g></g>'),
+    trophy: TILE_SVG('<path d="M200,48v63.1c0,39.7-31.75,72.6-71.45,72.9A72,72,0,0,1,56,112V48Z" class="ph-tint"/><path d="M232,64H208V48a8,8,0,0,0-8-8H56a8,8,0,0,0-8,8V64H24A16,16,0,0,0,8,80V96a40,40,0,0,0,40,40h3.65A80.13,80.13,0,0,0,120,191.61V216H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V191.58c31.94-3.23,58.44-25.64,68.08-55.58H208a40,40,0,0,0,40-40V80A16,16,0,0,0,232,64ZM48,120A24,24,0,0,1,24,96V80H48v32q0,4,.39,8Zm144-8.9c0,35.52-29,64.64-64,64.9a64,64,0,0,1-64-64V56H192ZM232,96a24,24,0,0,1-24,24h-.5a81.81,81.81,0,0,0,.5-8.9V80h24Z"/><defs><clipPath id="pwCupClip"><path d="M200,48v63.1c0,39.7-31.75,72.6-71.45,72.9A72,72,0,0,1,56,112V48Z"/></clipPath><linearGradient id="pwShine"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.5" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><g clip-path="url(#pwCupClip)"><rect class="tq-shine" x="-30" y="0" width="64" height="256" fill="url(#pwShine)"/></g>'),
+  };
+  // The show runs only where its numbers can ease (CSS @property); it restarts from the
+  // beginning each time the mouse comes onto a tile. Nothing here for touch or reduced motion:
+  // the CSS media query keeps those still.
+  if (window.CSS && CSS.registerProperty) {
+    document.documentElement.classList.add('tiles-motion');
+    document.addEventListener('pointerover', e => {
+      if (e.pointerType !== 'mouse' || !e.target.closest) return;
+      const tile = e.target.closest('.pw-stat');
+      if (!tile || (e.relatedTarget && tile.contains(e.relatedTarget))) return;
+      tile.getAnimations({ subtree: true }).forEach(a => { if (a.animationName) a.currentTime = 0; });
+    });
+  }
+
+  // category name → icon name (a key of PH below — Phosphor). First match wins.
   const ICON_RULES = [
-    [/phrase/i, '\u{1F4AC}'],
-    [/verb/i, '\u{1F3C3}'],
-    [/adjective/i, '\u{1F3A8}'],
-    [/anatomy|health|medicine|body/i, '\u{1FA7A}'],
-    [/animal/i, '\u{1F43E}'],
-    [/food|drink|fruit|vegetable/i, '\u{1F34E}'],
-    [/family|people|relationship|profession/i, '\u{1F46A}'],
-    [/number/i, '\u{1F522}'],
-    [/time|calendar|season|measurement/i, '\u{23F0}'],
-    [/weather|nature|geography|agriculture/i, '\u{1F326}️'],
-    [/city|transport|place|direction|location/i, '\u{1F3D9}️'],
-    [/clothing|footwear/i, '\u{1F455}'],
-    [/home|furniture|household|decor/i, '\u{1F3E0}'],
-    [/tech|gadget|\bit\b|analytics|business|economy|money/i, '\u{1F4BB}'],
-    [/tool|material|mineral|stationery|object/i, '\u{1F6E0}️'],
-    [/space|science/i, '\u{1F680}'],
-    [/society|government/i, '\u{1F3DB}️'],
-    [/culture|entertainment/i, '\u{1F3AD}'],
-    [/abstract|feeling|concept/i, '\u{1F4AD}'],
-    [/basic/i, '\u{1F4D8}'],
+    [/phrase/i, 'chat-circle-dots'],
+    [/verb/i, 'person-simple-run'],
+    [/adjective/i, 'palette'],
+    [/anatomy|health|medicine|body/i, 'stethoscope'],
+    [/animal/i, 'paw-print'],
+    [/food|drink|fruit|vegetable/i, 'orange'],
+    [/family|people|relationship|profession/i, 'users'],
+    [/number/i, 'list-numbers'],
+    [/time|calendar|season|measurement/i, 'clock'],
+    [/weather|nature|geography|agriculture/i, 'cloud-sun'],
+    [/city|transport|place|direction|location/i, 'buildings'],
+    [/clothing|footwear/i, 't-shirt'],
+    [/home|furniture|household|decor/i, 'house'],
+    [/tech|gadget|\bit\b|analytics|business|economy|money/i, 'laptop'],
+    [/tool|material|mineral|stationery|object/i, 'wrench'],
+    [/space|science/i, 'rocket'],
+    [/society|government/i, 'bank'],
+    [/culture|entertainment/i, 'mask-happy'],
+    [/abstract|feeling|concept/i, 'lightbulb'],
+    [/basic/i, 'book'],
+    [/world/i, 'globe-hemisphere-west'],
   ];
-  const FALLBACK_ICONS = ['\u{1F4DA}', '✨', '\u{1F524}', '\u{1F5C2}️'];
+  const FALLBACK_ICONS = ['books', 'sparkle', 'text-aa', 'folders'];
   const ACCENT_PALETTE = ['#2dd4bf', '#8b7af2', '#5b9df0', '#f472b6', '#fbbf24', '#34d399', '#f97316', '#60a5fa', '#c084fc', '#f87171'];
 
   function hashStr(s) {
@@ -171,6 +269,7 @@
     for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
     return h;
   }
+  // → the NAME of the icon; draw it with bigIcon(categoryIcon(cat))
   function categoryIcon(cat) {
     for (const [re, icon] of ICON_RULES) if (re.test(cat)) return icon;
     return FALLBACK_ICONS[hashStr(cat) % FALLBACK_ICONS.length];
@@ -599,7 +698,7 @@
   function trMatchHtml(w) {
     return `
       <div class="tr-match" style="--accent:${categoryColor(w.category)}">
-        <span class="tr-match-icon">${categoryIcon(w.category)}</span>
+        <span class="tr-match-icon">${bigIcon(categoryIcon(w.category))}</span>
         <div class="tr-match-text">
           <span class="tr-match-kk">${escapeHtml(w.kk)}</span>
           <span class="tr-match-en">${escapeHtml(w.en)}</span>
@@ -859,7 +958,7 @@
     $('#sozleKeys').innerHTML = SOZLE_ROWS.map(row =>
       '<div class="sozle-key-row">' + row.map(k => {
         if (k === 'enter') return '<button class="sozle-key sozle-key-wide" data-key="enter">ENTER</button>';
-        if (k === 'back') return '<button class="sozle-key sozle-key-wide" data-key="back">⌫</button>';
+        if (k === 'back') return `<button class="sozle-key sozle-key-wide" data-key="back" aria-label="Backspace">${icon('backspace')}</button>`;
         const s = status[k] ? ' is-' + status[k] : '';
         return `<button class="sozle-key${s}" data-key="${k}">${k}</button>`;
       }).join('') + '</div>'
@@ -875,7 +974,7 @@
     $('#sozleStats').innerHTML = `
       <span class="sozle-stat"><strong>${s.played}</strong> played</span>
       <span class="sozle-stat"><strong>${winPct}%</strong> won</span>
-      <span class="sozle-stat">🔥 <strong>${streak}</strong> streak</span>`;
+      <span class="sozle-stat sozle-stat-streak">${icon('flame')} <strong>${streak}</strong> streak</span>`;
   }
 
   function sozleMsg(text, sticky) {
@@ -897,9 +996,9 @@
 
   function sozleEndPanel() {
     const w = sozle.entry.w;
-    const head = sozle.win
-      ? ['', 'Genius! 🤯', 'Ájayıp! 🎉', 'Great! 🎉', 'Nice! 👏', 'Good! 🙂', 'Phew! 😅'][sozle.guesses.length]
-      : 'The word was:';
+    // [the cheer, its icon] by the number of guesses it took
+    const cheer = [null, ['Genius!', 'mood-crazy-happy'], ['Ájayıp!', 'confetti'], ['Great!', 'confetti'], ['Nice!', 'thumb-up'], ['Good!', 'mood-smile'], ['Phew!', 'mood-nervous']][sozle.guesses.length];
+    const head = sozle.win ? `${cheer[0]} ${icon(cheer[1])}` : 'The word was:';
     $('#sozlePanel').innerHTML = `
       <p class="sozle-panel-head">${head}</p>
       <div class="sozle-answer">
@@ -908,7 +1007,7 @@
         <span class="sozle-answer-ru">${escapeHtml(w.ru)}</span>
         <span class="tr-cat">${escapeHtml(w.category)}</span>
       </div>
-      <p class="sozle-learned">You just learned a Karakalpak word 🎓</p>
+      <p class="sozle-learned">You just learned a Karakalpak word ${icon('school')}</p>
       <div class="sozle-share">
         <button class="btn btn-primary btn-sm" id="sozleCopy">Copy result</button>
         <a class="btn btn-outline btn-sm" id="sozleTg" target="_blank" rel="noopener"
@@ -920,7 +1019,7 @@
     $('#sozleHint').hidden = true;
     const copyBtn = $('#sozleCopy');
     copyBtn.addEventListener('click', () => {
-      const done = () => { copyBtn.textContent = 'Copied ✓'; setTimeout(() => { copyBtn.textContent = 'Copy result'; }, 1600); };
+      const done = () => { copyBtn.innerHTML = `Copied ${icon('check')}`; setTimeout(() => { copyBtn.textContent = 'Copy result'; }, 1600); };
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(sozleShareText()).then(done, done);
       else done();
     });
@@ -982,7 +1081,7 @@
   function sozleShowHint() {
     const w = sozle.entry.w;
     const el = $('#sozleHintText');
-    el.innerHTML = `💡 It means: <strong>${escapeHtml(w.en)}</strong> · ${escapeHtml(w.ru)}`;
+    el.innerHTML = `${icon('bulb')} It means: <strong>${escapeHtml(w.en)}</strong> · ${escapeHtml(w.ru)}`;
     el.hidden = false;
   }
 
@@ -1204,9 +1303,9 @@
     el.hidden = false;
     el.innerHTML = `
       <div class="wotd-card" style="--accent:${categoryColor(w.category)}">
-        <span class="wotd-label">✨ Word of the Day</span>
+        <span class="wotd-label">${icon('sparkles')} Word of the Day</span>
         <div class="wotd-body">
-          <span class="wotd-icon">${categoryIcon(w.category)}</span>
+          <span class="wotd-icon">${bigIcon(categoryIcon(w.category))}</span>
           <div class="wotd-text">
             <span class="wotd-kk">${escapeHtml(w.kk)}</span>
             <span class="wotd-en">${escapeHtml(w.en)}</span>
@@ -1223,7 +1322,7 @@
     const learned = isLearned(id);
     const card = btn.closest('.word-card');
     card.classList.toggle('is-learned', learned);
-    $$('.learn-btn', card).forEach(b => b.textContent = learned ? '✓ Learned' : 'Mark as Learned');
+    $$('.learn-btn', card).forEach(b => { b.innerHTML = learned ? `${icon('check')} Learned` : 'Mark as Learned'; });
     renderProgressBar();
     renderProgressWidget();
   }
@@ -1264,35 +1363,35 @@
 
   function wordCardHtml(w) {
     const accent = categoryColor(w.category);
-    const icon = categoryIcon(w.category);
+    const catIcon = bigIcon(categoryIcon(w.category));
     const id = wordId(w);
     const learned = isLearned(id);
-    const learnBtnHtml = `<button class="learn-btn" data-id="${escapeAttr(id)}">${learned ? '✓ Learned' : 'Mark as Learned'}</button>`;
+    const learnBtnHtml = `<button class="learn-btn" data-id="${escapeAttr(id)}">${learned ? `${icon('check')} Learned` : 'Mark as Learned'}</button>`;
     // The ✓ badge lives INSIDE each face, so it turns with the card (as a child of
     // .word-card it stayed put in the corner while the card rotated under it), and it
     // is the LAST ITEM OF THE TOP ROW, so a long category pill shortens with "…"
     // instead of sliding under the badge.
-    const badgeHtml = '<span class="learned-badge" aria-hidden="true">✓</span>';
+    const badgeHtml = `<span class="learned-badge" aria-hidden="true">${icon('check')}</span>`;
     return `
       <div class="word-card${learned ? ' is-learned' : ''}" style="--accent:${accent}">
         <div class="word-card-inner">
           <div class="word-card-face word-card-front">
             <div class="word-card-top">
-              <span class="word-card-icon">${icon}</span>
+              <span class="word-card-icon">${catIcon}</span>
               <span class="word-cat-badge" title="${escapeAttr(w.category)}">${escapeHtml(w.category)}</span>
               ${badgeHtml}
             </div>
             <span class="word-kk">${escapeHtml(w.kk)}</span>
-            <span class="word-flip-hint">Tap to reveal ⟳</span>
+            <span class="word-flip-hint">Tap to reveal ${icon('rotate-clockwise')}</span>
             ${learnBtnHtml}
           </div>
           <div class="word-card-face word-card-back">
-            <div class="word-card-top"><span class="word-card-icon">${icon}</span>${badgeHtml}</div>
+            <div class="word-card-top"><span class="word-card-icon">${catIcon}</span>${badgeHtml}</div>
             <div class="word-card-trans">
               <span class="word-en">${escapeHtml(w.en)}</span>
               <span class="word-ru">${escapeHtml(w.ru)}</span>
             </div>
-            <span class="word-flip-hint">Tap to go back ⟲</span>
+            <span class="word-flip-hint">Tap to go back ${icon('rotate')}</span>
             ${learnBtnHtml}
           </div>
         </div>
@@ -1414,7 +1513,7 @@
     const learned = isLearned(wordId(w));
     if (learnBtn) {
       learnBtn.hidden = false;
-      learnBtn.textContent = learned ? '✓ Learned' : '✓ Mark as Learned';
+      learnBtn.innerHTML = `${icon('check')} ${learned ? 'Learned' : 'Mark as Learned'}`;
       learnBtn.classList.toggle('is-learned', learned);
     }
     // one badge on each face of the card (see flashcards.html)
@@ -1595,9 +1694,10 @@
     const note = $('#wordReqNote');
     const msg = $('#wordReqMsg');
 
-    const say = (text, ok) => {
+    const say = (text, ok, tail) => { // tail: an icon after the text
       msg.hidden = false;
       msg.textContent = text;
+      if (tail) msg.insertAdjacentHTML('beforeend', ' ' + tail);
       msg.classList.toggle('is-ok', !!ok);
       msg.classList.toggle('is-warn', !ok);
     };
@@ -1620,7 +1720,7 @@
       }).catch(() => {});
 
       form.reset();
-      say('Raxmet! Got it — we\'ll review this word soon. 💜', true);
+      say('Raxmet! Got it — we\'ll review this word soon.', true, icon('heart', 'ico-love'));
     });
 
     // "Missing a word? Tell us →" inside the translator jumps here with the word filled in
@@ -1671,11 +1771,11 @@
       const card = document.createElement('div');
       card.className = 'feedback-card';
       card.innerHTML = `
-        <button class="feedback-close" aria-label="Close">✕</button>
+        <button class="feedback-close" aria-label="Close">${icon('x')}</button>
         <p class="feedback-title">Enjoying Qaraqalpaq Tili?</p>
         <p class="feedback-sub">Rate the site — it takes 5 seconds and helps a lot.</p>
         <div class="feedback-stars" role="radiogroup" aria-label="Rating">
-          ${[1, 2, 3, 4, 5].map(n => `<button class="feedback-star" data-val="${n}" aria-label="${n} star${n > 1 ? 's' : ''}">★</button>`).join('')}
+          ${[1, 2, 3, 4, 5].map(n => `<button class="feedback-star" data-val="${n}" aria-label="${n} star${n > 1 ? 's' : ''}">${icon('star')}</button>`).join('')}
         </div>
         <div class="feedback-extra" hidden>
           <textarea class="feedback-comment" rows="2" placeholder="What should we improve? (optional)"></textarea>
@@ -1716,7 +1816,7 @@
         }).catch(() => {});
         fb.done = true;
         save();
-        $('.feedback-title', card).textContent = 'Raxmet! Thank you 💜';
+        $('.feedback-title', card).innerHTML = `Raxmet! Thank you ${icon('heart', 'ico-love')}`;
         $('.feedback-sub', card).textContent = 'Your feedback helps Qaraqalpaq Tili grow.';
         $('.feedback-stars', card).style.pointerEvents = 'none';
         $('.feedback-extra', card).hidden = true;
@@ -1787,7 +1887,7 @@
       ['.quiz-top', 'Your score, and your streak of right answers in a row.'],
     ],
     game: [
-      ['#sozleBoard', 'Six tries to guess the 5-letter word: 🟩 right spot, 🟨 wrong spot.'],
+      ['#sozleBoard', 'Six tries to guess the 5-letter word: <i class="tour-swatch is-correct"></i> right spot, <i class="tour-swatch is-present"></i> wrong spot.'],
       ['#sozleKeys', `Type on your own keyboard, in any layout — for á ǵ ı ń ó ú press the letter, then ${K("'")}.`,
         'Tap the letters — á ǵ ı ń ó ú have their own keys — then ENTER.'],
       ['#sozleHint', 'Stuck? The hint shows what the word means.'],

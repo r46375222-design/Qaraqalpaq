@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=122">
+<link rel="stylesheet" href="css/styles.css?v=123">
 <script>/* the tours of all five pages have been opened → no "?" in the nav (before the first paint; same list as GUIDE_PAGES in app.js) */try{if(['index','dictionary','flashcards','quiz','game'].every(function(p){return localStorage.getItem('qaraqalpaq_guide_'+p)==='seen'}))document.documentElement.className+=' guide-done'}catch(e){}</script>
 </head>
 <body class="page-game">
@@ -47,8 +47,8 @@
       <div class="sozle-topbar">
         <div class="sozle-stats" id="sozleStats"></div>
         <div class="sozle-actions">
-          <button class="btn btn-outline btn-sm" id="sozleHint">💡 Hint</button>
-          <button class="btn btn-outline btn-sm" id="sozleFree" hidden>🎲 Random word</button>
+          <button class="btn btn-outline btn-sm" id="sozleHint"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12h1m8 -9v1m8 8h1m-15.4 -6.4l.7 .7m12.1 -.7l-.7 .7"/><path d="M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0 -1 3a2 2 0 0 1 -4 0a3.5 3.5 0 0 0 -1 -3"/><path d="M9.7 17l4.6 0"/></svg> Hint</button>
+          <button class="btn btn-outline btn-sm" id="sozleFree" hidden><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14"/><path d="M8 8.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor"/><path d="M15 8.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor"/><path d="M15 15.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor"/><path d="M8 15.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor"/><path d="M11.5 12a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor"/></svg> Random word</button>
         </div>
       </div>
 
@@ -62,8 +62,8 @@
 
       <div class="sozle-keys" id="sozleKeys" aria-label="Keyboard"></div>
 
-      <p class="sozle-foot">Letters á, ǵ, ı, ń, ó, ú are on the keyboard above — that's what makes it Qaraqalpaq ✨</p>
-      <p class="sozle-foot sozle-kbd-hint">⌨️ You can type on your own keyboard too, in any layout. For á ǵ ı ń ó ú type the letter, then <kbd>'</kbd> — <kbd>a</kbd><kbd>'</kbd> gives á.</p>
+      <p class="sozle-foot">Letters á, ǵ, ı, ń, ó, ú are on the keyboard above — that's what makes it Qaraqalpaq <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg></p>
+      <p class="sozle-foot sozle-kbd-hint"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 8a2 2 0 0 1 2 -2h16a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-16a2 2 0 0 1 -2 -2l0 -8"/><path d="M6 10l0 .01"/><path d="M10 10l0 .01"/><path d="M14 10l0 .01"/><path d="M18 10l0 .01"/><path d="M6 14l0 .01"/><path d="M18 14l0 .01"/><path d="M10 14l4 .01"/></svg> You can type on your own keyboard too, in any layout. For á ǵ ı ń ó ú type the letter, then <kbd>'</kbd> — <kbd>a</kbd><kbd>'</kbd> gives á.</p>
     </div>
   </section>
 </main>

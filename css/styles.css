@@ -511,7 +511,7 @@ input, select { font-family: inherit; }
   box-shadow: var(--shadow-soft);
   padding: 22px 14px;
 }
-.stat-icon { display: block; font-size: 1.5rem; margin-bottom: 8px; line-height: 1; }
+.stat-icon { display: block; margin-bottom: 8px; }
 .stat-num {
   display: block;
   font-family: var(--font-display);
@@ -613,7 +613,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   margin-bottom: 18px;
 }
 .wotd-body { position: relative; z-index: 1; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
-.wotd-icon { font-size: 2.4rem; flex-shrink: 0; }
+.wotd-icon { flex-shrink: 0; }
 .wotd-text { display: flex; flex-direction: column; gap: 3px; }
 .wotd-kk { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.6rem, 4vw, 2.2rem); color: var(--text); }
 .wotd-en { font-style: italic; color: var(--teal-on-surface); font-size: 1rem; }
@@ -803,7 +803,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
    and can never end up underneath. min-height above = badge height, so marking a
    word as learned does not nudge the card's content. */
 .word-card .learned-badge { position: static; margin-left: auto; flex-shrink: 0; }
-.word-card-icon { font-size: 1.3rem; line-height: 1; }
+.word-card-icon { flex-shrink: 0; }
 .word-cat-badge {
   font-size: 0.62rem;
   font-weight: 700;
@@ -1383,7 +1383,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   transition: transform 0.2s ease, background-color 0.3s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .feature-card:hover { transform: translateY(-4px); border-color: var(--border-strong); box-shadow: var(--shadow-soft); }
-.feature-icon { font-size: 2.2rem; display: block; margin-bottom: 18px; }
+.feature-icon { display: flex; align-items: center; justify-content: center; height: 56px; margin-bottom: 18px; } /* 56px: the box the old 2.2rem emoji took, so the cards keep their height */
 .feature-card h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; margin-bottom: 8px; color: var(--text); }
 .feature-card p { color: var(--text-dim); font-size: 0.9rem; }
 
@@ -1485,7 +1485,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   text-align: center;
   box-shadow: var(--shadow-soft);
 }
-.pw-icon { display: block; font-size: 1.25rem; line-height: 1; margin-bottom: 8px; }
+.pw-icon { display: block; margin-bottom: 8px; }
 .pw-num {
   display: block;
   font-family: var(--font-display);
@@ -1563,7 +1563,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   .phone-frame { width: 220px; height: 460px; }
   .stats-bar { flex-wrap: nowrap; gap: 8px; padding: 18px 10px; }
   .stat { flex: 1 1 0; padding: 14px 6px; }
-  .stat-icon { font-size: 1.1rem; margin-bottom: 4px; }
+  .stat-icon { margin-bottom: 4px; }
   .stat-num { font-size: 1.3rem; }
   .stat-label { font-size: 0.6rem; letter-spacing: 0.3px; }
   .hero-title { letter-spacing: -0.5px; }
@@ -1659,7 +1659,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   border-radius: 14px;
   padding: 14px 18px;
 }
-.tr-match-icon { font-size: 1.7rem; flex-shrink: 0; }
+.tr-match-icon { flex-shrink: 0; }
 .tr-match-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
 .tr-match-kk { font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; color: var(--text); }
 .tr-match-en { font-style: italic; color: var(--teal-on-surface); font-size: 0.95rem; }
@@ -1762,7 +1762,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 .feedback-sub { color: var(--text-dim); font-size: 0.82rem; margin-bottom: 12px; }
 .feedback-stars { display: flex; gap: 6px; }
 .feedback-star {
-  font-size: 1.6rem;
+  line-height: 0;
   color: var(--text-faint);
   transition: color 0.15s ease, transform 0.15s ease;
   padding: 2px;
@@ -2180,6 +2180,189 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
   }
   .sozle-msg { min-height: 20px; margin-bottom: 6px; font-size: 0.85rem; }
 }
+
+/* ===== ICONS — Tabler Icons (MIT), outline. The paths live in ICON_PATHS (app.js) and,
+   for the static ones, in the html files. =====
+   ONE STYLE FOR THE WHOLE SITE: no fill, round caps, drawn in currentColor, and a line
+   about 1.6px thick on screen at EVERY size. stroke-width is counted in the icon's own
+   24-unit grid, so a bigger icon needs a smaller number:
+       stroke-width = 1.6 × 24 / size in px      (16px → 2.4 · 20px → 1.9 · 24px → 1.6 · 32px → 1.2)
+   A new place for an icon gets a line in the table below. Do not scale an icon with
+   font-size or transform to "make it fit" — the line would get thicker or thinner
+   than everywhere else. */
+.ico {
+  display: inline-block; flex-shrink: 0;
+  width: 1.15em; height: 1.15em;          /* inside a line of text: follows the text */
+  vertical-align: -0.2em;
+  fill: none; stroke: currentColor; stroke-width: 2.1;
+  stroke-linecap: round; stroke-linejoin: round;
+  overflow: visible;
+}
+/* size table: place · size · stroke-width */
+.section-head h2 .ico  { width: 0.82em; height: 0.82em; stroke-width: 1.4; vertical-align: -0.06em; }  /* the heading is 29–38px: the icon 24–31px */
+.word-flip-hint .ico,
+.wotd-label .ico,
+.pp-search .ico        { width: 13px; height: 13px; stroke-width: 2.7; }   /* beside 10–12px captions */
+.tr-swap .ico          { width: 18px; height: 18px; stroke-width: 2.1; }
+.translator-clear .ico,
+.feedback-close .ico   { width: 13px; height: 13px; stroke-width: 2.9; }
+.learned-badge .ico    { width: 13px; height: 13px; stroke-width: 3.3; }   /* a bolder tick: white on the accent disc */
+.sozle-key .ico        { width: 20px; height: 20px; stroke-width: 1.9; }
+.feedback-star .ico    { width: 28px; height: 28px; stroke-width: 1.4; }
+.btn .ico              { width: 1.15em; height: 1.15em; stroke-width: 2.25; margin: -0.15em 0; }  /* the negative margin: an icon never makes its button taller */
+@media (min-width: 769px) {
+  .translator-section .tr-swap .ico { width: 21px; height: 21px; stroke-width: 1.85; }
+}
+@media (max-width: 480px) {
+}
+/* colours: the icon takes the colour set on its holder */
+.word-card-icon, .wotd-icon, .tr-match-icon { color: var(--accent, var(--teal-light)); display: inline-flex; }
+.stat-icon, .pw-icon, .feature-icon, .wotd-icon, .word-card-icon, .tr-match-icon { line-height: 0; }           /* holders that used to size an emoji with font-size */
+.ico-love { color: #f472b6; }                                        /* the heart of "thank you" and of the Júrek card */
+.sozle-stat-streak .ico { color: #fb923c; }
+.sozle-panel-head .ico { color: var(--teal-light); width: 1.3em; height: 1.3em; stroke-width: 1.9; vertical-align: -0.28em; }
+.feedback-star.is-on .ico { fill: currentColor; }                   /* a chosen star is filled */
+.sm-icon { display: inline-flex; color: rgba(255, 255, 255, 0.7); }
+/* the two tile colours in the Sózle tour caption (same greens / yellows as .sozle-tile) */
+.tour-swatch { display: inline-block; width: 0.95em; height: 0.95em; border-radius: 3px; vertical-align: -0.12em; }
+.tour-swatch.is-correct { background: #16a34a; }
+.tour-swatch.is-present { background: #ca8a04; }
+
+/* ===== BIG ICONS — Phosphor Icons 2.1 (MIT, phosphoricons.com) =====
+   Where an icon IS the picture of a place — the four progress tiles, the home counters and
+   feature cards, the category icon on a word card / Word of the Day / translator match —
+   it is a coloured SHAPE (Phosphor duotone: the outline over a 35% tint), not a thin line. Small icons inside buttons and
+   lines of text stay Tabler outline (block ICONS above). bigIcon(name) in app.js draws them;
+   the static ones are pasted into index.html. Grid 256, fill = currentColor. */
+.ph {
+  display: inline-block; flex-shrink: 0;
+  width: 1.15em; height: 1.15em; vertical-align: -0.2em;
+  fill: currentColor; overflow: visible;
+}
+.ph .ph-tint { opacity: 0.35; }       /* Phosphor's own 20% tint disappears on this dark background */
+/* sizes: place · size */
+.pw-icon .ph         { width: 28px; height: 28px; margin: -2px 0; }   /* progress tiles (22px outline before) */
+.stat-icon .ph       { width: 28px; height: 28px; }                   /* home: Words / Categories / Languages */
+.feature-icon .ph    { width: 44px; height: 44px; }                   /* the box stays 56px high */
+.proof-num .ph       { width: 34px; height: 34px; }
+.wotd-icon .ph       { width: 42px; height: 42px; }
+.word-card-icon .ph  { width: 21px; height: 21px; }
+.tr-match-icon .ph   { width: 26px; height: 26px; }
+@media (max-width: 480px) {
+  .stat-icon .ph { width: 1.35rem; height: 1.35rem; }                 /* three counters in one row on a phone */
+}
+/* colours: every big icon has its own; category icons take the card's --accent */
+.tone-green  { color: #34d399; }
+.tone-violet { color: #c084fc; }
+.tone-orange { color: #fb923c; }
+.tone-gold   { color: #fbbf24; }
+.tone-sky    { color: #38bdf8; }
+.tone-pink   { color: #f472b6; }
+.tone-indigo { color: #818cf8; }
+
+/* ----- progress tiles: each icon has its own little show under the mouse -----
+   Musa, 2026-10-08: "motion in time, not a jump to another state" — keyframes, and a
+   different movement for each icon, clearly visible.
+   - tick: draws itself again (stroke-dashoffset), the disc pops and a ring ripples out;
+   - brain: beats twice, lub-dub, like thinking, and lights up on each beat;
+   - flame: flickers unevenly and sways, its core flares up inside (the main one);
+   - cup: hops and lands with a little squash, a glint runs over the metal.
+   HOW THE WAY BACK STAYS SMOOTH: a CSS animation that is removed when :hover ends snaps
+   back to rest (Chromium does not ease it, measured). So the keyframes never move anything
+   directly: they animate numbers (--ts, --fr, …), and every transform / opacity / filter is
+   that number × --amp. --amp is 0 at rest and 1 under the mouse, and --amp is what the
+   transition eases (in 0.15 s, out 0.45 s). The animations themselves stay attached and are
+   only paused at rest, so leaving mid-move freezes the pose and eases it back to rest.
+   app.js restarts them from 0 each time the mouse comes in (pointerover on .pw-stat).
+   - only transform, opacity, filter and stroke-dashoffset change;
+   - mouse only: (hover: hover) and (pointer: fine); nothing at all for prefers-reduced-motion
+     (the rules below are inside that media query, so --amp simply stays 0);
+   - the numbers need @property (Chrome 85, Safari 16.4, Firefox 128); without it they
+     would jump instead of easing, so the class `tiles-motion` that switches the show on is
+     only set when CSS.registerProperty exists. */
+@property --amp { syntax: '<number>'; inherits: true; initial-value: 0; }
+@property --g   { syntax: '<number>'; inherits: false; initial-value: 0; }   /* glow radius, px */
+@property --gb  { syntax: '<number>'; inherits: false; initial-value: 0; }   /* extra brightness */
+@property --ts  { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --td  { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --tr  { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --to  { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --bs  { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --bt  { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --fr  { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --fsx { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --fsy { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --fk  { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --co  { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --cs  { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --qy  { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --qsx { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --qsy { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --qx  { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --qo  { syntax: '<number>'; inherits: false; initial-value: 0; }
+
+.pw-icon-check  { color: #34d399; --glow: 52 211 153; }
+.pw-icon-brain  { color: #c084fc; --glow: 192 132 252; }
+.pw-icon-flame  { color: #fb923c; --glow: 251 146 60; }
+.pw-icon-trophy { color: #fbbf24; --glow: 251 191 36; }
+.pw-stat { --amp: 0; transition: --amp 0.45s ease-out; }
+.pw-icon .ph {
+  /* the glow: its colour is transparent at rest (a 0px shadow would still darken the tint) */
+  filter: drop-shadow(0 0 calc(var(--g) * var(--amp) * 1px) rgb(var(--glow) / calc(var(--amp) * 0.7)))
+          brightness(calc(1 + var(--gb) * var(--amp)));
+}
+.pw-icon .ph * { transform-box: view-box; }
+.tk-mark  { fill: none; stroke: currentColor; stroke-width: 16; stroke-linecap: round; stroke-linejoin: round;
+            stroke-dasharray: 1 2; stroke-dashoffset: calc(var(--td) * var(--amp)); }   /* pathLength 1: 0 = drawn, 1.15 = gone (past the round cap) */
+.tk-ink   { stroke: var(--bg-elevated); }      /* the solid disc: the tick is cut out of it */
+.tk-ripple { fill: none; stroke: currentColor; stroke-width: 10; transform-origin: 128px 128px;
+             transform: scale(calc(1 + var(--tr) * var(--amp))); opacity: calc(var(--to) * var(--amp)); }
+.fl-core  { fill: #fde68a; opacity: calc(var(--co) * var(--amp)); transform-origin: 128px 224px;
+            transform: scale(calc(1 + var(--cs) * var(--amp))); }
+.fl-sway  { transform-origin: 128px 228px; transform: rotate(calc(var(--fr) * var(--amp) * 1deg)); }
+.fl-flick { transform-origin: 128px 228px;
+            transform: skewX(calc(var(--fk) * var(--amp) * 1deg)) scale(calc(1 + var(--fsx) * var(--amp)), calc(1 + var(--fsy) * var(--amp))); }
+.tq-shine { opacity: calc(var(--qo) * var(--amp));
+            transform: translateX(calc(var(--qx) * 1px)) skewX(-22deg); }
+.pw-icon-check .ph  { transform-origin: 50% 50%; transform: scale(calc(1 + var(--ts) * var(--amp))); }
+.pw-icon-brain .ph  { transform-origin: 50% 55%; transform: scale(calc(1 + var(--bs) * var(--amp))); }
+.pw-icon-brain .ph-tint { opacity: calc(0.35 + var(--bt) * var(--amp)); }
+.pw-icon-trophy .ph { transform-origin: 50% 100%;
+            transform: translateY(calc(var(--qy) * var(--amp) * 1px)) scale(calc(1 + var(--qsx) * var(--amp)), calc(1 + var(--qsy) * var(--amp))); }
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .tiles-motion .pw-icon-check .ph    { animation: tk-pop 0.75s linear both paused; }
+  .tiles-motion .pw-icon-check .tk-mark   { animation: tk-draw 0.75s linear both paused; }
+  .tiles-motion .pw-icon-check .tk-ripple { animation: tk-ripple 0.75s linear both paused; }
+  .tiles-motion .pw-icon-brain .ph    { animation: bz-beat 1.6s linear infinite paused; }
+  .tiles-motion .pw-icon-brain .ph-tint { animation: bz-tint 1.6s linear infinite paused; }
+  .tiles-motion .pw-icon-flame .ph    { animation: fl-glow 0.7s linear infinite paused; }
+  .tiles-motion .pw-icon-flame .fl-sway  { animation: fl-sway 2.3s ease-in-out infinite paused; }
+  .tiles-motion .pw-icon-flame .fl-flick { animation: fl-flick 0.95s ease-in-out infinite paused; }
+  .tiles-motion .pw-icon-flame .fl-core  { animation: fl-core 0.6s ease-in-out infinite paused; }
+  .tiles-motion .pw-icon-trophy .ph   { animation: tq-hop 0.8s linear both paused; }
+  .tiles-motion .pw-icon-trophy .tq-shine { animation: tq-shine 2.4s linear infinite paused; }
+  .tiles-motion .pw-stat:hover { --amp: 1; transition-duration: 0.15s; }
+  .tiles-motion .pw-stat:hover * { animation-play-state: running; }
+}
+/* the tick: the disc pops, the tick is wiped and drawn again, a ring runs out */
+@keyframes tk-pop    { 0% { --ts: 0; --g: 0; } 18% { --ts: 0.28; --g: 12; } 38% { --ts: -0.08; } 58% { --ts: 0.06; } 78%, 100% { --ts: 0; --g: 8; } }
+@keyframes tk-draw   { 0%, 22% { --td: 1.15; } 70%, 100% { --td: 0; } }
+@keyframes tk-ripple { 0% { --tr: 0; --to: 0; } 12% { --tr: 0.02; --to: 0.7; } 70% { --tr: 0.75; --to: 0; } 100% { --tr: 0.75; --to: 0; } }
+/* the brain: two beats, then a rest — and it lights up from inside on each beat */
+@keyframes bz-beat { 0% { --bs: 0; --g: 3; --gb: 0; } 9% { --bs: 0.24; --g: 12; --gb: 0.18; } 19% { --bs: 0.04; --g: 5; --gb: 0; }
+                     29% { --bs: 0.28; --g: 14; --gb: 0.22; } 46% { --bs: 0; --g: 4; --gb: 0; } 100% { --bs: 0; --g: 3; --gb: 0; } }
+@keyframes bz-tint { 0% { --bt: 0; } 9% { --bt: 0.4; } 19% { --bt: 0.08; } 29% { --bt: 0.5; } 46%, 100% { --bt: 0; } }
+/* the flame: three rhythms that never line up (0.95 s flicker, 2.3 s sway, 0.6 s core) */
+@keyframes fl-flick { 0% { --fsy: 0.1; --fsx: 0; --fk: 0; } 17% { --fsy: 0.27; --fsx: -0.06; --fk: 5; } 31% { --fsy: 0.06; --fsx: 0.04; --fk: -3; }
+                      52% { --fsy: 0.3; --fsx: -0.08; --fk: 6; } 68% { --fsy: 0.12; --fsx: 0.03; --fk: -4; } 84% { --fsy: 0.22; --fsx: -0.04; --fk: 2; } 100% { --fsy: 0.1; --fsx: 0; --fk: 0; } }
+@keyframes fl-sway  { 0% { --fr: 0; } 22% { --fr: -6; } 47% { --fr: 4; } 63% { --fr: -2; } 81% { --fr: 7; } 100% { --fr: 0; } }
+@keyframes fl-core  { 0% { --co: 0.75; --cs: 0; } 30% { --co: 1; --cs: 0.18; } 55% { --co: 0.65; --cs: -0.06; } 80% { --co: 0.95; --cs: 0.12; } 100% { --co: 0.75; --cs: 0; } }
+@keyframes fl-glow  { 0% { --g: 9; --gb: 0.08; } 35% { --g: 14; --gb: 0.2; } 60% { --g: 8; --gb: 0.05; } 100% { --g: 9; --gb: 0.08; } }
+/* the cup: up, land with a squash, settle — the glint crosses it while it lands, then every 2.4 s */
+@keyframes tq-hop   { 0% { --qy: 0; --qsx: 0; --qsy: 0; --g: 0; } 32% { --qy: -10; --qsx: -0.05; --qsy: 0.09; --g: 10; } 55% { --qy: 0; --qsx: 0.12; --qsy: -0.12; }
+                      72% { --qy: -1.5; --qsx: -0.03; --qsy: 0.04; } 88%, 100% { --qy: 0; --qsx: 0; --qsy: 0; --g: 8; } }
+@keyframes tq-shine { 0%, 10% { --qx: -50; --qo: 0; } 12% { --qx: -40; --qo: 0.9; } 38% { --qx: 300; --qo: 0.9; } 39%, 100% { --qx: 300; --qo: 0; } }
 
 /* ===== GUIDE — a spotlight tour of the page (initHelp in app.js) =====
    Layers, bottom to top:

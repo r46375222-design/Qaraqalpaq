@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=122">
+<link rel="stylesheet" href="css/styles.css?v=123">
 <script>/* the tours of all five pages have been opened → no "?" in the nav (before the first paint; same list as GUIDE_PAGES in app.js) */try{if(['index','dictionary','flashcards','quiz','game'].every(function(p){return localStorage.getItem('qaraqalpaq_guide_'+p)==='seen'}))document.documentElement.className+=' guide-done'}catch(e){}</script>
 </head>
 <body class="page-dictionary">
@@ -52,13 +52,13 @@
       <div class="translator translator-panes" id="translator">
         <div class="tr-langbar">
           <span class="tr-lang" id="trLangSrc">Detect language</span>
-          <span class="tr-swap" aria-hidden="true">⇄</span>
+          <span class="tr-swap" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 10h14l-4 -4"/><path d="M17 14h-14l4 4"/></svg></span>
           <span class="tr-lang tr-lang-dst" id="trLangDst">Translation</span>
         </div>
         <div class="tr-panes">
           <div class="tr-pane tr-pane-src">
             <textarea id="translatorInput" rows="3" placeholder="Type in Qaraqalpaq, English or Russian…" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
-            <button class="translator-clear" id="translatorClear" aria-label="Clear" hidden>✕</button>
+            <button class="translator-clear" id="translatorClear" aria-label="Clear" hidden><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6l-12 12"/><path d="M6 6l12 12"/></svg></button>
           </div>
           <div class="tr-pane tr-pane-dst">
             <div class="tr-output" id="translatorOutput"><span class="tr-output-hint">Translation appears here</span></div>

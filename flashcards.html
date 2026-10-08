@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=122">
+<link rel="stylesheet" href="css/styles.css?v=123">
 <script>/* the tours of all five pages have been opened → no "?" in the nav (before the first paint; same list as GUIDE_PAGES in app.js) */try{if(['index','dictionary','flashcards','quiz','game'].every(function(p){return localStorage.getItem('qaraqalpaq_guide_'+p)==='seen'}))document.documentElement.className+=' guide-done'}catch(e){}</script>
 </head>
 <body>
@@ -56,13 +56,13 @@
         <div class="flashcard" id="flashcard">
           <div class="flashcard-inner">
             <div class="flashcard-face flashcard-front">
-              <span class="learned-badge" aria-hidden="true">✓</span>
+              <span class="learned-badge" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12l5 5l10 -10"/></svg></span>
               <span class="flash-badge" id="flashCatBadge">Category</span>
               <span class="flash-word" id="flashWordKK">Word</span>
               <span class="flash-hint">Tap to reveal</span>
             </div>
             <div class="flashcard-face flashcard-back">
-              <span class="learned-badge" aria-hidden="true">✓</span>
+              <span class="learned-badge" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12l5 5l10 -10"/></svg></span>
               <span class="flash-en" id="flashWordEN">English</span>
               <span class="flash-ru" id="flashWordRU">Russian</span>
             </div>
@@ -72,9 +72,9 @@
       </div>
 
       <div class="flash-actions">
-        <button class="btn btn-outline" id="flashShuffle">⤮ Shuffle</button>
+        <button class="btn btn-outline" id="flashShuffle"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 4l3 3l-3 3"/><path d="M18 20l3 -3l-3 -3"/><path d="M3 7h3a5 5 0 0 1 5 5a5 5 0 0 0 5 5h5"/><path d="M21 7h-5a4.978 4.978 0 0 0 -3 1m-4 8a4.984 4.984 0 0 1 -3 1h-3"/></svg> Shuffle</button>
         <button class="btn btn-primary" id="flashFlipBtn">Flip Card</button>
-        <button class="btn btn-outline" id="flashLearnBtn">✓ Mark as Learned</button>
+        <button class="btn btn-outline" id="flashLearnBtn"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12l5 5l10 -10"/></svg> Mark as Learned</button>
       </div>
     </div>
   </section>
