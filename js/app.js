@@ -101,8 +101,94 @@
     'game.letters': "Letters á, ǵ, ı, ń, ó, ú are on the keyboard above — that's what makes it Qaraqalpaq",
     'game.kbd': "You can type on your own keyboard too, in any layout. For á ǵ ı ń ó ú type the letter, then <kbd>'</kbd> — <kbd>a</kbd><kbd>'</kbd> gives á.",
   };
-  const stub = o => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, '[RU] ' + v]));   // phase 1 only
-  const STRINGS = { en: STRINGS_EN, ru: stub(STRINGS_EN) };
+  // Russian, built in portion by portion after Musa's "ок" (tone «ты», gender-neutral wording).
+  // A key that is not here yet shows "[RU] " + the English text — a portion still to come.
+  const STRINGS_RU = {
+    'nav.home': 'Главная',
+    'nav.dictionary': 'Словарь',
+    'nav.flashcards': 'Карточки',
+    'nav.quiz': 'Квиз',
+    'a11y.logo': 'Логотип Qaraqalpaq Tili',
+    'a11y.help': 'Как пользоваться сайтом',
+    'a11y.menu': 'Меню',
+    'a11y.toRu': 'Переключить на русский',
+    'a11y.toEn': 'Переключить на английский',
+    'footer.tagline': 'Помогаем каракалпакскому языку жить — слово за словом.',
+    'footer.questions': 'Есть вопросы?',
+    'footer.guide': 'Подсказки',
+    'footer.guideTitle': 'Короткая экскурсия по странице',
+    'hero.tag': 'Tili — твой путь в каракалпакский',
+    'hero.title': 'Учи <span class="hero-accent">каракалпакский</span> по-новому.',
+    'hero.sub': 'Мгновенный переводчик, словарь, карточки и квизы для нового поколения — быстро, ярко и по-настоящему весело.',
+    'hero.try': 'Попробуй переводчик',
+    'cta.exploreDict': 'Открой словарь',
+    'stat.words': 'Слова',
+    'stat.categories': 'Категории',
+    'stat.languages': 'Языки',
+    'home.exploreAll': 'Открой все 1 301 слово в словаре →',
+    'home.sozle': '<strong>Новое — Sózle:</strong> игра в каракалпакские слова. Угадай слово дня за 6 попыток →',
+    'proof.caption': 'Мы только запустились — будь среди <strong>первых</strong>, кто учит каракалпакский онлайн',
+    'proof.words': 'Настоящие слова, проверенные носителем языка',
+    'proof.waiting': 'Ждём твою оценку',
+    'proof.tell': 'Расскажи, что думаешь —',
+    'show.title': 'Посмотри в деле',
+    'show.sub': 'Коротко: словарь, карточки и квиз.',
+    'show.dictTitle': 'Словарь и переводчик',
+    'show.dictSub': '1 301 слово — мгновенный перевод в обе стороны',
+    'show.flashTitle': 'Карточки',
+    'show.flashSub': 'Переворачивай и запоминай быстрее',
+    'show.quizTitle': 'Квиз',
+    'show.quizSub': 'Проверь себя за минуту',
+    'phone.flashTitle': 'Запоминай слова с умными карточками',
+    'phone.flashText': 'Листай настоящие каракалпакские слова и тренируй память — с переводом на английский и русский.',
+    'phone.quizTitle': 'Проверь себя в квизе',
+    'phone.quizText': 'Четыре варианта, один верный. Следи за серией и счётом — и расти от новичка до знатока.',
+    'feat.title': 'Всё, чтобы выучить каракалпакский',
+    'feat.sub': 'Простой набор — для быстрого прогресса.',
+    'feat.translator': 'Мгновенный переводчик',
+    'feat.translatorText': 'Сам узнаёт каракалпакский, английский и русский.',
+    'feat.words': '1 301 слово',
+    'feat.wordsText': 'Каракалпакский, английский и русский в одном месте.',
+    'feat.flash': 'Умные карточки',
+    'feat.flashText': 'Переворачивай карточки и запоминай быстрее.',
+    'feat.quiz': 'Быстрый квиз',
+    'feat.quizText': 'Проверь знания за пару минут.',
+    'cta.title': 'Ну что, начнём?',
+    'tr.title': 'Мгновенный переводчик',
+    'tr.sub': 'Напиши любое слово на каракалпакском, английском или русском — язык определится сам, а перевод появится сразу, прямо в браузере.',
+    'tr.detect': 'Язык: авто',
+    'tr.translation': 'Перевод',
+    'tr.hint': 'Здесь появится перевод',
+    'tr.placeholder': 'Пиши на каракалпакском, английском или русском…',
+    'a11y.clear': 'Очистить',
+    'req.title': 'Нет нужного слова? Нашлась ошибка?',
+    'req.text': 'Напиши слово — мы читаем каждое сообщение и пополняем словарь.',
+    'req.word': 'Слово или фраза на любом языке',
+    'req.note': 'Правильное написание, значение или пример (по желанию)',
+    'req.send': 'Отправить',
+    'mock.whatIs': 'Что значит <strong>Suw</strong>?',
+    'quiz.correct': 'Верно!',
+    'mock.search': 'Найди слово…',
+    'mock.all': 'Все',
+    'mock.animals': 'Животные',
+    'mock.food': 'Еда',
+    'card.tapReveal': 'Нажми, чтобы открыть',
+    'quiz.whatMean': 'Что это значит?',
+    'mock.hello': 'Привет',
+    'mock.water': 'Вода',
+    'mock.fire': 'Огонь',
+    'mock.earth': 'Земля',
+    'mock.air': 'Воздух',
+    'mock.sky': 'небо',
+    'mock.flower': 'цветок',
+    'mock.sun': 'Солнце',
+    'mock.moon': 'Луна',
+    'mock.star': 'Звезда',
+    'mock.skyCap': 'Небо',
+    'mock.heart': 'Heart',
+  };
+  const stub = o => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, '[RU] ' + v]));   // until all portions are in
+  const STRINGS = { en: STRINGS_EN, ru: Object.assign(stub(STRINGS_EN), STRINGS_RU) };
   // display names of the 48 categories, by their English key; a missing one shows the key
   const CATEGORY_NAMES = { en: {}, ru: null };   // ru: null = phase 1, "[RU] " + the key
   // THE SWITCH IS HIDDEN FROM VISITORS until all four portions of Russian are in (Musa,
@@ -169,6 +255,30 @@
   // first thing on every page, before words.json arrives, so a Russian page does not
   // stay English for a moment (for English it rewrites the same text and lights "EN")
   applyStrings();
+
+  // ===== SMALL MOTIONS (Musa, 2026-10-09) =====
+  // Each one tells something: a block arrived, a number went up, a guess was too short.
+  // Only transform and opacity, 150–400 ms, nothing waits for them, and none at all under
+  // prefers-reduced-motion. The CSS is block "MOTION" in styles.css (all inside one media
+  // query); MOTION_OK only spares app.js the work of adding classes nobody would see.
+  const MOTION_OK = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // start a one-shot animation class again, even if it is still on the element
+  function replay(el, cls) {
+    if (!el || !MOTION_OK) return;
+    el.classList.remove(cls);
+    void el.offsetWidth; // a style flush in between, or the browser sees no change
+    el.classList.add(cls);
+  }
+  // one-shot classes leave again when their animation ends (keyed by keyframes name, so a
+  // button's sheen ending never cuts a pop short) — keep in step with the mo- names in the CSS
+  const ONE_SHOT = { 'mo-bump': 'bump', 'mo-pop': 'pop', 'mo-badge': 'pop', 'mo-q-in': 'q-in', 'mo-opt-in': 'opt-in', 'mo-card-in': 'card-in', 'mo-in-next': 'in-next', 'mo-in-prev': 'in-prev', 'mo-shuffle': 'shuffled', 'mo-typed': 'just-typed', 'mo-shake': 'shake', 'mo-msg-in': 'msg-in', 'mo-panel-in': 'panel-in', 'mo-tr-new': 'tr-new' };
+  document.addEventListener('animationend', e => {
+    const cls = ONE_SHOT[e.animationName];
+    if (cls && !e.pseudoElement && e.target.classList) e.target.classList.remove(cls);
+  });
+  // iOS Safari shows :active (the press on pills, quiz answers, Sózle keys) only when the
+  // page listens to touchstart
+  document.addEventListener('touchstart', () => {}, { passive: true });
 
   function norm(s) {
     return (s || '').toLowerCase();
@@ -272,12 +382,17 @@
   function renderProgressWidget() {
     const el = $('#progressWidget');
     if (!el) return;
+    const nums = [wordsLearnedToday(), totalWordsLearned(), currentStreak(), PROGRESS.quizBestScore || 0];
+    // a number that went up since the last drawing gets a short bump (never on page load)
+    const prev = renderProgressWidget.last;
+    renderProgressWidget.last = nums;
+    const num = i => `<span class="pw-num${MOTION_OK && prev && nums[i] > prev[i] ? ' bump' : ''}">${nums[i]}</span>`;
     el.innerHTML = `
       <div class="progress-widget-grid">
-        <div class="pw-stat"><span class="pw-icon pw-icon-check" aria-hidden="true">${TILE_ICONS.check}</span><span class="pw-num">${wordsLearnedToday()}</span><span class="pw-label">Learned Today</span></div>
-        <div class="pw-stat"><span class="pw-icon pw-icon-brain" aria-hidden="true">${TILE_ICONS.brain}</span><span class="pw-num">${totalWordsLearned()}</span><span class="pw-label">Total Learned</span></div>
-        <div class="pw-stat"><span class="pw-icon pw-icon-flame" aria-hidden="true">${TILE_ICONS.flame}</span><span class="pw-num">${currentStreak()}</span><span class="pw-label">Day Streak</span></div>
-        <div class="pw-stat"><span class="pw-icon pw-icon-trophy" aria-hidden="true">${TILE_ICONS.trophy}</span><span class="pw-num">${PROGRESS.quizBestScore || 0}</span><span class="pw-label">Quiz Best</span></div>
+        <div class="pw-stat"><span class="pw-icon pw-icon-check" aria-hidden="true">${TILE_ICONS.check}</span>${num(0)}<span class="pw-label">Learned Today</span></div>
+        <div class="pw-stat"><span class="pw-icon pw-icon-brain" aria-hidden="true">${TILE_ICONS.brain}</span>${num(1)}<span class="pw-label">Total Learned</span></div>
+        <div class="pw-stat"><span class="pw-icon pw-icon-flame" aria-hidden="true">${TILE_ICONS.flame}</span>${num(2)}<span class="pw-label">Day Streak</span></div>
+        <div class="pw-stat"><span class="pw-icon pw-icon-trophy" aria-hidden="true">${TILE_ICONS.trophy}</span>${num(3)}<span class="pw-label">Quiz Best</span></div>
       </div>`;
   }
 
@@ -286,10 +401,14 @@
     if (!el) return;
     const total = WORDS.length;
     const learned = totalWordsLearned();
-    const pct = total ? Math.min(100, Math.round((learned / total) * 100)) : 0;
-    el.innerHTML = `
-      <div class="progress-bar-label">${learned.toLocaleString()} / ${total.toLocaleString()} words learned</div>
-      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>`;
+    const frac = total ? Math.min(1, learned / total) : 0;
+    // built once; after that only the label and the fill change. The fill is scaled
+    // (transform), so a newly learned word slides it forward instead of redrawing the bar
+    if (!el.querySelector('.progress-bar-fill')) {
+      el.innerHTML = `<div class="progress-bar-label"></div><div class="progress-bar-track"><div class="progress-bar-fill"></div></div>`;
+    }
+    el.querySelector('.progress-bar-label').textContent = `${learned.toLocaleString()} / ${total.toLocaleString()} words learned`;
+    el.querySelector('.progress-bar-fill').style.transform = `scaleX(${frac})`;
   }
 
   // ===== CATEGORY ICONS & ACCENT COLORS =====
@@ -480,7 +599,47 @@
     // height by now, so the scroll lands on the search field.
     const q = new URLSearchParams(location.search).get('q');
     if (q && $('#wordGrid')) findInDictionary(q);
+    setupReveal();
+    setupBannerTiles();
     appReady = true;
+  }
+
+  // ===== REVEAL ON SCROLL =====
+  // Blocks below the first screen rise in once as they scroll into view (IntersectionObserver,
+  // no scroll handler). They are hidden ONLY from here on — data-reveal on each block and
+  // html.reveal-on, set by this function: if app.js fails to load or stops before this point,
+  // nothing is ever hidden (Musa's condition). Blocks already on screen are left alone.
+  const REVEAL_SEL = '.section-head, .translator-more, .game-banner, .progress-widget .pw-stat, .avatar-row, .proof-stat, .showcase-card, .phone-text, .phone-frame, .feature-card, .wordreq, .cta-box';
+  function setupReveal() {
+    if (!MOTION_OK || !('IntersectionObserver' in window)) return;
+    const fold = innerHeight * 0.92;
+    const els = $$(REVEAL_SEL).filter(el => { const r = el.getBoundingClientRect(); return r.height > 0 && r.top > fold; });
+    if (!els.length) return;
+    const io = new IntersectionObserver(entries => {
+      // blocks that come in together follow one another by 40 ms (at most 3 steps)
+      entries.filter(e => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top || a.boundingClientRect.left - b.boundingClientRect.left)
+        .forEach((e, i) => {
+          io.unobserve(e.target);
+          e.target.style.setProperty('--d', Math.min(i, 3) * 40 + 'ms');
+          e.target.classList.add('is-in');
+        });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+    els.forEach(el => { el.setAttribute('data-reveal', ''); io.observe(el); });
+    document.documentElement.classList.add('reveal-on');
+  }
+
+  // The five letter tiles of the home Sózle banner turn over once, the first time the
+  // banner is fully on screen — the game's own reveal, in small
+  function setupBannerTiles() {
+    const tiles = $('.game-banner-tiles');
+    if (!tiles || !MOTION_OK || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      io.disconnect();
+      tiles.classList.add('is-flipping');
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 1 });
+    io.observe(tiles);
   }
 
   // ===== TUBELIGHT NAV INDICATOR =====
@@ -885,6 +1044,7 @@
     const results = $('#translatorResults');
     const out = $('#translatorOutput');
     const res = translateQuery(raw);
+    if (!res || res.type !== 'exact') renderTranslation.last = null;
     if (!res) {
       results.hidden = true; results.innerHTML = '';
       out.innerHTML = trOutputHint();
@@ -899,8 +1059,11 @@
       trSetLangs(res.src);
       const big = res.src === 'kk' ? primaryText(m.en) : m.kk;
       const sub = res.src === 'kk' ? m.ru : (res.src === 'ru' ? primaryText(m.en) : m.ru);
+      // a NEW translation rises in; typing on while the answer stays the same moves nothing
+      const isNew = MOTION_OK && big !== renderTranslation.last;
+      renderTranslation.last = big;
       out.innerHTML = `
-        <div class="tr-output-main">
+        <div class="tr-output-main${isNew ? ' tr-new' : ''}">
           <span class="tr-output-big">${escapeHtml(big)}</span>
           <span class="tr-output-sub">${escapeHtml(sub)}</span>
           <div class="tr-output-meta">
@@ -1079,21 +1242,29 @@
     return res;
   }
 
+  // what the next drawing of the board should animate: 'type' (the letter just typed lands)
+  // or { row, win } (that guess turns over; on a win the tiles hop after it). One drawing only.
+  let sozleAnim = null;
   function sozleRenderBoard() {
     const board = $('#sozleBoard');
+    const anim = MOTION_OK ? sozleAnim : null;
+    sozleAnim = null;
     let html = '';
     for (let r = 0; r < 6; r++) {
       html += '<div class="sozle-row">';
       for (let c = 0; c < 5; c++) {
         let ch = '', cls = '';
+        let style = '';
         if (r < sozle.guesses.length) {
           ch = sozle.guesses[r][c];
           cls = ' is-' + sozle.evals[r][c];
+          if (anim && anim.row === r) { cls += anim.win ? ' flip-in win-hop' : ' flip-in'; style = ` style="--i:${c}"`; }
         } else if (r === sozle.guesses.length && !sozle.done) {
           ch = sozle.cur[c] || '';
           if (ch) cls = ' is-filled';
+          if (ch && anim === 'type' && c === sozle.cur.length - 1) cls += ' just-typed';
         }
-        html += `<div class="sozle-tile${cls}">${escapeHtml(ch)}</div>`;
+        html += `<div class="sozle-tile${cls}"${style}>${escapeHtml(ch)}</div>`;
       }
       html += '</div>';
     }
@@ -1134,6 +1305,7 @@
   function sozleMsg(text, sticky) {
     const el = $('#sozleMsg');
     el.textContent = text;
+    if (text) replay(el, 'msg-in');
     clearTimeout(sozleMsg._t);
     if (!sticky && text) sozleMsg._t = setTimeout(() => { el.textContent = ''; }, 2200);
   }
@@ -1173,7 +1345,7 @@
     $('#sozleHint').hidden = true;
     const copyBtn = $('#sozleCopy');
     copyBtn.addEventListener('click', () => {
-      const done = () => { copyBtn.innerHTML = `Copied ${icon('check')}`; setTimeout(() => { copyBtn.textContent = 'Copy result'; }, 1600); };
+      const done = () => { copyBtn.innerHTML = `Copied ${icon('check')}`; replay(copyBtn, 'pop'); setTimeout(() => { copyBtn.textContent = 'Copy result'; }, 1600); };
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(sozleShareText()).then(done, done);
       else done();
     });
@@ -1207,16 +1379,22 @@
     }
     sozleRenderStats();
     sozleEndPanel();
+    replay($('#sozlePanel'), 'panel-in'); // only for a game finished now — not for a board restored on load
   }
 
   function sozleSubmit() {
     if (sozle.done) return;
-    if (sozle.cur.length < 5) { sozleMsg('Not enough letters'); return; }
+    if (sozle.cur.length < 5) {
+      sozleMsg('Not enough letters');
+      replay($$('#sozleBoard .sozle-row')[sozle.guesses.length], 'shake'); // the row itself says "not yet"
+      return;
+    }
     const guess = sozle.cur;
     const ev = sozleEval(guess, sozle.answer);
     sozle.guesses.push(guess);
     sozle.evals.push(ev);
     sozle.cur = '';
+    sozleAnim = { row: sozle.guesses.length - 1, win: guess === sozle.answer };
     sozleRenderBoard();
     sozleRenderKeys();
     if (guess === sozle.answer) { sozleFinish(true); return; }
@@ -1247,6 +1425,7 @@
     if (k === 'back') { sozle.cur = sozle.cur.slice(0, -1); sozleRenderBoard(); return; }
     if (sozle.cur.length >= 5 || !SOZLE_ALLOWED.has(k)) return;
     sozle.cur += k;
+    sozleAnim = 'type';
     sozleRenderBoard();
   }
 
@@ -1258,6 +1437,7 @@
     const swap = SOZLE_ACCENT[sozle.cur.slice(-1)];
     if (!swap) return;
     sozle.cur = sozle.cur.slice(0, -1) + swap;
+    sozleAnim = 'type';
     sozleRenderBoard();
   }
 
@@ -1480,6 +1660,7 @@
     const card = btn.closest('.word-card');
     card.classList.toggle('is-learned', learned);
     $$('.learn-btn', card).forEach(b => { b.innerHTML = learned ? `${icon('check')} ${t('btn.learned')}` : t('btn.markLearned'); });
+    if (learned) $$('.learned-badge', card).forEach(b => replay(b, 'pop'));
     renderProgressBar();
     renderProgressWidget();
   }
@@ -1495,6 +1676,7 @@
     const paginationEl = $('#pagination');
 
     if (filtered.length === 0) {
+      renderDictionary.lastKey = '';
       $('#searchCount').textContent = '0 results found';
       grid.innerHTML = '';
       empty.hidden = false;
@@ -1515,6 +1697,16 @@
 
     $('#searchCount').textContent = `Showing ${pageItems.length} of ${sorted.length.toLocaleString()} word${sorted.length === 1 ? '' : 's'}`;
     grid.innerHTML = pageItems.map(wordCardHtml).join('');
+    // other cards than before (search, category, page) → they come in as a quick cascade.
+    // Not on page load, not when the same cards are drawn again (language switch). Only the
+    // cards on screen (12 at most): the rest are out of sight, and 48 moving cards cost a slow
+    // phone a long first frame (measured at 6× CPU slowdown). Read all, then write.
+    const pageKey = pageItems.map(wordId).join('|');
+    if (MOTION_OK && renderDictionary.lastKey !== undefined && pageKey !== renderDictionary.lastKey) {
+      const inView = $$('.word-card', grid).slice(0, 12).filter(c => c.getBoundingClientRect().top < innerHeight);
+      inView.forEach((c, i) => { c.style.setProperty('--i', i); c.classList.add('card-in'); });
+    }
+    renderDictionary.lastKey = pageKey;
     renderPagination(totalPages);
   }
 
@@ -1653,6 +1845,7 @@
       shuffle(state.flash.list);
       state.flash.index = 0;
       showFlashcard();
+      replay($('#flashcard'), 'shuffled');
     });
     const learnBtn = $('#flashLearnBtn');
     if (learnBtn) learnBtn.addEventListener('click', () => {
@@ -1662,6 +1855,7 @@
       // Only the button and the badge change — showFlashcard() would also turn the
       // card back to its front while you are reading the translation
       renderFlashLearned(list[index]);
+      if (isLearned(wordId(list[index]))) $$('#flashcard .learned-badge').forEach(b => replay(b, 'pop'));
       renderProgressBar();
     });
     renderProgressBar();
@@ -1728,6 +1922,10 @@
     if (list.length === 0) return;
     state.flash.index = (state.flash.index + dir + list.length) % list.length;
     showFlashcard();
+    // the next word comes in from the right, the previous one from the left
+    const card = $('#flashcard');
+    card.classList.remove('in-next', 'in-prev');
+    replay(card, dir > 0 ? 'in-next' : 'in-prev');
   }
 
   // ===== QUIZ PAGE =====
@@ -1739,18 +1937,27 @@
     LANG_REDRAW.push(() => { buildSelectOptions($('#quizCategory')); renderQuizFeedback(); });
   }
 
+  // The language of the ANSWERS (not of the interface). Musa, 2026-10-09: with the Russian
+  // interface the answers are Russian too, unless the person picked English (or Russian)
+  // themselves — that pick is remembered (qaraqalpaq_quiz_lang) and always wins.
+  const QUIZ_LANG_KEY = 'qaraqalpaq_quiz_lang';
+  function quizLangPicked() { try { const v = localStorage.getItem(QUIZ_LANG_KEY); return v === 'en' || v === 'ru' ? v : null; } catch (e) { return null; } }
+  function setQuizLang(lang) {
+    state.quiz.lang = lang;
+    $$('#quizLangToggle .lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    if (!$('#quizStage').hidden && state.quiz.current && !state.quiz.locked) renderQuizOptions(state.quiz.current.correct);
+  }
   function setupQuizLangToggle() {
     const wrap = $('#quizLangToggle');
     if (!wrap) return;
+    setQuizLang(quizLangPicked() || LANG);
     $$('.lang-btn', wrap).forEach(btn => {
       btn.addEventListener('click', () => {
-        state.quiz.lang = btn.dataset.lang;
-        $$('.lang-btn', wrap).forEach(b => b.classList.toggle('active', b === btn));
-        if (!$('#quizStage').hidden && state.quiz.current && !state.quiz.locked) {
-          renderQuizOptions(state.quiz.current.correct);
-        }
+        try { localStorage.setItem(QUIZ_LANG_KEY, btn.dataset.lang); } catch (e) {}
+        setQuizLang(btn.dataset.lang);
       });
     });
+    LANG_REDRAW.push(() => { if (!quizLangPicked()) setQuizLang(LANG); });   // follows the interface until picked
   }
 
   const QUIZ_LANG_FIELD = { en: 'en', ru: 'ru' };
@@ -1776,6 +1983,7 @@
     const pool = state.quiz.pool;
     const correct = pool[Math.floor(Math.random() * pool.length)];
     $('#quizQuestionWord').textContent = correct.kk;
+    replay($('#quizQuestionWord'), 'q-in');
     $('#quizNext').hidden = true;
     state.quiz.feedback = null;
     renderQuizFeedback();
@@ -1804,8 +2012,8 @@
     state.quiz.locked = false;
 
     const optWrap = $('#quizOptions');
-    optWrap.innerHTML = options.map(opt =>
-      `<button class="quiz-option" data-val="${escapeAttr(opt)}">${escapeHtml(opt)}</button>`
+    optWrap.innerHTML = options.map((opt, i) =>
+      `<button class="quiz-option${MOTION_OK ? ' opt-in' : ''}" style="--i:${i}" data-val="${escapeAttr(opt)}">${escapeHtml(opt)}</button>`
     ).join('');
 
     $$('.quiz-option', optWrap).forEach(btn => {
@@ -1827,6 +2035,7 @@
     // options says it in words.
     $$('.quiz-option').forEach(b => {
       b.disabled = true;
+      b.classList.remove('opt-in'); // a quick answer must not keep the entrance over the green pop
       if (b.dataset.val === correctVal) { b.classList.add('correct'); b.insertAdjacentHTML('afterbegin', icon('check') + ' '); }
       else if (b === btn) { b.classList.add('wrong'); b.insertAdjacentHTML('afterbegin', icon('x') + ' '); }
       else b.classList.add('is-other');
@@ -1873,6 +2082,11 @@
     $('#quizTotal').textContent = state.quiz.answered;
     $('#quizScoreLive').textContent = state.quiz.score;
     $('#quizStreakLive').textContent = state.quiz.streak;
+    // a point / a longer streak: the number bumps
+    const prev = updateQuizScoreboard.last;
+    if (prev && state.quiz.score > prev.score) replay($('#quizScoreLive'), 'bump');
+    if (prev && state.quiz.streak > prev.streak) replay($('#quizStreakLive'), 'bump');
+    updateQuizScoreboard.last = { score: state.quiz.score, streak: state.quiz.streak };
   }
 
   // ===== WORD REQUESTS & CORRECTIONS (own Google Form, no backend) =====
@@ -1893,6 +2107,7 @@
       msg.hidden = false;
       msg.textContent = text;
       if (tail) msg.insertAdjacentHTML('beforeend', ' ' + tail);
+      replay(msg, 'msg-in');
       msg.classList.toggle('is-ok', !!ok);
       msg.classList.toggle('is-warn', !ok);
     };

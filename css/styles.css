@@ -1132,18 +1132,27 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 .quiz-feedback.is-wrong { color: #fca5a5; }
 .quiz-feedback.is-wrong strong { color: #4ade80; }
 /* the eye-catcher: the right option pops once and glows, its tick draws itself, the line fades in.
-   Only transform, filter, opacity and stroke-dashoffset. */
+   Only transform, opacity and stroke-dashoffset. The glow is a box-shadow on ::after whose
+   OPACITY moves (it was an animated drop-shadow filter until v127 — a filter cannot run on the
+   compositor, so it stuttered on a busy phone; measured at 6× CPU slowdown). */
 @media (prefers-reduced-motion: no-preference) {
+  .quiz-option { position: relative; }
   .quiz-option.correct { animation: quiz-right 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+  .quiz-option.correct::after {
+    content: ''; position: absolute; inset: -1.5px; border-radius: inherit; pointer-events: none;
+    box-shadow: 0 0 14px rgba(34, 197, 94, 0.65);
+    animation: quiz-glow 0.55s ease-out both;
+  }
   .quiz-option.correct .ico path { stroke-dasharray: 22; animation: quiz-tick 0.35s 0.12s ease-out both; }
   .quiz-feedback:not([hidden]) { animation: quiz-line 0.3s ease-out both; }
 }
 @keyframes quiz-right {
-  0%   { transform: scale(1);     filter: drop-shadow(0 0 0 rgba(34, 197, 94, 0)); }
-  35%  { transform: scale(1.06);  filter: drop-shadow(0 0 16px rgba(34, 197, 94, 0.65)); }
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.06); }
   65%  { transform: scale(0.985); }
-  100% { transform: scale(1);     filter: drop-shadow(0 0 7px rgba(34, 197, 94, 0.35)); }
+  100% { transform: scale(1); }
 }
+@keyframes quiz-glow { 0% { opacity: 0; } 35% { opacity: 1; } 100% { opacity: 0.5; } }
 @keyframes quiz-tick { from { stroke-dashoffset: 22; } to { stroke-dashoffset: 0; } }
 @keyframes quiz-line { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 
@@ -1547,7 +1556,8 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   height: 100%;
   background: linear-gradient(90deg, var(--teal), var(--purple));
   border-radius: 999px;
-  transition: width 0.4s ease;
+  width: 100%;                  /* full width, scaled down by app.js (transform: scaleX) — see MOTION */
+  transform-origin: left center;
 }
 
 .progress-widget { max-width: 760px; margin: 0 auto 24px; }
@@ -2165,7 +2175,7 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
   border-radius: 8px;
   transition: transform 0.12s ease, background 0.25s ease, border-color 0.25s ease;
 }
-.sozle-tile.is-filled { border-color: var(--border-strong); transform: scale(1.04); }
+.sozle-tile.is-filled { border-color: var(--border-strong); }   /* the typed letter lands with .just-typed (MOTION) */
 .sozle-tile.is-correct { background: #16a34a; border-color: #16a34a; color: #fff; }
 .sozle-tile.is-present { background: #ca8a04; border-color: #ca8a04; color: #fff; }
 .sozle-tile.is-absent { background: var(--bg-elevated-2); border-color: var(--bg-elevated-2); color: var(--text-faint); }
@@ -2196,7 +2206,7 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
   border: 1px solid var(--border);
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
   touch-action: manipulation;
 }
 .sozle-key:hover { border-color: var(--teal); }
@@ -2664,6 +2674,112 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
   .wordreq-form textarea,
   .feedback-comment { font-size: 16px; }
 }
+
+/* ===== MOTION (Musa, 2026-10-09: "бери всё, кроме H3") =====
+   Small motions, each of which tells something: a block arrived, a number went up, the
+   answer was wrong, a guess was too short. Rules (Musa's):
+   - only transform and opacity; 150–400 ms per motion; nothing ever waits for one;
+   - reveal on scroll = IntersectionObserver, once (setupReveal in app.js), no scroll handler;
+   - NOTHING under prefers-reduced-motion: every rule below sits inside this media query, and
+     app.js does not even add the classes then (MOTION_OK);
+   - .nav gets NO entrance animation (a finished opacity animation breaks backdrop-filter in it);
+   - checked at 4× and 6× CPU slowdown on a 375px phone screen, all five pages.
+   app.js takes the one-shot classes off again at animationend, by KEYFRAMES NAME (ONE_SHOT):
+   rename a mo- keyframes and that list must follow. */
+@media (prefers-reduced-motion: no-preference) {
+  /* A1 — blocks below the first screen rise in once. Hidden ONLY under html.reveal-on, which
+     app.js sets after marking the blocks: without app.js nothing is ever hidden. */
+  .reveal-on [data-reveal]:not(.is-in) { opacity: 0; }
+  .reveal-on [data-reveal].is-in { animation: mo-reveal 0.32s cubic-bezier(0.2, 0.7, 0.3, 1) var(--d, 0ms) backwards; }
+
+  /* A2 — a press is felt: pills, quiz answers and Sózle keys give a little while held */
+  .pill:active,
+  .quiz-option:active:not(:disabled),
+  .sozle-key:active { transform: scale(0.96); }
+
+  /* A3 — a message that appears slides in; "Copied" pops */
+  .wordreq-msg.msg-in, .sozle-msg.msg-in { animation: mo-msg-in 0.22s ease-out; }
+  #sozleCopy.pop { animation: mo-pop 0.25s ease-out; }
+
+  /* H1 — the home Sózle banner: its five tiles turn over once, one after another */
+  .game-banner-tiles { perspective: 300px; }
+  .game-banner-tiles.is-flipping .gt { animation: mo-gt-flip 0.36s ease-in-out; }
+  .game-banner-tiles.is-flipping .gt:nth-child(1) { animation-delay: 120ms; }
+  .game-banner-tiles.is-flipping .gt:nth-child(2) { animation-delay: 180ms; }
+  .game-banner-tiles.is-flipping .gt:nth-child(3) { animation-delay: 240ms; }
+  .game-banner-tiles.is-flipping .gt:nth-child(4) { animation-delay: 300ms; }
+  .game-banner-tiles.is-flipping .gt:nth-child(5) { animation-delay: 360ms; }
+
+  /* H2 — a new translation rises into the output pane */
+  .tr-output-main.tr-new { animation: mo-tr-new 0.18s ease-out; }
+
+  /* D1 — a new set of word cards (search, category, page) comes in as a quick cascade */
+  .word-card.card-in { animation: mo-card-in 0.2s ease-out calc(var(--i, 0) * 15ms) backwards; }
+
+  /* D2 / F3 — "learned": the ✓ badge pops in */
+  .learned-badge.pop { animation: mo-badge 0.25s cubic-bezier(0.3, 1.6, 0.5, 1); }
+
+  /* D3 — the progress bar slides forward to the new value */
+  .progress-bar-fill { transition: transform 0.3s ease-out; }
+
+  /* D4 / Q2 — a number that went up bumps */
+  .pw-num.bump, .score-num.bump { animation: mo-bump 0.25s ease-out; }
+
+  /* F1 — the next word comes in from the right, the previous one from the left */
+  .flashcard.in-next { animation: mo-in-next 0.22s ease-out; }
+  .flashcard.in-prev { animation: mo-in-prev 0.22s ease-out; }
+  /* F2 — shuffled: the card wobbles once */
+  .flashcard.shuffled { animation: mo-shuffle 0.3s ease-in-out; }
+
+  /* Q1 — a new question: the word and the four options come in (all in by 250 ms) */
+  .quiz-q-word.q-in { animation: mo-q-in 0.22s ease-out; }
+  .quiz-option.opt-in { animation: mo-opt-in 0.16s ease-out calc(var(--i, 0) * 30ms) backwards; }
+  /* Q3 — a wrong pick sways once, softly (Musa: "короткое качание, не тряска") */
+  .quiz-option.wrong { animation: mo-sway 0.28s ease-in-out; }
+  /* once answered, transform belongs to the pop / the sway: a transform TRANSITION running
+     at the same time (the release of :active, the end of :hover) would pull both off the
+     compositor */
+  .quiz-option:disabled { transition-property: background-color, border-color, color, opacity; }
+
+  /* S1 — a typed letter lands in its tile */
+  .sozle-tile.just-typed { animation: mo-typed 0.15s ease-out; }
+  /* S2 — a guess turns over tile by tile (all five in 400 ms) */
+  .sozle-tile.flip-in { animation: mo-flip-in 0.2s ease-out calc(var(--i, 0) * 50ms) backwards; }
+  /* S4 — a win: after turning over, the tiles hop one by one (the hop has no fill, so it
+     does not hold the tiles before its turn) */
+  .sozle-tile.flip-in.win-hop {
+    animation: mo-flip-in 0.2s ease-out calc(var(--i, 0) * 50ms) backwards,
+               mo-hop 0.3s ease-out calc(400ms + var(--i, 0) * 60ms);
+  }
+  /* S3 — "Not enough letters": the row shakes its head */
+  .sozle-row.shake { animation: mo-shake 0.3s ease-in-out; }
+  /* S5 — the end panel rises in */
+  #sozlePanel.panel-in { animation: mo-panel-in 0.25s ease-out; }
+}
+/* A4 — the phone menu drops in (its LINKS box only — never .nav itself) */
+@media (prefers-reduced-motion: no-preference) and (max-width: 768px) {
+  .nav.menu-open .nav-links { animation: mo-menu-in 0.2s ease-out backwards; }
+}
+@keyframes mo-reveal   { from { opacity: 0; transform: translateY(12px); } }
+@keyframes mo-msg-in   { from { opacity: 0; transform: translateY(-4px); } }
+@keyframes mo-pop      { 0% { transform: scale(1); } 40% { transform: scale(1.08); } 100% { transform: scale(1); } }
+@keyframes mo-menu-in  { from { opacity: 0; transform: translateY(-6px); } }
+@keyframes mo-gt-flip  { 0% { transform: rotateX(0); } 50% { transform: rotateX(90deg); } 100% { transform: rotateX(0); } }
+@keyframes mo-tr-new   { from { opacity: 0; transform: translateY(6px); } }
+@keyframes mo-card-in  { from { opacity: 0; transform: translateY(8px); } }
+@keyframes mo-badge    { from { opacity: 0; transform: scale(0.5); } }
+@keyframes mo-bump     { 0% { transform: scale(1); } 40% { transform: scale(1.18); } 100% { transform: scale(1); } }
+@keyframes mo-in-next  { from { opacity: 0; transform: translateX(24px); } }
+@keyframes mo-in-prev  { from { opacity: 0; transform: translateX(-24px); } }
+@keyframes mo-shuffle  { 0% { transform: rotate(0); } 30% { transform: rotate(-3deg); } 65% { transform: rotate(3deg); } 100% { transform: rotate(0); } }
+@keyframes mo-q-in     { from { opacity: 0; transform: translateY(6px); } }
+@keyframes mo-opt-in   { from { opacity: 0; transform: translateY(6px); } }
+@keyframes mo-sway     { 0% { transform: translateX(0); } 30% { transform: translateX(-4px); } 70% { transform: translateX(3px); } 100% { transform: translateX(0); } }
+@keyframes mo-typed    { 0% { transform: scale(0.9); } 60% { transform: scale(1.06); } 100% { transform: scale(1); } }
+@keyframes mo-flip-in  { from { transform: scaleY(0); } }
+@keyframes mo-hop      { 0% { transform: translateY(0); } 40% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
+@keyframes mo-shake    { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
+@keyframes mo-panel-in { from { opacity: 0; transform: translateY(10px); } }
 
 /* ===== SIDE GUTTERS FOR THE HOME SECTIONS (keep this block last) =====
    These sections set their vertical spacing with the `padding` shorthand
