@@ -11,8 +11,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=124">
-<script>/* the tours of all five pages have been opened → no "?" in the nav (before the first paint; same list as GUIDE_PAGES in app.js) */try{if(['index','dictionary','flashcards','quiz','game'].every(function(p){return localStorage.getItem('qaraqalpaq_guide_'+p)==='seen'}))document.documentElement.className+=' guide-done'}catch(e){}</script>
+<link rel="stylesheet" href="css/styles.css?v=126">
+<script>/* the tours of all five pages have been opened → no "?" in the nav (before the first paint; same list as GUIDE_PAGES in app.js) */try{if(['index','dictionary','flashcards','quiz','game'].every(function(p){return localStorage.getItem('qaraqalpaq_guide_'+p)==='seen'}))document.documentElement.className+=' guide-done'}catch(e){}/* the interface language, before the first paint (the EN / RU switch is drawn on the right side at once) */try{if(localStorage.getItem('qaraqalpaq_lang')==='ru')document.documentElement.lang='ru'}catch(e){}</script>
 </head>
 <body class="page-game">
 
@@ -28,7 +28,7 @@
       <a href="flashcards.html" class="nav-link" data-page="flashcards" data-i18n="nav.flashcards">Flashcards</a>
       <a href="quiz.html" class="nav-link" data-page="quiz" data-i18n="nav.quiz">Quiz</a>
       <a href="game.html" class="nav-link" data-page="game">Sózle</a>
-      <div class="ui-lang" id="uiLang" role="group" aria-label="Interface language" data-i18n-attr="aria-label:a11y.lang"><button type="button" class="ui-lang-btn" data-ui-lang="en" aria-pressed="true">EN</button><button type="button" class="ui-lang-btn" data-ui-lang="ru" aria-pressed="false">RU</button></div>
+      <button type="button" class="ui-lang" id="uiLang" aria-label="Switch to Russian"><span class="ui-lang-thumb" aria-hidden="true"></span><span class="ui-lang-opt ui-lang-en" lang="en">EN</span><span class="ui-lang-opt ui-lang-ru" lang="ru">RU</span></button>
     </nav>
     <button class="nav-help" id="navHelp" type="button" aria-label="How to use this site" data-i18n-attr="aria-label:a11y.help" aria-expanded="false">?</button>
     <button class="nav-toggle" id="navToggle" aria-label="Menu" data-i18n-attr="aria-label:a11y.menu">

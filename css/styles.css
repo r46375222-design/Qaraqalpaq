@@ -283,29 +283,47 @@ input, select { font-family: inherit; }
 .nav-help.is-done { opacity: 0; pointer-events: none; }
 .guide-done .nav-help { display: none; }
 
-/* EN / RU — the interface language (app.js, "INTERFACE LANGUAGE"). It lives inside
-   .nav-links: at the end of the links on a computer, at the bottom of the menu on a phone. */
+/* EN / RU — the interface language (app.js, "INTERFACE LANGUAGE"). ONE button: a click
+   anywhere on it (or Enter / Space, or ← →) switches to the other language, and the light
+   behind the chosen side slides across — transform only. It lives inside .nav-links: at the
+   end of the links on a computer, at the bottom of the menu on a phone. Its side is set by
+   <html lang>, which the <head> script already sets before the first paint, so a Russian
+   page does not show the light sliding over on load. */
 .ui-lang {
-  display: flex; align-items: center; flex-shrink: 0; align-self: center;
-  margin-left: 10px; padding: 3px; gap: 2px;
+  position: relative; flex-shrink: 0; align-self: center;
+  display: none;   /* shown only with html.i18n-on — hidden from visitors until the Russian is done (app.js, I18N_READY) */
+  grid-template-columns: 1fr 1fr;
+  margin-left: 10px; padding: 3px;
   border-radius: 999px; border: 1px solid var(--border-strong); background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
 }
-.ui-lang-btn {
+.ui-lang-thumb {
+  position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px);
+  border-radius: 999px; background: var(--teal);
+  transition: transform 0.26s cubic-bezier(0.3, 0.8, 0.3, 1);
+}
+:root[lang="ru"] .ui-lang-thumb { transform: translateX(100%); }
+.ui-lang-opt {
+  position: relative;   /* above the light */
   font-family: var(--font-display); font-weight: 700; font-size: 0.7rem; letter-spacing: 0.04em; line-height: 1;
-  color: var(--text-dim); padding: 6px 8px; border-radius: 999px;
-  transition: background-color 0.18s ease, color 0.18s ease;
+  color: var(--white); padding: 6px 9px; text-align: center;
+  opacity: 0.5; transition: opacity 0.26s ease;
 }
-.ui-lang-btn:hover { color: var(--text); }
-.ui-lang-btn.is-on { background: var(--teal); color: var(--white); }
-.ui-lang-btn:focus-visible { outline: 2px solid var(--teal-light); outline-offset: 1px; }
-/* room for it: the scrolled pill is a little wider, and on narrow computer screens the
-   links are a little tighter */
+:root:not([lang="ru"]) .ui-lang-en, :root[lang="ru"] .ui-lang-ru { opacity: 1; }
+.ui-lang:hover .ui-lang-opt { opacity: 0.8; }
+:root:not([lang="ru"]) .ui-lang:hover .ui-lang-en, :root[lang="ru"] .ui-lang:hover .ui-lang-ru { opacity: 1; }
+.ui-lang:focus-visible { outline: 2px solid var(--teal-light); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .ui-lang-thumb, .ui-lang-opt { transition: none; } }
+.i18n-on .ui-lang { display: grid; }
+/* room for it (only while it is shown): the scrolled pill is a little wider, and on narrow
+   computer screens the links are a little tighter */
+.i18n-on .nav-pill.is-scrolled .nav-inner { max-width: 900px; }
 @media (max-width: 1000px) and (min-width: 769px) {
-  .nav-link { padding-left: 11px; padding-right: 11px; }
-  .nav-links { gap: 2px; }
+  .i18n-on .nav-link { padding-left: 11px; padding-right: 11px; }
+  .i18n-on .nav-links { gap: 2px; }
 }
 @media (max-width: 860px) and (min-width: 769px) {
-  .brand-name { display: none; }   /* 769–860px: the logo alone, or the links do not fit */
+  .i18n-on .brand-name { display: none; }   /* 769–860px: the logo alone, or the links do not fit */
 }
 
 /* ===== NAV — scroll pill (index.html, dictionary.html only) =====
@@ -330,7 +348,7 @@ input, select { font-family: inherit; }
    .nav-inner — disable the clip while it's open so it isn't cut off. */
 .nav-pill.menu-open .nav-inner { overflow: visible; }
 .nav-pill.is-scrolled .nav-inner {
-  max-width: 900px;   /* 800 before the EN / RU switch */
+  max-width: 800px;   /* 900px while the EN / RU switch is shown (.i18n-on, above) */
   margin: 0 auto;
   border-radius: 16px;
   -webkit-backdrop-filter: blur(18px) saturate(150%);
@@ -1279,7 +1297,11 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   border-radius: 8px;
   padding: 8px 6px;
 }
-.sq-opt.sq-correct { background: rgba(99, 102, 241, 0.18); border-color: rgba(99, 102, 241, 0.5); color: var(--teal-light); }
+.sq-opt.sq-correct { background: #15803d; border-color: #22c55e; color: #fff; box-shadow: 0 0 7px rgba(34, 197, 94, 0.35); }
+.sq-opt:not(.sq-correct) { opacity: 0.45; }   /* the mock-ups show the quiz right after a correct answer (.quiz-option) */
+.sq-opt .ico { width: 1.1em; height: 1.1em; stroke-width: 2.6; vertical-align: -0.2em; }
+.sq-feedback { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 8px; font-size: 0.76rem; line-height: 1.3; font-weight: 700; color: #4ade80; }
+.sq-feedback .ico { width: 1.15em; height: 1.15em; stroke-width: 2.5; }
 
 /* ===== PHONE MOCKUP SECTION ===== */
 .phone-section { padding: 110px 0; }
@@ -1417,7 +1439,11 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   color: var(--text-dim);
   text-align: center;
 }
-.pp-quiz-opt.pp-correct { background: var(--teal-soft); border-color: var(--teal-soft-border); color: var(--teal-on-surface); }
+.pp-quiz-opt.pp-correct { background: #15803d; border-color: #22c55e; color: #fff; }
+.pp-quiz-opt:not(.pp-correct) { opacity: 0.45; }
+.pp-quiz-opt .ico { width: 1.1em; height: 1.1em; stroke-width: 2.8; vertical-align: -0.2em; }
+.pp-feedback { display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 8px; font-size: 0.62rem; font-weight: 700; color: #4ade80; }
+.pp-feedback .ico { width: 1.15em; height: 1.15em; stroke-width: 2.6; }
 
 /* ===== FEATURES SECTION ===== */
 .features-section { padding: 0 0 110px; }
@@ -1584,7 +1610,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
     text-align: left;
   }
   .nav.menu-open .ui-lang { align-self: flex-start; margin: 10px 0 0 14px; }
-  .ui-lang-btn { font-size: 0.8rem; padding: 9px 14px; }   /* a finger-sized target in the menu */
+  .ui-lang-opt { font-size: 0.8rem; padding: 11px 16px; }   /* a finger-sized target in the menu */
   .word-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .quiz-options { grid-template-columns: 1fr; }
   .quiz-option { min-height: 48px; padding: 16px; }

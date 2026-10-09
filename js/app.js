@@ -40,7 +40,8 @@
   const STRINGS_EN = {
     // nav and footer (every page)
     'nav.home': 'Home', 'nav.dictionary': 'Dictionary', 'nav.flashcards': 'Flashcards', 'nav.quiz': 'Quiz',
-    'a11y.logo': 'Qaraqalpaq Tili logo', 'a11y.help': 'How to use this site', 'a11y.menu': 'Menu', 'a11y.lang': 'Interface language',
+    'a11y.logo': 'Qaraqalpaq Tili logo', 'a11y.help': 'How to use this site', 'a11y.menu': 'Menu',
+    'a11y.toRu': 'Switch to Russian', 'a11y.toEn': 'Switch to English',
     'footer.tagline': 'Keeping the Karakalpak language alive, one word at a time.', 'footer.questions': 'Questions?',
     'footer.guide': 'Guide', 'footer.guideTitle': 'A quick tour of this page',
     // home
@@ -104,8 +105,22 @@
   const STRINGS = { en: STRINGS_EN, ru: stub(STRINGS_EN) };
   // display names of the 48 categories, by their English key; a missing one shows the key
   const CATEGORY_NAMES = { en: {}, ru: null };   // ru: null = phase 1, "[RU] " + the key
+  // THE SWITCH IS HIDDEN FROM VISITORS until all four portions of Russian are in (Musa,
+  // 2026-10-09: "[RU] Home" on the live site looks like a broken site). Until then the site is
+  // English for everybody — also for whoever pressed RU on v124 and has "ru" stored.
+  // To see the switch anyway (Musa, Claude): open any page once with ?i18n=1 — this browser
+  // remembers it; ?i18n=0 forgets. WHEN THE TRANSLATIONS ARE DONE: I18N_READY = true.
+  const I18N_READY = false;
+  let I18N_ON = I18N_READY;
+  try {
+    const q = new URLSearchParams(location.search).get('i18n');
+    if (q === '1') localStorage.setItem('qaraqalpaq_i18n_preview', '1');
+    if (q === '0') localStorage.removeItem('qaraqalpaq_i18n_preview');
+    if (localStorage.getItem('qaraqalpaq_i18n_preview') === '1') I18N_ON = true;
+  } catch (e) {}
+  document.documentElement.classList.toggle('i18n-on', I18N_ON);   // shows the switch (CSS)
   let LANG = 'en';
-  try { const v = localStorage.getItem(LANG_KEY); if (STRINGS[v]) LANG = v; } catch (e) {}
+  if (I18N_ON) try { const v = localStorage.getItem(LANG_KEY); if (STRINGS[v]) LANG = v; } catch (e) {}
 
   function t(key, vars) {
     let s = STRINGS[LANG][key] ?? STRINGS.en[key] ?? key;
@@ -128,25 +143,28 @@
         if (attr && key) el.setAttribute(attr, t(key));
       });
     });
-    document.documentElement.lang = LANG;
-    $$('.ui-lang-btn').forEach(b => {
-      const on = b.dataset.uiLang === LANG;
-      b.classList.toggle('is-on', on);
-      b.setAttribute('aria-pressed', String(on));
-    });
+    document.documentElement.lang = LANG;   // also moves the light of the EN / RU switch (CSS)
+    const sw = $('#uiLang');
+    if (sw) sw.setAttribute('aria-label', t(LANG === 'en' ? 'a11y.toRu' : 'a11y.toEn'));
   }
   // the parts of a page that app.js draws itself register here and are redrawn on a switch
   const LANG_REDRAW = [];
   function setLang(lang) {
-    if (!STRINGS[lang] || lang === LANG) return;
+    if (!I18N_ON || !STRINGS[lang] || lang === LANG) return;
     LANG = lang;
     try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
     applyStrings();
     LANG_REDRAW.forEach(fn => { try { fn(); } catch (e) { console.error(e); } });
   }
+  // the EN / RU switch: a click anywhere on it (Enter / Space too — it is a button) flips the
+  // language; ← and → pick a side
   document.addEventListener('click', e => {
-    const b = e.target.closest && e.target.closest('.ui-lang-btn');
-    if (b) setLang(b.dataset.uiLang);
+    if (e.target.closest && e.target.closest('#uiLang')) setLang(LANG === 'en' ? 'ru' : 'en');
+  });
+  document.addEventListener('keydown', e => {
+    if (!e.target.closest || !e.target.closest('#uiLang')) return;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); setLang('en'); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); setLang('ru'); }
   });
   // first thing on every page, before words.json arrives, so a Russian page does not
   // stay English for a moment (for English it rewrites the same text and lights "EN")
@@ -1311,7 +1329,7 @@
     document.addEventListener('keydown', e => {
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       if (e.target && /^(input|textarea|select)$/i.test(e.target.tagName)) return; // don't steal typing from forms
-      if (e.target && e.target.closest && e.target.closest('#navHelp, #tourCard, #tourAsk, #footerGuide')) return; // the guide, not the game
+      if (e.target && e.target.closest && e.target.closest('#navHelp, #tourCard, #tourAsk, #footerGuide, #uiLang')) return; // the guide or the EN / RU switch, not the game
       if (e.key === 'Enter') {
         // Enter always submits the guess — it never "presses" a focused on-screen key
         if (e.target && e.target.closest && e.target.closest('.sozle-key')) e.preventDefault();
@@ -1621,6 +1639,7 @@
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       const tag = (e.target && e.target.tagName) || '';
       if (/^(input|textarea|select)$/i.test(tag)) return; // the category dropdown uses the arrows itself
+      if (e.target.closest && e.target.closest('#uiLang')) return; // ← → on the EN / RU switch pick a language
       if (e.key === 'ArrowRight') stepFlashcard(1);
       else if (e.key === 'ArrowLeft') stepFlashcard(-1);
       else if ((e.key === ' ' || e.key === 'Enter') && !/^(button|a)$/i.test(tag)) {
