@@ -665,8 +665,10 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 .wotd-icon { flex-shrink: 0; }
 .wotd-text { display: flex; flex-direction: column; gap: 3px; }
 .wotd-kk { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.6rem, 4vw, 2.2rem); color: var(--text); }
-.wotd-en { font-style: italic; color: var(--teal-on-surface); font-size: 1rem; }
-.wotd-ru { color: var(--text-dim); font-size: 0.9rem; }
+/* -main / -second (wotd, word cards, flashcards, translator): the main meaning of a word
+   and the other one under it — English first, Russian first in the RU interface (v131) */
+.wotd-main { font-style: italic; color: var(--teal-on-surface); font-size: 1rem; }
+.wotd-second { color: var(--text-dim); font-size: 0.9rem; }
 .wotd-cat {
   position: relative; z-index: 1;
   display: inline-block;
@@ -881,8 +883,8 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 }
 .word-flip-hint { font-size: 0.66rem; color: var(--text-faint); font-weight: 600; }
 .word-card-trans { display: flex; flex-direction: column; gap: 4px; }
-.word-en { display: block; font-style: italic; font-size: 1.1rem; font-weight: 700; color: var(--teal-on-surface); }
-.word-ru { display: block; font-size: 0.86rem; color: var(--text-dim); }
+.word-main { display: block; font-style: italic; font-size: 1.1rem; font-weight: 700; color: var(--teal-on-surface); }
+.word-second { display: block; font-size: 0.86rem; color: var(--text-dim); }
 
 .empty-state { text-align: center; padding: 60px 0; color: var(--text-dim); }
 
@@ -1039,14 +1041,14 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   line-height: 1.2;
 }
 .flash-hint { margin-top: 24px; font-size: 0.78rem; opacity: 0.7; font-weight: 500; }
-.flash-en {
+.flash-main {
   font-family: var(--font-display);
   font-weight: 800;
   font-size: clamp(1.5rem, 4vw, 2rem);
   font-style: italic;
   margin-bottom: 10px;
 }
-.flash-ru { font-size: 1rem; opacity: 0.8; }
+.flash-second { font-size: 1rem; opacity: 0.8; }
 
 .flash-actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
 .flash-actions .btn-outline { color: var(--text-dim); border-color: var(--border-strong); }
@@ -1790,8 +1792,8 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 .tr-match-icon { flex-shrink: 0; }
 .tr-match-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
 .tr-match-kk { font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; color: var(--text); }
-.tr-match-en { font-style: italic; color: var(--teal-on-surface); font-size: 0.95rem; }
-.tr-match-ru { color: var(--text-dim); font-size: 0.88rem; }
+.tr-match-main { font-style: italic; color: var(--teal-on-surface); font-size: 0.95rem; }
+.tr-match-second { color: var(--text-dim); font-size: 0.88rem; }
 .tr-match-side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
 .tr-cat {
   font-size: 0.66rem; font-weight: 700;
@@ -1825,8 +1827,8 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 .tr-phrase-arrow { color: var(--text-faint); }
 .tr-phrase-target { display: flex; gap: 10px; flex-wrap: wrap; min-width: 0; }
 .tr-phrase-kk { font-family: var(--font-display); font-weight: 700; color: var(--teal-on-surface); }
-.tr-phrase-en { font-style: italic; color: var(--teal-on-surface); }
-.tr-phrase-ru { color: var(--text-dim); }
+.tr-phrase-main { font-style: italic; color: var(--teal-on-surface); }
+.tr-phrase-second { color: var(--text-dim); }
 
 @media (max-width: 768px) {
   .translator { padding: 20px 18px; }
@@ -1953,6 +1955,9 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   white-space: nowrap;
 }
 .tr-lang-dst { justify-self: end; }
+/* v131: "КАРАКАЛПАКСКИЙ" + "РУССКИЙ · АНГЛИЙСКИЙ" are wider than a phone (390px: 45px too
+   much). Up to 440px the Russian interface names only the language of the big line. */
+@media (max-width: 440px) { html[lang="ru"] .tr-lang-also { display: none; } }
 .tr-swap {
   font-size: 1.1rem;
   color: var(--text-dim);
@@ -2992,6 +2997,32 @@ html.hero-b[lang="ru"] .hero-title { font-size: clamp(2rem, 5.9vw, 5rem); font-s
 @media (prefers-reduced-motion: reduce) {
   .hero-b body.page-home .stats-bar { transform: none !important; }
 }
+/* THE FIRST SCREEN (v131, Musa's 1900×1077 screenshot: the hero stopped two thirds down the
+   screen, with a hard edge under it — the glow on the right cut off, a strip of another
+   background below).
+   1. From 1024px the hero fills the first screen: the nav is fixed OVER the hero, so the
+      hero itself is one screen tall (never more than 1100px on very tall screens). The
+      running line stays at the top under the nav; the title and the numbers sit in the middle
+      of the room left under it (row 2 takes all of that room, align-items: center).
+      Phones and tablets keep their height.
+   2. Everywhere: the background of the hero (dots, glows, vignette) fades into the colour of
+      the next section (--bg) over its last 120–220px, so there is no line where it ends.
+      The fade is the last layer INSIDE .hero-bg, so it lies under the text and the buttons. */
+@media (min-width: 1024px) {
+  .hero-b .hero {
+    grid-template-rows: auto 1fr;
+    min-height: min(100vh, 1100px);
+    min-height: min(100svh, 1100px);
+  }
+}
+.hero-b .hero-bg::after {
+  content: '';
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: clamp(120px, 20vh, 220px);
+  background: linear-gradient(to bottom, transparent, var(--bg));
+  pointer-events: none;
+}
+
 @media (max-width: 900px) {
   .hero-b .hero { grid-template-columns: 24px minmax(0, 1fr) 24px; }
   .hero-b .stats-bar { grid-column: 2; flex-direction: row; margin-top: 44px; padding: 0; gap: 10px; }
