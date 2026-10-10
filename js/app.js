@@ -77,6 +77,9 @@
     'tr.sub': 'Type any word in Qaraqalpaq, English or Russian — it detects the language and translates instantly, right in your browser.',
     'tr.detect': 'Detect language', 'tr.translation': 'Translation', 'tr.hint': 'Translation appears here',
     'tr.placeholder': 'Type in Qaraqalpaq, English or Russian…', 'a11y.clear': 'Clear',
+    // a whole sentence was typed (v128): an honest note instead of a word salad
+    'tr.sentence': 'Full sentences aren\u2019t translated yet.', 'tr.sentenceSub': 'Here are the words we found:',
+    'tr.notFound': 'not found', 'tr.report': 'Missing a word? Tell us →',
     // word request (home + dictionary)
     'req.title': 'Missing a word? Spotted a mistake?', 'req.text': 'Tell us the word — we read every message and keep the dictionary growing.',
     'req.word': 'Word or phrase in any language', 'req.note': 'Correct spelling, meaning or context (optional)', 'req.send': 'Send it in',
@@ -903,6 +906,10 @@
   // ===== TRANSLATOR (dictionary-based, no external APIs) =====
   let TRANS_INDEX = null;   // exact-match maps: kk/en/ru → Map(foldedKey → [words])
   let SEARCH_KEYS = null;   // per-word folded keys for suggestion scans
+  // WORD FORMS (Musa, 2026-10-10) — NO GRAMMAR, only the way from a form back to a word the
+  // dictionary has. en: base verb ("go") → the "To go" entries; ru: infinitive ("любить") →
+  // the entries of that verb. Filled by buildTranslatorIndex(); see lookupForm().
+  let FORM_INDEX = null;    // { en: Map(base → {lemma, words}), ru: Map(infinitive → {lemma, words}) }
 
   // Fold text into a diacritics-insensitive, punctuation-free key so that
   // "salemetsiz" finds "Sálemetsiz be!" and "привет" finds "Привет!".
@@ -936,11 +943,144 @@
       if (arr) { if (!arr.includes(w)) arr.push(w); }
       else map.set(key, [w]);
     };
+    FORM_INDEX = { en: new Map(), ru: new Map() };
+    const addForm = (map, key, lemma, w) => {
+      const e = map.get(key);
+      if (!e) map.set(key, { lemma, words: [w] });
+      else if (!e.words.includes(w)) e.words.push(w);
+    };
+    // "Excuse me / Sorry (polite)" → ["Excuse me", "Sorry"], as written
+    const shownVariants = s => String(s || '').replace(/\([^)]*\)/g, ' ').split(/[\/,;]/).map(x => x.trim()).filter(Boolean);
     WORDS.forEach(w => {
       textVariants(w.kk).forEach(k => add(TRANS_INDEX.kk, k, w));
       textVariants(w.en).forEach(k => add(TRANS_INDEX.en, k, w));
       textVariants(w.ru).forEach(k => add(TRANS_INDEX.ru, k, w));
       SEARCH_KEYS.push({ w, kk: foldKey(w.kk), en: foldKey(w.en), ru: foldKey(w.ru) });
+      // a verb = an entry whose English is "To …" (147 of them); only verbs get forms,
+      // nouns never (too many false hits)
+      const enVerbs = shownVariants(w.en).filter(v => /^to\s/i.test(v));
+      if (!enVerbs.length) return;
+      enVerbs.forEach(v => addForm(FORM_INDEX.en, foldKey(v).slice(3), v.charAt(0).toLowerCase() + v.slice(1), w));
+      shownVariants(w.ru).forEach(v => {
+        const k = foldKey(v);
+        if (/(ть|ти|чь)(ся|сь)?$/.test(k) && !/\s/.test(k)) addForm(FORM_INDEX.ru, k, v.toLowerCase(), w);
+      });
+    });
+  }
+
+  // Pronouns. Russian case forms lead back to the pronoun the dictionary has
+  // (тебя → ты → Sen); English object forms the same way (me → I → Men). Ambiguous forms
+  // ("ним": him or them) are left out on purpose.
+  const RU_PRON_FORMS = {
+    'я': 'меня мне мной мною', 'ты': 'тебя тебе тобой тобою', 'он': 'его ему него нему нём',
+    'она': 'её ей неё ней ею нею', 'мы': 'нас нам нами', 'вы': 'вас вам вами', 'они': 'их им них ими ними',
+  };
+  const EN_PRON_FORMS = { i: 'me', he: 'him', she: 'her', we: 'us', they: 'them' };
+  const PRON_BASE = { ru: new Map(), en: new Map() };   // folded form → pronoun as written
+  Object.entries(RU_PRON_FORMS).forEach(([base, forms]) => forms.split(' ').forEach(f => PRON_BASE.ru.set(foldKey(f), base)));
+  Object.entries(EN_PRON_FORMS).forEach(([base, form]) => PRON_BASE.en.set(form, base === 'i' ? 'I' : base));
+  const PRONOUNS = {   // after one of these the next word is looked up as a verb first
+    ru: new Set(['я', 'ты', 'он', 'она', 'оно', 'мы', 'вы', 'они', ...PRON_BASE.ru.keys()].map(foldKey)),
+    en: new Set(['i', 'you', 'he', 'she', 'it', 'we', 'they', ...PRON_BASE.en.keys()]),
+  };
+  // English words that carry no meaning of their own here: never shown as "not found"
+  const EN_SKIP = new Set(['to', 'a', 'an', 'the']);
+
+  // goes / loved / going → go / love — only when the base verb is in the dictionary
+  function enVerbLookup(k) {
+    const map = FORM_INDEX.en;
+    if (map.has(k)) return map.get(k);
+    const c = [];
+    if (k.endsWith('ies')) c.push(k.slice(0, -3) + 'y');                  // tries → try
+    if (k.endsWith('es')) c.push(k.slice(0, -2));                         // goes → go
+    if (k.endsWith('s') && !k.endsWith('ss')) c.push(k.slice(0, -1));     // loves → love
+    if (k.endsWith('ied')) c.push(k.slice(0, -3) + 'y');                  // tried → try
+    if (k.endsWith('ed')) { const st = k.slice(0, -2); c.push(st + 'e', st); if (/([^aeiou])\1$/.test(st)) c.push(st.slice(0, -1)); }
+    if (k.endsWith('ing')) { const st = k.slice(0, -3); c.push(st, st + 'e'); if (/([^aeiou])\1$/.test(st)) c.push(st.slice(0, -1)); if (st.endsWith('y')) c.push(st.slice(0, -1) + 'ie'); }
+    for (const b of c) if (b.length >= 2 && map.has(b)) return map.get(b);
+    return null;
+  }
+
+  // люблю / любишь / любит / любим / любят / любил / любила → любить; идём → идти.
+  // Candidate infinitives are built from the ending and kept only if the dictionary has
+  // that verb. Text is folded (ё → е, й → и), like everything in the index.
+  function ruVerbLookup(k) {
+    const map = FORM_INDEX.ru;
+    if (map.has(k)) return map.get(k);
+    let s = k, refl = '';
+    if (/(ся|сь)$/.test(s) && s.length > 4) { refl = 'ся'; s = s.slice(0, -2); }
+    const c = [];
+    const past = s.match(/^(.{2,}?)(л|ла|ло|ли)$/);                      // любил, любила
+    if (past) c.push(past[1] + 'ть');
+    for (const end of ['ите', 'ете', 'ишь', 'ешь', 'ют', 'ут', 'ят', 'ат', 'ит', 'ет', 'им', 'ем', 'ю', 'у']) {
+      if (!s.endsWith(end) || s.length - end.length < 2) continue;
+      const st = s.slice(0, -end.length);
+      if (/[аеиоуыэюя]$/.test(st)) c.push(st + 'ть', st + 'ять', st + 'вать');   // знаю, стою, даю
+      else c.push(st + 'ить', st + 'еть', st + 'ать', st + 'ти', st + 'ять');    // любит, видит, слышит, идёт
+      if (/[бвмпф]л$/.test(st)) c.push(st.slice(0, -1) + 'ить');                // люблю → любить
+      if (/у$/.test(st)) c.push(st.slice(0, -1) + 'овать', st.slice(0, -1) + 'евать'); // рисую → рисовать
+      if (end === 'у' || end === 'ю') {                                          // вижу → видеть, прошу → просить
+        const alt = { 'ж': ['д', 'з'], 'ч': ['т'], 'ш': ['с'], 'щ': ['ст', 'ск'] }[st.slice(-1)];
+        if (alt) alt.forEach(a => c.push(st.slice(0, -1) + a + 'еть', st.slice(0, -1) + a + 'ить', st.slice(0, -1) + a + 'ать'));
+      }
+    }
+    for (const cand of c) if (map.has(cand + refl)) return map.get(cand + refl);
+    return null;
+  }
+
+  // one word that is not in the dictionary as typed, but whose dictionary word we can name.
+  // → { src, matches, lemma } or null. lang: detectLang() of the whole input (null = plain Latin).
+  function lookupForm(k, lang) {
+    if (lang === 'ru') {
+      const v = ruVerbLookup(k);
+      if (v) return { src: 'ru', matches: v.words, lemma: v.lemma };
+      const base = PRON_BASE.ru.get(k);
+      const hit = base && TRANS_INDEX.ru.get(foldKey(base));
+      if (hit) return { src: 'ru', matches: hit, lemma: base };
+      return null;
+    }
+    if (lang === 'kk') return null;
+    const v = enVerbLookup(k);
+    if (v) return { src: 'en', matches: v.words, lemma: v.lemma };
+    const base = PRON_BASE.en.get(k);
+    const hit = base && TRANS_INDEX.en.get(foldKey(base));
+    if (hit) return { src: 'en', matches: hit, lemma: base };
+    return null;
+  }
+
+  // the words of a sentence, one by one. Plain Latin is read as English when more of its
+  // words are English than Qaraqalpaq ("I love it": "it" is the pronoun, not It = dog).
+  // Right after a pronoun a word is looked up as a VERB first ("I love you": Súyiw, not Muhabbat).
+  function phraseParts(rawTokens, lang) {
+    const keys = rawTokens.map(foldKey);
+    let order = lang;
+    if (!lang) {
+      const en = keys.filter(k => EN_SKIP.has(k) || PRONOUNS.en.has(k) || TRANS_INDEX.en.has(k) || enVerbLookup(k)).length;
+      const kk = keys.filter(k => TRANS_INDEX.kk.has(k)).length;
+      order = en > kk ? 'en' : null;
+    }
+    const pron = lang === 'ru' ? PRONOUNS.ru : PRONOUNS.en;
+    let prevPron = false;
+    return rawTokens.map((raw, i) => {
+      const k = keys[i];
+      if (order === 'en' && EN_SKIP.has(k)) return { raw, skip: true };
+      const verbFirst = prevPron && lang !== 'kk';
+      prevPron = lang !== 'kk' && pron.has(k);
+      let part = null;
+      if (verbFirst) {
+        const v = lang === 'ru' ? ruVerbLookup(k) : enVerbLookup(k);
+        if (v) part = { src: lang === 'ru' ? 'ru' : 'en', matches: v.words, lemma: v.lemma };
+      }
+      if (!part && order === 'en') {
+        const en = TRANS_INDEX.en.get(k);
+        part = en ? { src: 'en', matches: en } : lookupForm(k, null);
+        if (!part && TRANS_INDEX.kk.get(k)) part = { src: 'kk', matches: TRANS_INDEX.kk.get(k) };
+      }
+      if (!part) {
+        const ex = lookupExact(k, lang);
+        part = ex.matches.length ? ex : (lookupForm(k, lang) || ex);
+      }
+      return Object.assign({ raw }, part);
     });
   }
 
@@ -982,10 +1122,13 @@
     if (!key) return null;
     const exact = lookupExact(key, lang);
     if (exact.matches.length) return { type: 'exact', src: exact.src, matches: exact.matches.slice(0, 4) };
+    // not in the dictionary as typed — maybe a form of a word that is ("go", "люблю", "тебя")
+    const form = lookupForm(key, lang);
+    if (form) return { type: 'exact', src: form.src, matches: form.matches.slice(0, 4), lemma: form.lemma };
     const rawTokens = raw.split(/\s+/).filter(t => foldKey(t));
     if (rawTokens.length > 1) {
-      const parts = rawTokens.map(t => Object.assign({ raw: t }, lookupExact(foldKey(t), lang)));
-      if (parts.some(p => p.matches.length)) return { type: 'phrase', parts };
+      const parts = phraseParts(rawTokens, lang);
+      if (parts.some(p => p.matches && p.matches.length)) return { type: 'phrase', parts };
     }
     return { type: 'suggest', lang, suggestions: suggestWords(key, lang) };
   }
@@ -1023,13 +1166,16 @@
       </div>`;
   }
 
+  // the dictionary word a form was found by: "люблю → Súyiw (любить)"
+  const lemmaHtml = lemma => lemma ? ` <span class="tr-lemma">(${escapeHtml(lemma)})</span>` : '';
+
   function trPhraseRowHtml(part) {
     const m = part.matches[0];
     const target = !m
-      ? '<span class="tr-note">not found</span>'
+      ? `<span class="tr-note">${escapeHtml(t('tr.notFound'))}</span>`
       : part.src === 'kk'
         ? `<span class="tr-phrase-en">${escapeHtml(m.en)}</span><span class="tr-phrase-ru">${escapeHtml(m.ru)}</span>`
-        : `<span class="tr-phrase-kk">${escapeHtml(m.kk)}</span>`;
+        : `<span class="tr-phrase-kk">${escapeHtml(m.kk)}${lemmaHtml(part.lemma)}</span>`;
     return `
       <div class="tr-phrase-row${m ? '' : ' is-missing'}">
         <span class="tr-phrase-token">${escapeHtml(part.raw)}</span>
@@ -1064,7 +1210,7 @@
       renderTranslation.last = big;
       out.innerHTML = `
         <div class="tr-output-main${isNew ? ' tr-new' : ''}">
-          <span class="tr-output-big">${escapeHtml(big)}</span>
+          <span class="tr-output-big">${escapeHtml(big)}${lemmaHtml(res.lemma)}</span>
           <span class="tr-output-sub">${escapeHtml(sub)}</span>
           <div class="tr-output-meta">
             <span class="tr-cat">${escapeHtml(catLabel(m.category))}</span>
@@ -1074,23 +1220,22 @@
       const rest = res.matches.slice(1);
       html = rest.length ? `<p class="tr-note">More matches:</p>` + rest.map(trMatchHtml).join('') : '';
     } else if (res.type === 'phrase') {
-      const firstFound = res.parts.find(p => p.matches.length);
+      // Musa, 2026-10-10: a row of looked-up words in big type ("Men want to go home") read
+      // like a translation and was not one. Now the big line says so plainly, the words come
+      // below one by one, and the report button hands the WHOLE sentence to the form.
+      const firstFound = res.parts.find(p => p.matches && p.matches.length);
       trSetLangs(firstFound ? firstFound.src : null);
-      const joined = res.parts.map(p => {
-        const m = p.matches[0];
-        if (!m) return `<span class="tr-miss">${escapeHtml(p.raw)}</span>`;
-        return escapeHtml(p.src === 'kk' ? primaryText(m.en) : m.kk);
-      }).join(' ');
       out.innerHTML = `
         <div class="tr-output-main">
-          <span class="tr-output-big tr-output-phrase">${joined}</span>
-          <span class="tr-output-sub">Word-by-word — grammar may differ in full sentences.</span>
+          <span class="tr-output-big tr-output-note">${escapeHtml(t('tr.sentence'))}</span>
+          <span class="tr-output-sub">${escapeHtml(t('tr.sentenceSub'))}</span>
         </div>`;
-      html = `<div class="tr-phrase">${res.parts.map(trPhraseRowHtml).join('')}</div>`;
+      html = `<div class="tr-phrase">${res.parts.filter(p => !p.skip).map(trPhraseRowHtml).join('')}</div>
+        <button class="tr-report" data-q="${escapeAttr(raw)}">${escapeHtml(t('tr.report'))}</button>`;
     } else {
       trSetLangs(res.lang);
       out.innerHTML = `<span class="tr-output-hint">No exact match — this word isn't in the dictionary yet (1,301 words and growing).</span>
-        <button class="tr-report" data-q="${escapeAttr(raw)}">Missing a word? Tell us →</button>`;
+        <button class="tr-report" data-q="${escapeAttr(raw)}">${escapeHtml(t('tr.report'))}</button>`;
       if (res.suggestions.length) {
         const chips = res.suggestions.map(w => {
           const label = res.lang === 'ru' ? `${w.kk} · ${w.ru}` : `${w.kk} · ${w.en}`;

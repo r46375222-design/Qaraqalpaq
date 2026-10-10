@@ -482,8 +482,12 @@ input, select { font-family: inherit; }
   transition: opacity 0.25s ease;
   pointer-events: none;
 }
-.btn:hover            { transform: translateY(-2px); }
-.btn:hover::after     { opacity: 1; }
+/* hover looks only for a mouse: on a phone :hover sticks to a tapped button until the next
+   tap elsewhere — Shuffle kept its glow and lift (Musa, 2026-10-10) */
+@media (hover: hover) {
+  .btn:hover            { transform: translateY(-2px); }
+  .btn:hover::after     { opacity: 1; }
+}
 .btn:active           { transform: scale(0.97); transition-duration: 0.1s; }
 .btn:focus-visible    { outline: 2px solid rgb(129, 140, 248); outline-offset: 3px; }
 /* Arrow slide */
@@ -491,7 +495,7 @@ input, select { font-family: inherit; }
   display: inline-block;
   transition: transform 0.2s ease;
 }
-.btn:hover .btn-arrow { transform: translateX(4px); }
+@media (hover: hover) { .btn:hover .btn-arrow { transform: translateX(4px); } }
 .btn-primary {
   background: var(--teal);
   color: var(--on-teal);
@@ -511,8 +515,10 @@ input, select { font-family: inherit; }
   background-position: 100% 0;
   pointer-events: none;
 }
-.btn-primary:hover            { box-shadow: 0 16px 32px -10px var(--teal-shadow); }
-.btn-primary:hover::before    { animation: btnSheen 0.65s ease forwards; }
+@media (hover: hover) {
+  .btn-primary:hover            { box-shadow: 0 16px 32px -10px var(--teal-shadow); }
+  .btn-primary:hover::before    { animation: btnSheen 0.65s ease forwards; }
+}
 @keyframes btnSheen {
   from { background-position: 100% 0; }
   to   { background-position: 0% 0; }
@@ -522,7 +528,7 @@ input, select { font-family: inherit; }
   color: var(--white);
   border: 1.5px solid var(--border-on-dark-strong);
 }
-.btn-outline:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.45); }
+@media (hover: hover) { .btn-outline:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.45); } }
 .btn-lg { padding: 17px 36px; font-size: 1rem; }
 @media (prefers-reduced-motion: reduce) {
   .btn-primary::before { animation: none !important; }
@@ -790,8 +796,11 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   transition: all 0.18s ease;
 }
 .learn-btn:hover { border-color: var(--teal); color: var(--text); }
+/* #flashLearnBtn is a .btn, not a .learn-btn (that class would shrink it to the card button's
+   size), so it is named by its id. Until v128 the rule waited for .learn-btn and the
+   flashcard "Learned" state never lit up. The id also outranks the outline hover below. */
 .word-card.is-learned .learn-btn,
-.flash-actions .learn-btn.is-learned {
+.flash-actions #flashLearnBtn.is-learned {
   background: var(--teal-soft);
   border-color: var(--teal-soft-border);
   color: var(--teal-on-surface);
@@ -826,6 +835,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 .word-card-face {
   position: absolute;
   inset: 0;
+  -webkit-backface-visibility: hidden;   /* Safari before 15.4 knows only the prefixed name */
   backface-visibility: hidden;
   border-radius: var(--radius);
   background: var(--bg-elevated);
@@ -959,6 +969,24 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   touch-action: pan-y; /* vertical drags scroll the page, horizontal ones are the swipe (next / previous) */
 }
 .flashcard .learned-badge { top: 14px; right: 14px; }
+/* SAFARI ON iPHONE (Musa, 2026-10-10): the ✓ of the FRONT showed through, mirrored, in the
+   top left corner of the BACK. WebKit bug: a badge with its own z-index (its own layer)
+   inside a face with backface-visibility: hidden does not inherit the hiding. Two fixes at
+   once: (a) the badge hides its own back side; (b) the badge of the face turned away is
+   visibility: hidden, switched in the middle of the turn (the flashcard turns in 0.55 s,
+   a dictionary card in 0.5 s), so it cannot show through whatever the browser does.
+   Chromium never showed it. */
+.flashcard .learned-badge,
+.word-card .learned-badge {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transition: visibility 0s linear 0.27s;
+}
+.word-card .learned-badge { transition-delay: 0.25s; }
+.flashcard:not(.flipped) .flashcard-back .learned-badge,
+.flashcard.flipped .flashcard-front .learned-badge,
+.word-card:not(.flipped) .word-card-back .learned-badge,
+.word-card.flipped .word-card-front .learned-badge { visibility: hidden; }
 .flashcard-inner {
   position: relative;
   width: 100%; height: 100%;
@@ -969,6 +997,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
 .flashcard-face {
   position: absolute; inset: 0;
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   border-radius: 22px;
   display: flex;
@@ -1017,7 +1046,10 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 
 .flash-actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
 .flash-actions .btn-outline { color: var(--text-dim); border-color: var(--border-strong); }
-.flash-actions .btn-outline:hover { background: var(--overlay-soft); color: var(--text); }
+/* mouse only: on a phone :hover stays on a button after a tap and looked like a state */
+@media (hover: hover) {
+  .flash-actions .btn-outline:hover { background: var(--overlay-soft); color: var(--text); }
+}
 
 /* ===== QUIZ ===== */
 .quiz-lang-toggle {
@@ -1273,6 +1305,7 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   align-items: center;
   justify-content: center;
   gap: 4px;
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   border-radius: 14px;
   border: 1px solid var(--border-on-dark-strong);
@@ -1970,6 +2003,11 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 .tr-output-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
 .tr-output-meta .tr-cat { text-align: left; }
 .tr-miss { opacity: 0.55; text-decoration: underline dotted; }
+/* found by its form (v128): "люблю → Súyiw (любить)" — the dictionary word in brackets, quieter */
+.tr-lemma { font-family: var(--font-body); font-weight: 500; color: var(--text-dim); }
+.tr-output-big .tr-lemma { font-size: 0.62em; }
+/* a whole sentence: the big line is a note, not a translation */
+.tr-output-big.tr-output-note { font-weight: 700; }
 @media (max-width: 768px) {
   .tr-panes { grid-template-columns: 1fr; }
   .tr-pane-src { border-right: none; border-bottom: 1px solid var(--border); }
