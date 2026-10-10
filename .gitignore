@@ -1,6 +1,7 @@
 # Private / local-only files — never publish to GitHub
 .claude/
 CLAUDE.md
+KARAKALPAK_GRAMMAR.md
 .tmp/
 .env
 credentials.json

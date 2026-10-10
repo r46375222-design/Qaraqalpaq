@@ -6,13 +6,14 @@
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#07090d">
 <title>Qaraqalpaq Tili — Learn Karakalpak Online</title>
-<meta name="description" content="Learn the Karakalpak language with an instant translator, interactive dictionary, flashcards, quizzes and Sózle — the daily Karakalpak word game. 1,301 words across 48 categories.">
+<meta name="description" content="Learn the Karakalpak language with an instant translator, interactive dictionary, flashcards, quizzes and Sózle — the daily Karakalpak word game. 1,305 words across 48 categories.">
 <link rel="icon" type="image/png" href="public/assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=128">
+<link rel="stylesheet" href="css/styles.css?v=129">
 <script>/* the tours of all five pages have been opened → no "?" in the nav (before the first paint; same list as GUIDE_PAGES in app.js) */try{if(['index','dictionary','flashcards','quiz','game'].every(function(p){return localStorage.getItem('qaraqalpaq_guide_'+p)==='seen'}))document.documentElement.className+=' guide-done'}catch(e){}/* the interface language, before the first paint (the EN / RU switch is drawn on the right side at once) */try{if(localStorage.getItem('qaraqalpaq_lang')==='ru')document.documentElement.lang='ru'}catch(e){}</script>
+<script>/* HOME HERO VARIANT B — a preview behind a flag, like ?i18n=1: ?hero=b turns it on (remembered in this browser), ?hero=0 turns it off; visitors see the old hero. The class goes on <html> before the first paint, and only then are its two fonts loaded. */(function(){var k='qaraqalpaq_hero_preview',q=location.search.match(/[?&]hero=([^&]*)/),on=false;try{if(q){if(q[1]==='b')localStorage.setItem(k,'b');else localStorage.removeItem(k)}on=localStorage.getItem(k)==='b'}catch(e){}if(q)on=q[1]==='b';if(!on)return;document.documentElement.className+=' hero-b';var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Oswald:wght@700&display=block';document.head.appendChild(l)})();</script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body class="page-home">
@@ -45,9 +46,11 @@
     <span class="hero-glow hero-glow-2"></span>
     <span class="hero-vignette"></span>
   </div>
+  <!-- hero variant B only (?hero=b): ten dictionary words in all three languages, so nothing to translate -->
+  <div class="hero-ticker" aria-hidden="true"><div class="hero-ticker-track"><div class="hero-ticker-set"><span class="tk"><b>Sálem</b> · hello · привет</span><span class="tk"><b>Suw</b> · water · вода</span><span class="tk"><b>Quyash</b> · sun · солнце</span><span class="tk"><b>Kún</b> · day · день</span><span class="tk"><b>Júrek</b> · heart · сердце</span><span class="tk"><b>Dos</b> · friend · друг</span><span class="tk"><b>Kitap</b> · book · книга</span><span class="tk"><b>Til</b> · language · язык</span><span class="tk"><b>Raxmet</b> · thank you · спасибо</span><span class="tk"><b>Muhabbat</b> · love · любовь</span></div><div class="hero-ticker-set"><span class="tk"><b>Sálem</b> · hello · привет</span><span class="tk"><b>Suw</b> · water · вода</span><span class="tk"><b>Quyash</b> · sun · солнце</span><span class="tk"><b>Kún</b> · day · день</span><span class="tk"><b>Júrek</b> · heart · сердце</span><span class="tk"><b>Dos</b> · friend · друг</span><span class="tk"><b>Kitap</b> · book · книга</span><span class="tk"><b>Til</b> · language · язык</span><span class="tk"><b>Raxmet</b> · thank you · спасибо</span><span class="tk"><b>Muhabbat</b> · love · любовь</span></div></div></div>
   <div class="hero-content">
     <span class="hero-tag"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12h18"/><path d="M12 21v-18"/><path d="M7.5 7.5l9 9"/><path d="M7.5 16.5l9 -9"/></svg> <span data-i18n="hero.tag">Tili — your gateway to Karakalpak</span></span>
-    <h1 class="hero-title" data-i18n-html="hero.title">Learn <span class="hero-accent">Qaraqalpaq</span> the modern way.</h1>
+    <h1 class="hero-title" data-i18n-html="hero.title"><span class="ht-l">Learn</span> <span class="hero-accent ht-l">Qaraqalpaq</span> <span class="ht-l">the modern way.</span></h1>
     <p class="hero-sub" data-i18n="hero.sub">An instant translator, dictionary, flashcards and quizzes built for a new generation of learners — fast, bold, and actually fun.</p>
     <div class="hero-cta">
       <a class="btn btn-primary" href="#translator-home"><span data-i18n="hero.try">Try the Translator</span> <span class="btn-arrow" aria-hidden="true">→</span></a>
@@ -58,7 +61,7 @@
   <div class="stats-bar" id="statsBar">
     <div class="stat">
       <span class="tone-gold stat-icon" aria-hidden="true"><svg class="ph" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M48,72h64V184H48ZM190.64,38.39a8,8,0,0,0-9.5-6.21l-46.81,10a8.07,8.07,0,0,0-6.15,9.57L139.79,107l62.46-13.42Z" class="ph-tint"/><path d="M231.65,194.55,198.46,36.75a16,16,0,0,0-19-12.39L132.65,34.42a16.08,16.08,0,0,0-12.3,19l33.19,157.8A16,16,0,0,0,169.16,224a16.25,16.25,0,0,0,3.38-.36l46.81-10.06A16.09,16.09,0,0,0,231.65,194.55ZM136,50.15c0-.06,0-.09,0-.09l46.8-10,3.33,15.87L139.33,66Zm6.62,31.47,46.82-10.05,3.34,15.9L146,97.53Zm6.64,31.57,46.82-10.06,13.3,63.24-46.82,10.06ZM216,197.94l-46.8,10-3.33-15.87L212.67,182,216,197.85C216,197.91,216,197.94,216,197.94ZM104,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V48A16,16,0,0,0,104,32ZM56,48h48V64H56Zm0,32h48v96H56Zm48,128H56V192h48v16Z"/></svg></span>
-      <span class="stat-num" data-count="1301">0</span>
+      <span class="stat-num" data-count="1305">0</span>
       <span class="stat-label" data-i18n="stat.words">Words</span>
     </div>
     <div class="stat">
@@ -99,7 +102,7 @@
       </div>
       <div class="translator-results" id="translatorResults" hidden></div>
     </div>
-    <p class="translator-more"><a href="dictionary.html" data-i18n="home.exploreAll">Explore all 1,301 words in the dictionary →</a></p>
+    <p class="translator-more"><a href="dictionary.html" data-i18n="home.exploreAll">Explore all 1,305 words in the dictionary →</a></p>
   </section>
 
   <!-- SÓZLE GAME BANNER -->
@@ -119,7 +122,7 @@
     </div>
     <div class="proof-stats">
       <div class="proof-stat">
-        <span class="stat-num proof-num" data-count="1301">0</span>
+        <span class="stat-num proof-num" data-count="1305">0</span>
         <span class="proof-label" data-i18n="proof.words">Real words, checked by a native speaker</span>
       </div>
       <div class="proof-stat">
@@ -155,7 +158,7 @@
         </div>
         <div class="showcase-foot">
           <h3 data-i18n="show.dictTitle">Dictionary &amp; Translator</h3>
-          <p data-i18n="show.dictSub">1,301 words — instant translation both ways</p>
+          <p data-i18n="show.dictSub">1,305 words — instant translation both ways</p>
         </div>
       </div>
 
@@ -270,7 +273,7 @@
       </div>
       <div class="feature-card">
         <span class="tone-violet feature-icon"><svg class="ph" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M192,112a80,80,0,1,1-80-80A80,80,0,0,1,192,112Z" class="ph-tint"/><path d="M229.66,218.34,179.6,168.28a88.21,88.21,0,1,0-11.32,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg></span>
-        <h3 data-i18n="feat.words">1,301 Words</h3>
+        <h3 data-i18n="feat.words">1,305 Words</h3>
         <p data-i18n="feat.wordsText">Karakalpak, English and Russian in one place.</p>
       </div>
       <div class="feature-card">

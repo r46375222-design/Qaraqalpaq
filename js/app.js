@@ -46,16 +46,16 @@
     'footer.guide': 'Guide', 'footer.guideTitle': 'A quick tour of this page',
     // home
     'hero.tag': 'Tili — your gateway to Karakalpak',
-    'hero.title': 'Learn <span class="hero-accent">Qaraqalpaq</span> the modern way.',
+    'hero.title': '<span class="ht-l">Learn</span> <span class="hero-accent ht-l">Qaraqalpaq</span> <span class="ht-l">the modern way.</span>',
     'hero.sub': 'An instant translator, dictionary, flashcards and quizzes built for a new generation of learners — fast, bold, and actually fun.',
     'hero.try': 'Try the Translator', 'cta.exploreDict': 'Explore the Dictionary',
     'stat.words': 'Words', 'stat.categories': 'Categories', 'stat.languages': 'Languages',
-    'home.exploreAll': 'Explore all 1,301 words in the dictionary →',
+    'home.exploreAll': 'Explore all 1,305 words in the dictionary →',
     'home.sozle': "<strong>New — Sózle:</strong> the Karakalpak word game. Guess today's word in 6 tries →",
     'proof.caption': 'Just launched — be among the <strong>first learners</strong> of Qaraqalpaq online',
     'proof.words': 'Real words, checked by a native speaker', 'proof.waiting': 'Waiting for your feedback', 'proof.tell': 'Tell us what you think —',
     'show.title': 'See it in action', 'show.sub': 'A quick look at the dictionary, flashcards and quiz.',
-    'show.dictTitle': 'Dictionary & Translator', 'show.dictSub': '1,301 words — instant translation both ways',
+    'show.dictTitle': 'Dictionary & Translator', 'show.dictSub': '1,305 words — instant translation both ways',
     'show.flashTitle': 'Flashcards', 'show.flashSub': 'Flip to memorize faster', 'show.quizTitle': 'Quiz', 'show.quizSub': 'Test yourself instantly',
     'phone.flashTitle': 'Master words with smart Flashcards',
     'phone.flashText': 'Flip through real Karakalpak vocabulary and build recall with instant English & Russian translations.',
@@ -63,7 +63,7 @@
     'phone.quizText': 'Four options, one right answer. Track your streak and score as you grow from beginner to fluent.',
     'feat.title': 'Everything you need to learn Qaraqalpaq', 'feat.sub': 'One simple toolkit, built for fast progress.',
     'feat.translator': 'Instant Translator', 'feat.translatorText': 'Auto-detects Qaraqalpaq, English or Russian.',
-    'feat.words': '1,301 Words', 'feat.wordsText': 'Karakalpak, English and Russian in one place.',
+    'feat.words': '1,305 Words', 'feat.wordsText': 'Karakalpak, English and Russian in one place.',
     'feat.flash': 'Smart Flashcards', 'feat.flashText': 'Flip cards to memorize faster.',
     'feat.quiz': 'Quick Quiz', 'feat.quizText': 'Test your knowledge instantly.',
     'cta.title': 'Ready to start learning?',
@@ -121,14 +121,14 @@
     'footer.guide': 'Подсказки',
     'footer.guideTitle': 'Короткая экскурсия по странице',
     'hero.tag': 'Tili — твой путь в каракалпакский',
-    'hero.title': 'Учи <span class="hero-accent">каракалпакский</span> по-новому.',
+    'hero.title': '<span class="ht-l">Учи</span> <span class="hero-accent ht-l">каракалпакский</span> <span class="ht-l">по-новому.</span>',
     'hero.sub': 'Мгновенный переводчик, словарь, карточки и квизы для нового поколения — быстро, ярко и по-настоящему весело.',
     'hero.try': 'Попробуй переводчик',
     'cta.exploreDict': 'Открой словарь',
     'stat.words': 'Слова',
     'stat.categories': 'Категории',
     'stat.languages': 'Языки',
-    'home.exploreAll': 'Открой все 1 301 слово в словаре →',
+    'home.exploreAll': 'Открой все 1 305 слов в словаре →',
     'home.sozle': '<strong>Новое — Sózle:</strong> игра в каракалпакские слова. Угадай слово дня за 6 попыток →',
     'proof.caption': 'Мы только запустились — будь среди <strong>первых</strong>, кто учит каракалпакский онлайн',
     'proof.words': 'Настоящие слова, проверенные носителем языка',
@@ -137,7 +137,7 @@
     'show.title': 'Посмотри в деле',
     'show.sub': 'Коротко: словарь, карточки и квиз.',
     'show.dictTitle': 'Словарь и переводчик',
-    'show.dictSub': '1 301 слово — мгновенный перевод в обе стороны',
+    'show.dictSub': '1 305 слов — мгновенный перевод в обе стороны',
     'show.flashTitle': 'Карточки',
     'show.flashSub': 'Переворачивай и запоминай быстрее',
     'show.quizTitle': 'Квиз',
@@ -150,7 +150,7 @@
     'feat.sub': 'Простой набор — для быстрого прогресса.',
     'feat.translator': 'Мгновенный переводчик',
     'feat.translatorText': 'Сам узнаёт каракалпакский, английский и русский.',
-    'feat.words': '1 301 слово',
+    'feat.words': '1 305 слов',
     'feat.wordsText': 'Каракалпакский, английский и русский в одном месте.',
     'feat.flash': 'Умные карточки',
     'feat.flashText': 'Переворачивай карточки и запоминай быстрее.',
@@ -189,6 +189,42 @@
     'mock.star': 'Звезда',
     'mock.skyCap': 'Небо',
     'mock.heart': 'Heart',
+    // PORTION 2 (dictionary, flashcards, quiz, Sózle), approved by Musa 2026-10-10 with two edits (№20, №27)
+    'dict.title': 'Загляни в словарь',
+    'dict.sub': 'Ищи по-каракалпакски, по-английски и по-русски — мгновенно.',
+    'dict.empty': 'Ничего не нашлось. Попробуй другое слово или категорию.',
+    'dict.search': 'Найди слово на любом языке…',
+    'a11y.scrollLeft': 'Прокрутить влево',
+    'a11y.scrollRight': 'Прокрутить вправо',
+    'flash.title': 'Учи по карточкам',
+    'flash.sub': 'Нажми на карточку — она перевернётся. Листай и закрепляй новые слова.',
+    'flash.shuffle': 'Перемешать',
+    'flash.flip': 'Перевернуть',
+    'btn.markLearned': 'Я это знаю',
+    'a11y.prev': 'Предыдущая карточка',
+    'a11y.next': 'Следующая карточка',
+    'quiz.title': 'Проверь себя',
+    'quiz.sub': 'Выбери правильный перевод. Четыре варианта — один верный.',
+    'quiz.ansEn': 'Английский',
+    'quiz.ansRu': 'Русский',
+    'quiz.score': 'Счёт',
+    'quiz.streak': 'Серия',
+    'quiz.answered': 'Всего',
+    'quiz.start': 'Начать квиз',
+    'quiz.next': 'Следующий вопрос',
+    'a11y.quizLang': 'Язык ответов',
+    'game.how': 'Угадай каракалпакское слово за 6 попыток. Зелёный — буква на своём месте, жёлтый — буква есть, но не там. Каждый день новое слово, а в конце узнаешь, что оно значит.',
+    'sozle.hint': 'Подсказка',
+    'sozle.random': 'Случайное слово',
+    'game.letters': 'Буквы á, ǵ, ı, ń, ó, ú есть на клавиатуре выше — в них вся каракалпакская фишка',
+    'game.kbd': "Можно печатать и на своей клавиатуре, в любой раскладке. Для á ǵ ı ń ó ú набери букву, а потом <kbd>'</kbd> (в русской раскладке — клавиша Э): <kbd>a</kbd><kbd>'</kbd> даёт á.",
+    'a11y.board': 'Игровое поле',
+    'a11y.keyboard': 'Клавиатура',
+    'cats.all': 'Все категории',
+    'cats.allPill': 'Все',
+    'card.tapBack': 'Нажми, чтобы вернуться',
+    'btn.learned': 'Выучено',
+    'quiz.wrong': 'Не совсем — правильный ответ: {answer}',
   };
   const stub = o => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, '[RU] ' + v]));   // until all portions are in
   const STRINGS = { en: STRINGS_EN, ru: Object.assign(stub(STRINGS_EN), STRINGS_RU) };
@@ -1234,7 +1270,7 @@
         <button class="tr-report" data-q="${escapeAttr(raw)}">${escapeHtml(t('tr.report'))}</button>`;
     } else {
       trSetLangs(res.lang);
-      out.innerHTML = `<span class="tr-output-hint">No exact match — this word isn't in the dictionary yet (1,301 words and growing).</span>
+      out.innerHTML = `<span class="tr-output-hint">No exact match — this word isn't in the dictionary yet (${WORDS.length.toLocaleString('en-US')} words and growing).</span>
         <button class="tr-report" data-q="${escapeAttr(raw)}">${escapeHtml(t('tr.report'))}</button>`;
       if (res.suggestions.length) {
         const chips = res.suggestions.map(w => {
@@ -1326,35 +1362,52 @@
     ['enter', 'z', 'x', 'v', 'b', 'n', 'm', 'á', 'ó', 'ú', 'back'],
   ];
 
-  let SOZLE_LIST = null; // deterministically shuffled [{key, w}]
+  let SOZLE_LIST = null; // [{key, w}] in the frozen order of SOZLE_ANSWERS
   let sozle = null;      // current game
 
-  function mulberry32(seed) {
-    return function () {
-      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
-      let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    };
-  }
-
+  // THE ANSWER LIST IS FROZEN (v129, Musa: the first people already play, the word of the day
+  // must never jump). Until v128 the list was rebuilt on every load from the five-letter words
+  // of words.json and shuffled with a fixed seed, so ANY added or removed five-letter word
+  // reshuffled every future day. These are those 357 words, in exactly the order v128 used
+  // (puzzle #1 = the first word, 22.07.2026; it came from a mulberry32 shuffle, seed 20260722,
+  // which is no longer needed). A word added to words.json later can be TYPED
+  // as a guess (guesses are not checked against a list) but is never an answer. To add
+  // answers one day, append them at the END: days before #358 stay the same.
+  const SOZLE_ANSWERS = (
+    'qulaq ásten tekst qızıq aǵash qızıl alsaq urlaw qaqpa qońır kútiw súlgi jótel qurıw dáliz qoyan ' +
+    'tegis erkin vanna dárya tuxım uqsas bilek kórpe júzıq qırıq durıs sawaq bazar tamır sábiz toǵız ' +
+    'biliw súret jılqı pısıq ásker tatlı akula tsirk jabıq túlki sasıq sabaq búrge bóliw shkaf keyin ' +
+    'divan tuqım buwın qońsı jeyiw model pútin gitar nusqa qatal qarǵa tútin gáyka hárip muzey ketiw ' +
+    'temir shosh taksı qayıs qısqa kúliw badam jaqsı tufli jipek ókshe gúreń jeńiw burın qaǵaz arqan ' +
+    'tozań qatıq bawır tuwrı tsifr murın moyın shege juwan erteń samal filtr ǵarrı shiye poezd jiraf ' +
+    'qayıq dúken hayal eshek ústel minez jiyen mekan júriw mıyıq kesiw satıw pirog segiz qalta árman ' +
+    'limon tósek buzıw turıw qalas jáhán aqsha paltó jıllı ashıw seziw qonaq túnde júziw keliw jalın ' +
+    'boyaw seniw kamod xalat aspaz kóshe kitap qazan jılan semiz kedey kirpi qarjı beriw ertek jılǵa ' +
+    'mápli gubka sıyır gúman balta bulaq palaw keste palız tenge qosıq gúmis tolıq oylaw tereń álsiz ' +
+    'geziw teńiz aldaw bolǵa saray yarım úńgir kóriw truba jılwı jemis jaman awqat banan dáwir piyaz ' +
+    'alpıs karta apayı eshki mánti payda múshe aqlıq tólew sanaw ekran balıq kómir izlew rayon keshe ' +
+    'ishek qutan qayǵı rámká jaziw sulıw zárúr tuman lampa taban báhár toqay jaqın músin toǵay saqal ' +
+    'tigiw qıyın tosap sızıw úlken tumba hápte kedei uqlıw súyek boran tutıw tarak túrme qawın altın ' +
+    'ashıq yubka saxna orbit máyek bilim parta rásim kúyew beket pikir waqıt jasıl dawıl polka kelin ' +
+    'oshaq áwmet zebra biyik arzan jelim polat ushıw bilet júrek jeńil qalam sorpa súdyá kamin boǵaz ' +
+    'tırna nawda gilem túyme sebet súyiw orman ziyan gońsı sirop pıste kishi soraw sopin tiyiw juwap ' +
+    'gúzar sabın júzim tabıs aspan krant parde uslaw alqan tabaq lazer jabıw sayız qálem papka sińli ' +
+    'qıyar jasaw mákke shash qobız ishiw qońız jazıw teńge baxıt bursh dutar álpis suwıq sınıf ayran ' +
+    'áwlad sapar ańsat nomer asman mayka jaǵis jaqtı radio beton juwıw islew barıw tiyın qımız jigit ' +
+    'qubbi qattı qızba doska minut dámli tawıq dawıs terek házir basqa paxta emlew oynaw bólme kúrek ' +
+    'somka kópir náwpe jılaw qulaw albom xalıq qasıq teatr jeyde zavod tabıw artıw somsa qagaz tatıw ' +
+    'salát qalıń búgin sırǵa qarın'
+  ).split(' ');
   function buildSozleList() {
-    const seen = new Set();
-    const list = [];
-    WORDS.forEach(w => {
-      const key = String(w.kk || '').trim().toLowerCase();
-      if (key.length !== 5 || seen.has(key)) return;
-      for (const ch of key) if (!SOZLE_ALLOWED.has(ch)) return;
-      seen.add(key);
-      list.push({ key, w });
-    });
-    // Fixed-seed shuffle so every player in the world gets the same daily word
-    const rnd = mulberry32(20260722);
-    for (let i = list.length - 1; i > 0; i--) {
-      const j = Math.floor(rnd() * (i + 1));
-      [list[i], list[j]] = [list[j], list[i]];
-    }
-    SOZLE_LIST = list;
+    const byKey = new Map();   // the first entry of each spelling, as v128 picked it
+    WORDS.forEach(w => { const key = String(w.kk || '').trim().toLowerCase(); if (!byKey.has(key)) byKey.set(key, w); });
+    // a word deleted from words.json keeps its place (w = null); that day takes the next word
+    SOZLE_LIST = SOZLE_ANSWERS.map(key => ({ key, w: byKey.get(key) || null }));
+  }
+  function sozleAnswerFor(num) {
+    const n = SOZLE_LIST.length;
+    for (let k = 0; k < n; k++) { const e = SOZLE_LIST[(((num - 1 + k) % n) + n) % n]; if (e.w) return e; }
+    return SOZLE_LIST[0];
   }
 
   function sozleDayNum() {
@@ -1589,8 +1642,8 @@
   function sozleStart(mode) {
     const num = sozleDayNum();
     const entry = mode === 'daily'
-      ? SOZLE_LIST[((num - 1) % SOZLE_LIST.length + SOZLE_LIST.length) % SOZLE_LIST.length]
-      : SOZLE_LIST[Math.floor(Math.random() * SOZLE_LIST.length)];
+      ? sozleAnswerFor(num)
+      : (list => list[Math.floor(Math.random() * list.length)])(SOZLE_LIST.filter(e => e.w));
     sozle = { mode, num, entry, answer: entry.key, guesses: [], evals: [], cur: '', done: false, win: false, hintUsed: false };
     $('#sozleNum').textContent = mode === 'daily' ? ` #${num}` : ' · practice';
     $('#sozlePanel').hidden = true;

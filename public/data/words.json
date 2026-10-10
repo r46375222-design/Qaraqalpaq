@@ -90,6 +90,18 @@
   "category": "Basic Phrases"
  },
  {
+  "kk": "Sizler",
+  "ru": "Вы",
+  "en": "You (plural)",
+  "category": "Basic Phrases"
+ },
+ {
+  "kk": "Olar",
+  "ru": "Они",
+  "en": "They",
+  "category": "Basic Phrases"
+ },
+ {
   "kk": "Kim?",
   "ru": "Кто?",
   "en": "Who?",
@@ -199,14 +211,14 @@
  },
  {
   "kk": "Áke",
-  "ru": "Отец",
-  "en": "Father",
+  "ru": "Отец / Папа",
+  "en": "Father / Dad",
   "category": "People & Family"
  },
  {
   "kk": "Ana",
-  "ru": "Мать",
-  "en": "Mother",
+  "ru": "Мать / Мама",
+  "en": "Mother / Mom",
   "category": "People & Family"
  },
  {
@@ -339,6 +351,12 @@
   "kk": "Jeti",
   "ru": "Семиречье / Предки",
   "en": "Ancestors",
+  "category": "People & Family"
+ },
+ {
+  "kk": "Brat",
+  "ru": "Брат (разг.)",
+  "en": "Brother (casual)",
   "category": "People & Family"
  },
  {
@@ -560,7 +578,7 @@
  {
   "kk": "Úy",
   "ru": "Дом",
-  "en": "House",
+  "en": "House / Home",
   "category": "Surrounding World"
  },
  {
@@ -7707,6 +7725,12 @@
   "kk": "Barıw",
   "ru": "Идти / Ехать",
   "en": "To go",
+  "category": "Basic Verbs"
+ },
+ {
+  "kk": "Qálew",
+  "ru": "Хотеть",
+  "en": "To want",
   "category": "Basic Verbs"
  },
  {
