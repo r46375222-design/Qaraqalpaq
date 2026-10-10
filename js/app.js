@@ -80,6 +80,7 @@
     // a whole sentence was typed (v128): an honest note instead of a word salad
     'tr.sentence': 'Full sentences aren\u2019t translated yet.', 'tr.sentenceSub': 'Here are the words we found:',
     'tr.notFound': 'not found', 'tr.report': 'Missing a word? Tell us →',
+    'tr.missNote': "Words we can't find are saved anonymously, so we know what to add.",   // shown only while MISS_LOG is on
     // word request (home + dictionary)
     'req.title': 'Missing a word? Spotted a mistake?', 'req.text': 'Tell us the word — we read every message and keep the dictionary growing.',
     'req.word': 'Word or phrase in any language', 'req.note': 'Correct spelling, meaning or context (optional)', 'req.send': 'Send it in',
@@ -1285,6 +1286,55 @@
     results.innerHTML = html;
   }
 
+  // ===== MISSED-QUERY LOG (v130) — OFF until its Google Form exists =====
+  // What the translator could not find AS A WHOLE (a sentence, or a word without an exact
+  // match) is sent anonymously to a form, so we know which words to add. A word found through
+  // one of its forms ("goes" → Barıw) counts as found and is not sent.
+  // OFF while MISS_LOG is null. To switch it on, put the form's formResponse address and its
+  // three entry ids here (the advisor sends them):
+  //   { action: 'https://docs.google.com/forms/d/e/…/formResponse', query: 'entry.…', lang: 'entry.…', page: 'entry.…' }
+  // Only on the live site (never from localhost or a preview address); a query only when it
+  // is finished (2.5 s after the last key, or when the field is left); the same query once per
+  // visit and at most 20 per visit (sessionStorage); never under 2 letters, only digits, or
+  // anything that looks like an e-mail or a phone number (an @, or 5+ digits in a row).
+  const MISS_LOG = null;
+  const MISS = { idleMs: 2500, perVisit: 20, maxLen: 200, store: 'qaraqalpaq_miss_sent', host: 'qaraqalpaq.vercel.app' };
+  function missLogOn() { return !!(MISS_LOG && MISS_LOG.action && location.hostname === MISS.host); }
+  function missWorthSending(q) {
+    if ((q.match(/\p{L}/gu) || []).length < 2) return false;      // "x", "12", "?!"
+    if (/^[\d\s.,:;+\-()/]*$/.test(q)) return false;               // only digits
+    if (q.includes('@') || /\d{5,}/.test(q)) return false;          // an e-mail or a phone number
+    return true;
+  }
+  // kk / en / ru: Cyrillic → ru, á ǵ ı ń ó ú → kk; plain Latin → whichever has more of its words
+  function missLang(raw) {
+    const lang = detectLang(raw);
+    if (lang) return lang;
+    const keys = raw.split(/\s+/).map(foldKey).filter(Boolean);
+    const kk = keys.filter(k => TRANS_INDEX.kk.has(k)).length;
+    const en = keys.filter(k => EN_SKIP.has(k) || PRONOUNS.en.has(k) || TRANS_INDEX.en.has(k) || enVerbLookup(k)).length;
+    return kk > en ? 'kk' : 'en';
+  }
+  function missFlush(raw) {
+    if (!missLogOn()) return;
+    const q = String(raw || '').trim().replace(/\s+/g, ' ');
+    if (!q || !missWorthSending(q)) return;
+    if (!TRANS_INDEX) buildTranslatorIndex();
+    const res = translateQuery(q);
+    if (!res || res.type === 'exact') return;                       // found (also by its form)
+    let sent;
+    try { sent = JSON.parse(sessionStorage.getItem(MISS.store) || '[]'); } catch (e) { return; }   // no storage → no log (it could not be kept to 20)
+    const key = q.toLowerCase();
+    if (sent.includes(key) || sent.length >= MISS.perVisit) return;
+    sent.push(key);
+    try { sessionStorage.setItem(MISS.store, JSON.stringify(sent)); } catch (e) { return; }
+    const body = new URLSearchParams();
+    body.append(MISS_LOG.query, q.slice(0, MISS.maxLen));
+    body.append(MISS_LOG.lang, missLang(q));
+    body.append(MISS_LOG.page, /dictionary/.test(location.pathname) ? 'dictionary' : 'index');
+    fetch(MISS_LOG.action, { method: 'POST', mode: 'no-cors', body }).catch(() => {});
+  }
+
   function initTranslator() {
     const input = $('#translatorInput');
     if (!input) return;
@@ -1307,6 +1357,13 @@
     };
 
     input.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(run, 160); });
+    // the missed-query log: a query counts as finished 2.5 s after the last key, or when the field is left
+    if (missLogOn()) {
+      let missTimer;
+      input.addEventListener('input', () => { clearTimeout(missTimer); missTimer = setTimeout(() => missFlush(input.value), MISS.idleMs); });
+      input.addEventListener('blur', () => { clearTimeout(missTimer); missFlush(input.value); });
+      results.insertAdjacentHTML('afterend', `<p class="tr-miss-note" data-i18n="tr.missNote">${escapeHtml(t('tr.missNote'))}</p>`);
+    }
     input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); clearTimeout(timer); run(); } });
     clearBtn.addEventListener('click', () => { input.value = ''; run(); input.focus(); });
     LANG_REDRAW.push(run);

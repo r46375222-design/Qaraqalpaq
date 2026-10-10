@@ -2012,6 +2012,8 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 .tr-output-big .tr-lemma { font-size: 0.62em; }
 /* a whole sentence: the big line is a note, not a translation */
 .tr-output-big.tr-output-note { font-weight: 700; }
+/* the missed-query log note (v130), shown only while MISS_LOG is on */
+.tr-miss-note { margin-top: 14px; font-size: 0.76rem; color: var(--text-faint); text-align: center; }
 @media (max-width: 768px) {
   .tr-panes { grid-template-columns: 1fr; }
   .tr-pane-src { border-right: none; border-bottom: 1px solid var(--border); }
@@ -2823,11 +2825,10 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
 @keyframes mo-shake    { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
 @keyframes mo-panel-in { from { opacity: 0; transform: translateY(10px); } }
 
-/* ===== HOME HERO, VARIANT B (v129) — A PREVIEW BEHIND ?hero=b =====
-   Visitors see the old hero: every rule here sits under html.hero-b, which the <head> script
-   of index.html sets only for ?hero=b (remembered in the browser; ?hero=0 forgets). The same
-   script loads the two fonts it needs (Oswald 700, JetBrains Mono 500 — both have
-   á ǵ ı ń ó ú and Cyrillic; Bebas Neue / Barlow Condensed / Roboto Condensed do NOT have ǵ).
+/* ===== HOME HERO, VARIANT B (v129) — THE HOME PAGE FOR EVERYBODY SINCE v130 =====
+   `hero-b` is written on <html> in index.html itself; ?hero=old removes it for one page load
+   (nothing remembered) — that fallback and the old hero rules go away on 24.10.2026, and then
+   the `.hero-b` prefix below can be dropped.
    Musa's terms (afraid of "copied MrBeast"): only the device is borrowed — big condensed
    caps, numbers, a running line — the rest is ours: the WebGL dots, indigo only, our buttons.
    - title: three lines that live INSIDE the hero.title string (.ht-l spans, inline in the old
@@ -2837,9 +2838,52 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
    - the tag in mono instead of the pill; the counters big on the right (under the text on
      phones), same elements and same count-up as before;
    - the running line: transform only, slow, still under prefers-reduced-motion, height
-     reserved so nothing jumps; words in their dictionary spelling, NOT in caps (the capital
-     of ı is not decided yet — KARAKALPAK_GRAMMAR.md).
+     reserved so nothing jumps, soft edges (mask); words in their dictionary spelling, NOT in
+     caps (the capital of ı is not decided yet — KARAKALPAK_GRAMMAR.md).
    Rules kept: no animation on .nav; no padding shorthand on .container at ≤768px. */
+
+/* THE TWO HERO FONTS (v130) — Oswald 700 and JetBrains Mono 500 (both have á ǵ ı ń ó ú and
+   Cyrillic; Bebas Neue / Barlow Condensed / Roboto Condensed do NOT have ǵ). Served from
+   the site (public/fonts: Google's own latin / latin-ext / cyrillic subsets, unchanged, SIL
+   OFL), 66 KB in all; a browser downloads only the subsets the page uses (unicode-range).
+   index.html PRELOADS Oswald latin + JetBrains Mono latin (and Oswald Cyrillic on a Russian
+   page). font-display: swap — the title is NEVER invisible; until Oswald arrives it is drawn
+   in a local fallback scaled with size-adjust so that no title line is wider than in Oswald
+   (measured: Arial Narrow Bold 92%, Roboto Bold 83.4%, Arial Bold 75.5%). Every title line
+   is a nowrap block with a fixed line-height, so the swap moves nothing — the letters only
+   change shape. Chosen over display=optional (on a slow first visit the fallback would stay
+   for the whole visit, and the condensed caps ARE this design) and over display=block (the
+   v129 preview: up to 3 s of an invisible title on a slow connection). */
+@font-face { font-family: 'Oswald'; font-style: normal; font-weight: 700; font-display: swap;
+  src: url('../public/fonts/oswald-cyrillic-700-normal.woff2') format('woff2');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116; }
+@font-face { font-family: 'Oswald'; font-style: normal; font-weight: 700; font-display: swap;
+  src: url('../public/fonts/oswald-latin-ext-700-normal.woff2') format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+@font-face { font-family: 'Oswald'; font-style: normal; font-weight: 700; font-display: swap;
+  src: url('../public/fonts/oswald-latin-700-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url('../public/fonts/jetbrains-mono-cyrillic-500-normal.woff2') format('woff2');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116; }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url('../public/fonts/jetbrains-mono-latin-ext-500-normal.woff2') format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url('../public/fonts/jetbrains-mono-latin-500-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+/* the stand-ins while Oswald is on its way (the first one the device has is used) */
+@font-face { font-family: 'Oswald FB Narrow'; font-weight: 700; size-adjust: 92%;
+  src: local('Arial Narrow Bold'), local('ArialNarrow-Bold'); }
+@font-face { font-family: 'Oswald FB Roboto'; font-weight: 700; size-adjust: 83.4%;
+  src: local('Roboto Bold'), local('Roboto-Bold'); }
+@font-face { font-family: 'Oswald FB Arial'; font-weight: 700; size-adjust: 75.5%;
+  src: local('Arial Bold'), local('Arial-BoldMT'), local('Liberation Sans Bold'), local('LiberationSans-Bold'); }
+:root {
+  --font-hero: 'Oswald', 'Oswald FB Narrow', 'Oswald FB Roboto', 'Oswald FB Arial', var(--font-display);
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, 'Roboto Mono', 'Liberation Mono', monospace;
+}
+
 .hero-ticker { display: none; }
 .hero-b .hero {               /* outer columns = the side margins, so the running line can go edge to edge */
   display: grid;
@@ -2857,12 +2901,15 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
   border-top: 1px solid rgba(129, 140, 248, 0.16);
   border-bottom: 1px solid rgba(129, 140, 248, 0.16);
   background: rgba(99, 102, 241, 0.06);
+  /* soft edges (v130): the words fade out on both sides instead of being cut */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
 }
 .hero-b .hero-ticker-track { display: flex; width: max-content; height: 100%; }
 .hero-b .hero-ticker-set { display: flex; flex-shrink: 0; align-items: center; }
 .hero-b .tk {
   display: block;
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-mono);
   font-weight: 500; font-size: 0.84rem; line-height: 44px;
   white-space: nowrap;
   color: rgba(255, 255, 255, 0.6);
@@ -2881,7 +2928,7 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
 .hero-b .hero-content { grid-column: 2; max-width: none; margin: 0; text-align: left; padding-bottom: 0; container-type: inline-size; }
 .hero-b .hero-tag {
   display: inline-flex; align-items: center; gap: 12px;
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-mono);
   font-weight: 500; font-size: 0.8rem; letter-spacing: 1.2px;
   background: none; border: 0; border-radius: 0; padding: 0;
   color: var(--teal-light);
@@ -2890,7 +2937,7 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
 .hero-b .hero-tag .ico { display: none; }
 .hero-b .hero-tag::before { content: ''; width: 28px; height: 2px; background: var(--teal); flex-shrink: 0; }
 .hero-b .hero-title {
-  font-family: 'Oswald', var(--font-display);
+  font-family: var(--font-hero);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -2930,13 +2977,17 @@ html.hero-b[lang="ru"] .hero-title { font-size: clamp(2rem, 5.9vw, 5rem); font-s
 .hero-b .stat-icon { grid-row: 1 / span 2; margin: 0; }
 .hero-b .stat-icon .ph { width: 40px; height: 40px; }
 .hero-b .stat-num {
-  font-family: 'Oswald', var(--font-display); font-weight: 700;
+  font-family: var(--font-hero); font-weight: 700;
   font-size: clamp(2.4rem, 4.2vw, 3.8rem); line-height: 1; letter-spacing: 0.5px;
   font-variant-numeric: tabular-nums;
 }
+/* the labels under the numbers (v130: were 9.6px on phones and #6b7280 — too small and pale).
+   Now at least 11px and --text-dim: 7.8:1 on the stat background (the old hero tiles had
+   #6b7280 on #161b22 = 3.6:1, at 12.5px in Inter 600) */
 .hero-b .stat-label {
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-weight: 500; font-size: 0.72rem; letter-spacing: 1.2px; margin-top: 4px;
+  font-family: var(--font-mono);
+  font-weight: 500; font-size: 0.8rem; letter-spacing: 1px; margin-top: 4px;
+  color: var(--text-dim);
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-b body.page-home .stats-bar { transform: none !important; }
@@ -2957,7 +3008,7 @@ html.hero-b[lang="ru"] .hero-title { font-size: clamp(2rem, 5.9vw, 5rem); font-s
   .hero-b .hero-tag { font-size: 0.72rem; letter-spacing: 0.8px; }
   .hero-b .stat-icon .ph { width: 28px; height: 28px; }
   .hero-b .stat-num { font-size: 2rem; }
-  .hero-b .stat-label { font-size: 0.6rem; letter-spacing: 0.6px; }
+  .hero-b .stat-label { font-size: 11px; letter-spacing: 0.4px; }
 }
 
 /* ===== SIDE GUTTERS FOR THE HOME SECTIONS (keep this block last) =====
