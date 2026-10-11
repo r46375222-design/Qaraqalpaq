@@ -90,6 +90,12 @@
   "category": "Basic Phrases"
  },
  {
+  "kk": "Siz",
+  "ru": "Вы (вежливо)",
+  "en": "You (polite)",
+  "category": "Basic Phrases"
+ },
+ {
   "kk": "Sizler",
   "ru": "Вы",
   "en": "You (plural)",
@@ -264,7 +270,7 @@
   "category": "People & Family"
  },
  {
-  "kk": "Mugallim",
+  "kk": "Muǵallim",
   "ru": "Учитель",
   "en": "Teacher",
   "category": "People & Family"
@@ -291,12 +297,6 @@
   "kk": "Xalıq",
   "ru": "Народ",
   "en": "People / Nation",
-  "category": "People & Family"
- },
- {
-  "kk": "Gońsı",
-  "ru": "Сосед",
-  "en": "Neighbor",
   "category": "People & Family"
  },
  {
@@ -474,21 +474,9 @@
   "category": "Education & IT"
  },
  {
-  "kk": "Ústel",
-  "ru": "Стол",
-  "en": "Table",
-  "category": "Education & IT"
- },
- {
   "kk": "Otarqı",
   "ru": "Стул",
   "en": "Chair",
-  "category": "Education & IT"
- },
- {
-  "kk": "Qagaz",
-  "ru": "Бумага",
-  "en": "Paper",
   "category": "Education & IT"
  },
  {
@@ -504,7 +492,7 @@
   "category": "Education & IT"
  },
  {
-  "kk": "Sızgısh",
+  "kk": "Sızǵısh",
   "ru": "Линейка",
   "en": "Ruler",
   "category": "Education & IT"
@@ -594,12 +582,6 @@
   "category": "Surrounding World"
  },
  {
-  "kk": "Asman",
-  "ru": "Небо",
-  "en": "Sky",
-  "category": "Surrounding World"
- },
- {
   "kk": "Quyash",
   "ru": "Солнце",
   "en": "Sun",
@@ -609,12 +591,6 @@
   "kk": "Ay",
   "ru": "Луна / Месяц",
   "en": "Moon / Month",
-  "category": "Surrounding World"
- },
- {
-  "kk": "Julduz",
-  "ru": "Звезда",
-  "en": "Star",
   "category": "Surrounding World"
  },
  {
@@ -846,12 +822,6 @@
   "category": "Verbs"
  },
  {
-  "kk": "Uqlıw",
-  "ru": "Спать",
-  "en": "To sleep",
-  "category": "Verbs"
- },
- {
   "kk": "Baslaw",
   "ru": "Начинать",
   "en": "To start / To begin",
@@ -978,7 +948,7 @@
   "category": "Business & Analytics"
  },
  {
-  "kk": "Progres",
+  "kk": "Progress",
   "ru": "Прогресс",
   "en": "Progress",
   "category": "Business & Analytics"
@@ -1003,7 +973,7 @@
  },
  {
   "kk": "Keste",
-  "ru": "Таблица / График",
+  "ru": "Таблица / График / Расписание",
   "en": "Table / Schedule",
   "category": "Business & Analytics"
  },
@@ -1050,7 +1020,7 @@
   "category": "Business & Analytics"
  },
  {
-  "kk": "Tájribe",
+  "kk": "Tájiriybe",
   "ru": "Опыт",
   "en": "Experience",
   "category": "Business & Analytics"
@@ -1068,19 +1038,13 @@
   "category": "Business & Analytics"
  },
  {
-  "kk": "Shıgın",
-  "ru": "Расход",
-  "en": "Expense",
-  "category": "Business & Analytics"
- },
- {
   "kk": "Tabıs",
   "ru": "Доход / Успех",
   "en": "Income / Success",
   "category": "Business & Analytics"
  },
  {
-  "kk": "Shartnama",
+  "kk": "Shártnama",
   "ru": "Договор / Контракт",
   "en": "Contract",
   "category": "Business & Analytics"
@@ -1164,12 +1128,6 @@
   "category": "Home & Household"
  },
  {
-  "kk": "Tarqas",
-  "ru": "Расческа",
-  "en": "Comb",
-  "category": "Home & Household"
- },
- {
   "kk": "Útik",
   "ru": "Утюг",
   "en": "Iron",
@@ -1191,12 +1149,6 @@
   "kk": "Pol",
   "ru": "Пол",
   "en": "Floor",
-  "category": "Home & Household"
- },
- {
-  "kk": "Toba",
-  "ru": "Потолок",
-  "en": "Ceiling",
   "category": "Home & Household"
  },
  {
@@ -1248,7 +1200,7 @@
   "category": "Home & Household"
  },
  {
-  "kk": "Shanshıq",
+  "kk": "Shanıshqı",
   "ru": "Вилка",
   "en": "Fork",
   "category": "Home & Household"
@@ -1290,12 +1242,6 @@
   "category": "Food & Drinks"
  },
  {
-  "kk": "Sháy",
-  "ru": "Чай",
-  "en": "Tea",
-  "category": "Food & Drinks"
- },
- {
   "kk": "Sheker",
   "ru": "Сахар",
   "en": "Sugar",
@@ -1320,12 +1266,6 @@
   "category": "Food & Drinks"
  },
  {
-  "kk": "Jumırtqa",
-  "ru": "Яйцо",
-  "en": "Egg",
-  "category": "Food & Drinks"
- },
- {
   "kk": "Alma",
   "ru": "Яблоко",
   "en": "Apple",
@@ -1341,12 +1281,6 @@
   "kk": "Júzim",
   "ru": "Виноград",
   "en": "Grape",
-  "category": "Food & Drinks"
- },
- {
-  "kk": "Qarbız",
-  "ru": "Арбуз",
-  "en": "Watermelon",
   "category": "Food & Drinks"
  },
  {
@@ -1374,27 +1308,9 @@
   "category": "Food & Drinks"
  },
  {
-  "kk": "Pamidor",
-  "ru": "Помидор",
-  "en": "Tomato",
-  "category": "Food & Drinks"
- },
- {
   "kk": "Qıyar",
   "ru": "Огурец",
   "en": "Cucumber",
-  "category": "Food & Drinks"
- },
- {
-  "kk": "Pal",
-  "ru": "Мед",
-  "en": "Honey",
-  "category": "Food & Drinks"
- },
- {
-  "kk": "Sharbat",
-  "ru": "Сок",
-  "en": "Juice",
   "category": "Food & Drinks"
  },
  {
@@ -1428,12 +1344,6 @@
   "category": "Food & Drinks"
  },
  {
-  "kk": "Palw",
-  "ru": "Плов",
-  "en": "Pilaf",
-  "category": "Food & Drinks"
- },
- {
   "kk": "Nan-bulka",
   "ru": "Выпечка",
   "en": "Pastry",
@@ -1464,12 +1374,6 @@
   "category": "Adjectives"
  },
  {
-  "kk": "Biyk",
-  "ru": "Высокий",
-  "en": "High / Tall",
-  "category": "Adjectives"
- },
- {
   "kk": "Pás",
   "ru": "Низкий",
   "en": "Low",
@@ -1485,12 +1389,6 @@
   "kk": "Eski",
   "ru": "Старый (о вещах)",
   "en": "Old (things)",
-  "category": "Adjectives"
- },
- {
-  "kk": "Qarı",
-  "ru": "Старый (о людях)",
-  "en": "Old (people)",
   "category": "Adjectives"
  },
  {
@@ -1524,7 +1422,7 @@
   "category": "Adjectives"
  },
  {
-  "kk": "Issı",
+  "kk": "Íssı",
   "ru": "Горячий",
   "en": "Hot",
   "category": "Adjectives"
@@ -1533,12 +1431,6 @@
   "kk": "Suwıq",
   "ru": "Холодный",
   "en": "Cold",
-  "category": "Adjectives"
- },
- {
-  "kk": "Tatlı",
-  "ru": "Вкусный / Сладкий",
-  "en": "Tasty / Sweet",
   "category": "Adjectives"
  },
  {
@@ -1560,33 +1452,15 @@
   "category": "Adjectives"
  },
  {
-  "kk": "Sulw",
-  "ru": "Красивый",
-  "en": "Beautiful",
-  "category": "Adjectives"
- },
- {
   "kk": "Kúshli",
   "ru": "Сильный",
   "en": "Strong",
   "category": "Adjectives"
  },
  {
-  "kk": "Álpis",
-  "ru": "Слабый",
-  "en": "Weak",
-  "category": "Adjectives"
- },
- {
   "kk": "Bay",
   "ru": "Богатый",
   "en": "Rich",
-  "category": "Adjectives"
- },
- {
-  "kk": "Kedei",
-  "ru": "Бедный",
-  "en": "Poor",
   "category": "Adjectives"
  },
  {
@@ -1680,18 +1554,6 @@
   "category": "Anatomy & Health"
  },
  {
-  "kk": "Tis",
-  "ru": "Зуб",
-  "en": "Tooth",
-  "category": "Anatomy & Health"
- },
- {
-  "kk": "Shosh",
-  "ru": "Волосы",
-  "en": "Hair",
-  "category": "Anatomy & Health"
- },
- {
   "kk": "Moyın",
   "ru": "Шея",
   "en": "Neck",
@@ -1746,12 +1608,6 @@
   "category": "Anatomy & Health"
  },
  {
-  "kk": "Iyn",
-  "ru": "Плечо",
-  "en": "Shoulder",
-  "category": "Anatomy & Health"
- },
- {
   "kk": "Tize",
   "ru": "Колено",
   "en": "Knee",
@@ -1764,7 +1620,7 @@
   "category": "Anatomy & Health"
  },
  {
-  "kk": "Den-sawlıq",
+  "kk": "Densawlıq",
   "ru": "Здоровье",
   "en": "Health",
   "category": "Anatomy & Health"
@@ -1836,12 +1692,6 @@
   "category": "Nature & Animals"
  },
  {
-  "kk": "Pishek",
-  "ru": "Кошка",
-  "en": "Cat",
-  "category": "Nature & Animals"
- },
- {
   "kk": "Tawıq",
   "ru": "Курица",
   "en": "Chicken",
@@ -1878,12 +1728,6 @@
   "category": "Nature & Animals"
  },
  {
-  "kk": "Ayu",
-  "ru": "Медведь",
-  "en": "Bear",
-  "category": "Nature & Animals"
- },
- {
   "kk": "Jılan",
   "ru": "Змея",
   "en": "Snake",
@@ -1899,12 +1743,6 @@
   "kk": "Dárya",
   "ru": "Река",
   "en": "River",
-  "category": "Nature & Animals"
- },
- {
-  "kk": "Toqay",
-  "ru": "Лес",
-  "en": "Forest",
   "category": "Nature & Animals"
  },
  {
@@ -2148,25 +1986,25 @@
   "category": "Numbers"
  },
  {
-  "kk": "Dúyshenbi",
+  "kk": "Dúyshembi",
   "ru": "Понедельник",
   "en": "Monday",
   "category": "Calendar & Time"
  },
  {
-  "kk": "Siyshenbi",
+  "kk": "Siyshembi",
   "ru": "Вторник",
   "en": "Tuesday",
   "category": "Calendar & Time"
  },
  {
-  "kk": "Sárshenbi",
+  "kk": "Sárshembi",
   "ru": "Среда",
   "en": "Wednesday",
   "category": "Calendar & Time"
  },
  {
-  "kk": "Piyshenbi",
+  "kk": "Piyshembi",
   "ru": "Четверг",
   "en": "Thursday",
   "category": "Calendar & Time"
@@ -2178,13 +2016,13 @@
   "category": "Calendar & Time"
  },
  {
-  "kk": "Shenbi",
+  "kk": "Shembi",
   "ru": "Суббота",
   "en": "Saturday",
   "category": "Calendar & Time"
  },
  {
-  "kk": "Ekshenbi",
+  "kk": "Ekshembi",
   "ru": "Воскресенье",
   "en": "Sunday",
   "category": "Calendar & Time"
@@ -2238,7 +2076,7 @@
   "category": "Calendar & Time"
  },
  {
-  "kk": "Sekunt",
+  "kk": "Sekund",
   "ru": "Секунда",
   "en": "Second",
   "category": "Calendar & Time"
@@ -2298,7 +2136,7 @@
   "category": "Clothing & Footwear"
  },
  {
-  "kk": "Paltó",
+  "kk": "Palto",
   "ru": "Пальто",
   "en": "Coat",
   "category": "Clothing & Footwear"
@@ -2748,12 +2586,6 @@
   "category": "Home & Household"
  },
  {
-  "kk": "Almurat",
-  "ru": "Груша",
-  "en": "Pear",
-  "category": "Fruits, Vegetables & Produce"
- },
- {
   "kk": "Shiye",
   "ru": "Вишня",
   "en": "Cherry",
@@ -2790,15 +2622,9 @@
   "category": "Fruits, Vegetables & Produce"
  },
  {
-  "kk": "Írimshik",
+  "kk": "Irimshik",
   "ru": "Сыр",
   "en": "Cheese",
-  "category": "Fruits, Vegetables & Produce"
- },
- {
-  "kk": "Jumuırtqa",
-  "ru": "Яйцо",
-  "en": "Egg",
   "category": "Fruits, Vegetables & Produce"
  },
  {
@@ -2823,12 +2649,6 @@
   "kk": "Tawıq góshi",
   "ru": "Курятина",
   "en": "Chicken meat",
-  "category": "Fruits, Vegetables & Produce"
- },
- {
-  "kk": "Tuz",
-  "ru": "Соль",
-  "en": "Salt",
   "category": "Fruits, Vegetables & Produce"
  },
  {
@@ -2883,12 +2703,6 @@
   "kk": "Malina",
   "ru": "Малина",
   "en": "Raspberry",
-  "category": "Fruits, Vegetables & Produce"
- },
- {
-  "kk": "Sarymsaq",
-  "ru": "Чеснок",
-  "en": "Garlic",
   "category": "Fruits, Vegetables & Produce"
  },
  {
@@ -2976,12 +2790,6 @@
   "category": "Home, Furniture & Household Items"
  },
  {
-  "kk": "Áyna",
-  "ru": "Зеркало",
-  "en": "Mirror",
-  "category": "Home, Furniture & Household Items"
- },
- {
   "kk": "Kórpe",
   "ru": "Одеяло",
   "en": "Blanket",
@@ -3006,12 +2814,6 @@
   "category": "Home, Furniture & Household Items"
  },
  {
-  "kk": "Sopin",
-  "ru": "Мыло",
-  "en": "Soap",
-  "category": "Home, Furniture & Household Items"
- },
- {
   "kk": "Tıs shotkası",
   "ru": "Зубная щетка",
   "en": "Toothbrush",
@@ -3021,24 +2823,6 @@
   "kk": "Tarelka",
   "ru": "Тарелка",
   "en": "Plate",
-  "category": "Home, Furniture & Household Items"
- },
- {
-  "kk": "Shanshqı",
-  "ru": "Вилка",
-  "en": "Fork",
-  "category": "Home, Furniture & Household Items"
- },
- {
-  "kk": "Pishaq",
-  "ru": "Нож",
-  "en": "Knife",
-  "category": "Home, Furniture & Household Items"
- },
- {
-  "kk": "Káse",
-  "ru": "Пиала",
-  "en": "Bowl",
   "category": "Home, Furniture & Household Items"
  },
  {
@@ -3144,7 +2928,7 @@
   "category": "Home, Furniture & Household Items"
  },
  {
-  "kk": "Tarak",
+  "kk": "Taraq",
   "ru": "Расческа",
   "en": "Comb",
   "category": "Home, Furniture & Household Items"
@@ -3198,7 +2982,7 @@
   "category": "Anatomy & Human Body"
  },
  {
-  "kk": "Kókrek",
+  "kk": "Kókirek",
   "ru": "Грудь",
   "en": "Chest",
   "category": "Anatomy & Human Body"
@@ -3294,7 +3078,7 @@
   "category": "Anatomy & Human Body"
  },
  {
-  "kk": "Kındik",
+  "kk": "Kindik",
   "ru": "Пупок",
   "en": "Navel",
   "category": "Anatomy & Human Body"
@@ -3318,7 +3102,7 @@
   "category": "Anatomy & Human Body"
  },
  {
-  "kk": "Alqan",
+  "kk": "Alaqan",
   "ru": "Ладонь",
   "en": "Palm",
   "category": "Anatomy & Human Body"
@@ -3330,7 +3114,7 @@
   "category": "Anatomy & Human Body"
  },
  {
-  "kk": "Jawrın",
+  "kk": "Jawırın",
   "ru": "Лопатка",
   "en": "Shoulder blade",
   "category": "Anatomy & Human Body"
@@ -3381,12 +3165,6 @@
   "kk": "Bult",
   "ru": "Облако",
   "en": "Cloud",
-  "category": "Nature, Weather & Geography"
- },
- {
-  "kk": "Shamal",
-  "ru": "Ветер",
-  "en": "Wind",
   "category": "Nature, Weather & Geography"
  },
  {
@@ -3612,12 +3390,6 @@
   "category": "Nature, Weather & Geography"
  },
  {
-  "kk": "Pısıq",
-  "ru": "Кошка",
-  "en": "Cat",
-  "category": "Animal World"
- },
- {
   "kk": "Eshek",
   "ru": "Осёл",
   "en": "Donkey",
@@ -3636,21 +3408,15 @@
   "category": "Animal World"
  },
  {
-  "kk": "Arslan",
+  "kk": "Arıslan",
   "ru": "Лев",
   "en": "Lion",
   "category": "Animal World"
  },
  {
-  "kk": "Jılbarıs",
+  "kk": "Jolbarıs",
   "ru": "Тигр",
   "en": "Tiger",
-  "category": "Animal World"
- },
- {
-  "kk": "Ayú",
-  "ru": "Медведь",
-  "en": "Bear",
   "category": "Animal World"
  },
  {
@@ -3840,13 +3606,13 @@
   "category": "Animal World"
  },
  {
-  "kk": "Shıgırshıq",
+  "kk": "Shıǵırshıq",
   "ru": "Скворец",
   "en": "Starling",
   "category": "Animal World"
  },
  {
-  "kk": "Jalmauız",
+  "kk": "Jalmawız",
   "ru": "Летучая мышь",
   "en": "Bat",
   "category": "Animal World"
@@ -3864,7 +3630,7 @@
   "category": "City, Buildings & Transport"
  },
  {
-  "kk": "Kitaphana",
+  "kk": "Kitapxana",
   "ru": "Библиотека",
   "en": "Library",
   "category": "City, Buildings & Transport"
@@ -3927,12 +3693,6 @@
   "kk": "Beket",
   "ru": "Остановка",
   "en": "Bus stop",
-  "category": "City, Buildings & Transport"
- },
- {
-  "kk": "Baǵa",
-  "ru": "Цена",
-  "en": "Price",
   "category": "City, Buildings & Transport"
  },
  {
@@ -4044,12 +3804,6 @@
   "category": "Study & Stationery"
  },
  {
-  "kk": "Qalam",
-  "ru": "Карандаш",
-  "en": "Pencil",
-  "category": "Study & Stationery"
- },
- {
   "kk": "Óshirgish",
   "ru": "Ластик",
   "en": "Eraser",
@@ -4086,39 +3840,15 @@
   "category": "Study & Stationery"
  },
  {
-  "kk": "Muallim",
-  "ru": "Учитель",
-  "en": "Teacher",
-  "category": "Study & Stationery"
- },
- {
-  "kk": "Oquwshı",
+  "kk": "Oqıwshı",
   "ru": "Ученик",
   "en": "Student",
-  "category": "Study & Stationery"
- },
- {
-  "kk": "Bahá",
-  "ru": "Оценка",
-  "en": "Grade",
-  "category": "Study & Stationery"
- },
- {
-  "kk": "Imtihan",
-  "ru": "Экзамен",
-  "en": "Exam",
   "category": "Study & Stationery"
  },
  {
   "kk": "Kúndelik",
   "ru": "Дневник",
   "en": "Diary",
-  "category": "Study & Stationery"
- },
- {
-  "kk": "Súret",
-  "ru": "Рисунок",
-  "en": "Picture",
   "category": "Study & Stationery"
  },
  {
@@ -4296,30 +4026,6 @@
   "category": "Basic Verbs"
  },
  {
-  "kk": "Jaziw",
-  "ru": "Писать",
-  "en": "To write",
-  "category": "Basic Verbs"
- },
- {
-  "kk": "Kóriw",
-  "ru": "Видеть",
-  "en": "To see",
-  "category": "Basic Verbs"
- },
- {
-  "kk": "Jeyiw",
-  "ru": "Есть / Кушать",
-  "en": "To eat",
-  "category": "Basic Verbs"
- },
- {
-  "kk": "Uyqlaw",
-  "ru": "Спать",
-  "en": "To sleep",
-  "category": "Basic Verbs"
- },
- {
   "kk": "Oyanıw",
   "ru": "Просыпаться",
   "en": "To wake up",
@@ -4474,12 +4180,6 @@
   "ru": "Терять",
   "en": "To lose",
   "category": "Basic Verbs"
- },
- {
-  "kk": "Qart",
-  "ru": "Старый (о человеке)",
-  "en": "Old (people)",
-  "category": "Descriptive Adjectives"
  },
  {
   "kk": "Jıllı",
@@ -4800,7 +4500,7 @@
   "category": "Family, People & Professions"
  },
  {
-  "kk": "Prezdent",
+  "kk": "Prezident",
   "ru": "Президент",
   "en": "President",
   "category": "Family, People & Professions"
@@ -4812,7 +4512,7 @@
   "category": "Family, People & Professions"
  },
  {
-  "kk": "Baslık",
+  "kk": "Baslıq",
   "ru": "Начальник / Босс",
   "en": "Boss",
   "category": "Family, People & Professions"
@@ -4872,12 +4572,6 @@
   "category": "Time, Seasons & Measurements"
  },
  {
-  "kk": "Kestesi",
-  "ru": "Расписание / График",
-  "en": "Schedule",
-  "category": "Time, Seasons & Measurements"
- },
- {
   "kk": "Santimetr",
   "ru": "Сантиметр",
   "en": "Centimeter",
@@ -4896,13 +4590,13 @@
   "category": "Time, Seasons & Measurements"
  },
  {
-  "kk": "Gram",
+  "kk": "Gramm",
   "ru": "Грамм",
   "en": "Gram",
   "category": "Time, Seasons & Measurements"
  },
  {
-  "kk": "Kilogram",
+  "kk": "Kilogramm",
   "ru": "Килограмм",
   "en": "Kilogram",
   "category": "Time, Seasons & Measurements"
@@ -5043,12 +4737,6 @@
   "kk": "Sebebi",
   "ru": "Причина",
   "en": "Reason",
-  "category": "Abstract Concepts & Feelings"
- },
- {
-  "kk": "Nátije",
-  "ru": "Результат",
-  "en": "Result",
   "category": "Abstract Concepts & Feelings"
  },
  {
@@ -5484,12 +5172,6 @@
   "category": "Nature & Agriculture"
  },
  {
-  "kk": "Tuxım",
-  "ru": "Семя",
-  "en": "Seed",
-  "category": "Nature & Agriculture"
- },
- {
   "kk": "Puta",
   "ru": "Куст",
   "en": "Bush",
@@ -5685,12 +5367,6 @@
   "kk": "Nawqas",
   "ru": "Пациент / Больной",
   "en": "Patient",
-  "category": "Medicine & Health"
- },
- {
-  "kk": "Densaqlıq",
-  "ru": "Здоровье",
-  "en": "Health",
   "category": "Medicine & Health"
  },
  {
@@ -6570,7 +6246,7 @@
   "category": "Adjectives"
  },
  {
-  "kk": "Iǵal",
+  "kk": "Íǵal",
   "ru": "Влажный",
   "en": "Wet / Damp",
   "category": "Adjectives"
@@ -7698,12 +7374,6 @@
   "category": "Fruits, Vegetables & Produce"
  },
  {
-  "kk": "Iyt",
-  "ru": "Собака",
-  "en": "Dog",
-  "category": "Animal World"
- },
- {
   "kk": "Pıshıq",
   "ru": "Кошка",
   "en": "Cat",
@@ -7797,12 +7467,6 @@
   "kk": "Oyın",
   "ru": "Игра",
   "en": "Game",
-  "category": "Abstract Concepts & Feelings"
- },
- {
-  "kk": "Dostıq",
-  "ru": "Дружба",
-  "en": "Friendship",
   "category": "Abstract Concepts & Feelings"
  },
  {

@@ -20,3 +20,10 @@ liveblocks.io_.png
 
 # Files Claude delivers into the chat get mirrored here — never publish them
 Claude outputs/
+
+# Big language data for Claude's spelling checks (Dilmash corpus etc.) — never publish
+*.parquet
+
+# The source spreadsheet of the dictionary stays on Musa's computer — the site reads public/data/words.json
+# (v132; it was downloadable from the live site). Already tracked, so once: git rm --cached "Karakalpak_Dictionary_Database.xlsx"
+Karakalpak_Dictionary_Database.xlsx

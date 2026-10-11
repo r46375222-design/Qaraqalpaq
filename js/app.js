@@ -51,12 +51,12 @@
     'hero.sub': 'An instant translator, dictionary, flashcards and quizzes built for a new generation of learners — fast, bold, and actually fun.',
     'hero.try': 'Try the Translator', 'cta.exploreDict': 'Explore the Dictionary',
     'stat.words': 'Words', 'stat.categories': 'Categories', 'stat.languages': 'Languages',
-    'home.exploreAll': 'Explore all 1,305 words in the dictionary →',
+    'home.exploreAll': 'Explore all 1,249 words in the dictionary →',
     'home.sozle': "<strong>New — Sózle:</strong> the Karakalpak word game. Guess today's word in 6 tries →",
     'proof.caption': 'Just launched — be among the <strong>first learners</strong> of Qaraqalpaq online',
     'proof.words': 'Real words, checked by a native speaker', 'proof.waiting': 'Waiting for your feedback', 'proof.tell': 'Tell us what you think —',
     'show.title': 'See it in action', 'show.sub': 'A quick look at the dictionary, flashcards and quiz.',
-    'show.dictTitle': 'Dictionary & Translator', 'show.dictSub': '1,305 words — instant translation both ways',
+    'show.dictTitle': 'Dictionary & Translator', 'show.dictSub': '1,249 words — instant translation both ways',
     'show.flashTitle': 'Flashcards', 'show.flashSub': 'Flip to memorize faster', 'show.quizTitle': 'Quiz', 'show.quizSub': 'Test yourself instantly',
     'phone.flashTitle': 'Master words with smart Flashcards',
     'phone.flashText': 'Flip through real Karakalpak vocabulary and build recall with instant English & Russian translations.',
@@ -64,7 +64,7 @@
     'phone.quizText': 'Four options, one right answer. Track your streak and score as you grow from beginner to fluent.',
     'feat.title': 'Everything you need to learn Qaraqalpaq', 'feat.sub': 'One simple toolkit, built for fast progress.',
     'feat.translator': 'Instant Translator', 'feat.translatorText': 'Auto-detects Qaraqalpaq, English or Russian.',
-    'feat.words': '1,305 Words', 'feat.wordsText': 'Karakalpak, English and Russian in one place.',
+    'feat.words': '1,249 Words', 'feat.wordsText': 'Karakalpak, English and Russian in one place.',
     'feat.flash': 'Smart Flashcards', 'feat.flashText': 'Flip cards to memorize faster.',
     'feat.quiz': 'Quick Quiz', 'feat.quizText': 'Test your knowledge instantly.',
     'cta.title': 'Ready to start learning?',
@@ -161,6 +161,8 @@
     'tip.game.keysTouch': 'Tap the letters — á ǵ ı ń ó ú have their own keys — then ENTER.',
     'tip.game.hint': 'Stuck? The hint shows what the word means.',
     'tip.game.free': 'Done for today? Play a random word — it does not change your stats.',
+    // 404.html (v132)
+    'nf.title': 'Page not found', 'nf.text': 'The link may be old or mistyped — but all the words are still here.', 'nf.home': 'Back to the home page',
   };
   // Russian, built in portion by portion after Musa's "ок" (tone «ты», gender-neutral wording).
   const STRINGS_RU = {
@@ -185,7 +187,7 @@
     'stat.words': 'Слова',
     'stat.categories': 'Категории',
     'stat.languages': 'Языки',
-    'home.exploreAll': 'Открой все 1 305 слов в словаре →',
+    'home.exploreAll': 'Открой все 1 249 слов в словаре →',
     'home.sozle': '<strong>Новое — Sózle:</strong> игра в каракалпакские слова. Угадай слово дня за 6 попыток →',
     'proof.caption': 'Мы только запустились — будь среди <strong>первых</strong>, кто учит каракалпакский онлайн',
     'proof.words': 'Настоящие слова, проверенные носителем языка',
@@ -194,7 +196,7 @@
     'show.title': 'Посмотри в деле',
     'show.sub': 'Коротко: словарь, карточки и квиз.',
     'show.dictTitle': 'Словарь и переводчик',
-    'show.dictSub': '1 305 слов — мгновенный перевод в обе стороны',
+    'show.dictSub': '1 249 слов — мгновенный перевод в обе стороны',
     'show.flashTitle': 'Карточки',
     'show.flashSub': 'Переворачивай и запоминай быстрее',
     'show.quizTitle': 'Квиз',
@@ -207,7 +209,7 @@
     'feat.sub': 'Простой набор — для быстрого прогресса.',
     'feat.translator': 'Мгновенный переводчик',
     'feat.translatorText': 'Сам узнаёт каракалпакский, английский и русский.',
-    'feat.words': '1 305 слов',
+    'feat.words': '1 249 слов',
     'feat.wordsText': 'Каракалпакский, английский и русский в одном месте.',
     'feat.flash': 'Умные карточки',
     'feat.flashText': 'Переворачивай карточки и запоминай быстрее.',
@@ -317,7 +319,7 @@
     'sozle.streak': 'Серия: {n}',
     'sozle.enter': 'ВВОД',
     'a11y.backspace': 'Стереть букву',
-    'sozle.short': 'Не хватает букв',
+    'sozle.short': 'Нужно 5 букв',   // v132, Musa (was «Не хватает букв»)
     'sozle.practice': 'тренировка',
     'sozle.means': 'Перевод: {en} · {ru}',   // №29
     'sozle.cheer1': 'Гениально!',
@@ -372,10 +374,14 @@
     'tip.quiz.options': 'Выбери правильный перевод — верный только один из 4.',
     'tip.quiz.top': 'Твой счёт и серия верных ответов подряд.',
     'tip.game.board': 'Шесть попыток, чтобы угадать слово из 5 букв: <i class="tour-swatch is-correct"></i> буква на своём месте, <i class="tour-swatch is-present"></i> не на своём.',
-    'tip.game.keys': "Печатай на своей клавиатуре, в любой раскладке: для á ǵ ı ń ó ú нажми букву, а потом <kbd>'</kbd>.",
+    'tip.game.keys': "Печатай на своей клавиатуре, в любой раскладке: для á ǵ ı ń ó ú нажми букву, а потом <kbd>'</kbd> (в русской раскладке — Э).",   // v132, Musa
     'tip.game.keysTouch': 'Нажимай на буквы (у á ǵ ı ń ó ú свои клавиши), потом ВВОД.',   // №66
     'tip.game.hint': 'Не получается? Подсказка покажет, что значит слово.',
     'tip.game.free': 'На сегодня всё? Сыграй со случайным словом — на статистику это не влияет.',
+    // 404.html (v132)
+    'nf.title': 'Такой страницы нет',
+    'nf.text': 'Ссылка устарела или в ней опечатка — но все слова на месте.',
+    'nf.home': 'На главную',
   };
   const STRINGS = { en: STRINGS_EN, ru: STRINGS_RU };
   // display names of the 48 categories, by their English key (PORTION 4, the advisor's
@@ -568,6 +574,63 @@
 
   let PROGRESS = loadProgress();
 
+  // DICTIONARY CLEANUP v132: 33 words got a new spelling, and a word's id is
+  // "category::kk" — so "learned" and the quiz counts of the old spelling move to the new one,
+  // once (idempotent: an old id that is no longer there is simply not found).
+  const WORD_ID_RENAMES = {
+    "People & Family::Mugallim": "People & Family::Muǵallim",
+    "Home, Furniture & Household Items::Tarak": "Home, Furniture & Household Items::Taraq",
+    "Home & Household::Shanshıq": "Home & Household::Shanıshqı",
+    "Anatomy & Health::Den-sawlıq": "Anatomy & Health::Densawlıq",
+    "Calendar & Time::Dúyshenbi": "Calendar & Time::Dúyshembi",
+    "Calendar & Time::Siyshenbi": "Calendar & Time::Siyshembi",
+    "Calendar & Time::Sárshenbi": "Calendar & Time::Sárshembi",
+    "Calendar & Time::Piyshenbi": "Calendar & Time::Piyshembi",
+    "Calendar & Time::Shenbi": "Calendar & Time::Shembi",
+    "Calendar & Time::Ekshenbi": "Calendar & Time::Ekshembi",
+    "Anatomy & Human Body::Kókrek": "Anatomy & Human Body::Kókirek",
+    "Animal World::Jılbarıs": "Animal World::Jolbarıs",
+    "City, Buildings & Transport::Kitaphana": "City, Buildings & Transport::Kitapxana",
+    "Study & Stationery::Oquwshı": "Study & Stationery::Oqıwshı",
+    "Education & IT::Sızgısh": "Education & IT::Sızǵısh",
+    "Animal World::Shıgırshıq": "Animal World::Shıǵırshıq",
+    "Animal World::Jalmauız": "Animal World::Jalmawız",
+    "Animal World::Arslan": "Animal World::Arıslan",
+    "Family, People & Professions::Baslık": "Family, People & Professions::Baslıq",
+    "Family, People & Professions::Prezdent": "Family, People & Professions::Prezident",
+    "Clothing & Footwear::Paltó": "Clothing & Footwear::Palto",
+    "Business & Analytics::Tájribe": "Business & Analytics::Tájiriybe",
+    "Business & Analytics::Shartnama": "Business & Analytics::Shártnama",
+    "Anatomy & Human Body::Jawrın": "Anatomy & Human Body::Jawırın",
+    "Anatomy & Human Body::Alqan": "Anatomy & Human Body::Alaqan",
+    "Anatomy & Human Body::Kındik": "Anatomy & Human Body::Kindik",
+    "Business & Analytics::Progres": "Business & Analytics::Progress",
+    "Calendar & Time::Sekunt": "Calendar & Time::Sekund",
+    "Time, Seasons & Measurements::Gram": "Time, Seasons & Measurements::Gramm",
+    "Time, Seasons & Measurements::Kilogram": "Time, Seasons & Measurements::Kilogramm",
+    "Adjectives::Issı": "Adjectives::Íssı",
+    "Adjectives::Iǵal": "Adjectives::Íǵal",
+    "Fruits, Vegetables & Produce::Írimshik": "Fruits, Vegetables & Produce::Irimshik",
+  };
+  (function migrateIds() {
+    let moved = 0;
+    for (const store of [PROGRESS.learned, PROGRESS.quizCorrect]) {
+      if (!store) continue;
+      for (const [from, to] of Object.entries(WORD_ID_RENAMES)) {
+        if (!(from in store)) continue;
+        if (!(to in store)) store[to] = store[from];
+        delete store[from];
+        moved++;
+      }
+    }
+    if (moved) saveProgress();
+  })();
+  // ids of the words that exist now (filled when words.json has arrived): a learned word that
+  // was later DELETED from the dictionary stays in storage but is never counted, so
+  // "learned" can never be more than the words there are
+  let WORD_IDS = null;
+  const countsAsWord = id => !WORD_IDS || WORD_IDS.has(id);
+
   function saveProgress() {
     try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(PROGRESS)); } catch (e) {}
   }
@@ -638,11 +701,11 @@
 
   function wordsLearnedToday() {
     const today = todayStr();
-    return Object.values(PROGRESS.learned)
-      .filter(e => localDateStr(new Date(e.at)) === today).length;
+    return Object.entries(PROGRESS.learned)
+      .filter(([id, e]) => countsAsWord(id) && localDateStr(new Date(e.at)) === today).length;
   }
 
-  function totalWordsLearned() { return Object.keys(PROGRESS.learned).length; }
+  function totalWordsLearned() { return Object.keys(PROGRESS.learned).filter(countsAsWord).length; }
 
   function renderProgressWidget() {
     const el = $('#progressWidget');
@@ -815,11 +878,12 @@
   }
 
   // ===== LOAD DATA =====
-  fetch('public/data/words.json')
+  fetch('/public/data/words.json')   // from the root: 404.html can be shown at any depth (v132)
     .then(r => r.json())
     .then(data => {
       WORDS = data;
       CATEGORIES = Array.from(new Set(WORDS.map(w => w.category))).sort();
+      WORD_IDS = new Set(WORDS.map(wordId));   // learned words that were deleted do not count (v132)
       init();
     })
     .catch(err => {
@@ -954,6 +1018,15 @@
 
     window.addEventListener('resize', returnToActive, { passive: true });
     LANG_REDRAW.push(returnToActive);   // the links change width with the language
+    // v132: the first placing above measures the links in the FALLBACK font when Montserrat
+    // is still on its way (up to ~30px off on a first visit). Place the light again once the
+    // fonts are in — and whenever another font arrives later (the Cyrillic subset after a
+    // switch to RU) — unless the mouse is on the links right now.
+    if (document.fonts) {
+      const again = () => { if (!navLinks.matches(':hover')) returnToActive(); };
+      if (document.fonts.ready) document.fonts.ready.then(again);
+      if (document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', again);
+    }
   }
 
   // ===== NAV =====
@@ -1671,6 +1744,10 @@
   // which is no longer needed). A word added to words.json later can be TYPED
   // as a guess (guesses are not checked against a list) but is never an answer. To add
   // answers one day, append them at the END: days before #358 stay the same.
+  // DICTIONARY CLEANUP v132 (Musa): a word whose SPELLING was corrected is corrected here too
+  // and keeps its day (tarak → taraq #221, paltó → palto #120). Alqan became Alaqan — six
+  // letters, it cannot be an answer — so 'alqan' stays as it was and, like the 17 deleted
+  // words, finds no entry: its day takes the next word (see sozleAnswerFor).
   const SOZLE_ANSWERS = (
     'qulaq ásten tekst qızıq aǵash qızıl alsaq urlaw qaqpa qońır kútiw súlgi jótel qurıw dáliz qoyan ' +
     'tegis erkin vanna dárya tuxım uqsas bilek kórpe júzıq qırıq durıs sawaq bazar tamır sábiz toǵız ' +
@@ -1679,13 +1756,13 @@
     'temir shosh taksı qayıs qısqa kúliw badam jaqsı tufli jipek ókshe gúreń jeńiw burın qaǵaz arqan ' +
     'tozań qatıq bawır tuwrı tsifr murın moyın shege juwan erteń samal filtr ǵarrı shiye poezd jiraf ' +
     'qayıq dúken hayal eshek ústel minez jiyen mekan júriw mıyıq kesiw satıw pirog segiz qalta árman ' +
-    'limon tósek buzıw turıw qalas jáhán aqsha paltó jıllı ashıw seziw qonaq túnde júziw keliw jalın ' +
+    'limon tósek buzıw turıw qalas jáhán aqsha palto jıllı ashıw seziw qonaq túnde júziw keliw jalın ' +
     'boyaw seniw kamod xalat aspaz kóshe kitap qazan jılan semiz kedey kirpi qarjı beriw ertek jılǵa ' +
     'mápli gubka sıyır gúman balta bulaq palaw keste palız tenge qosıq gúmis tolıq oylaw tereń álsiz ' +
     'geziw teńiz aldaw bolǵa saray yarım úńgir kóriw truba jılwı jemis jaman awqat banan dáwir piyaz ' +
     'alpıs karta apayı eshki mánti payda múshe aqlıq tólew sanaw ekran balıq kómir izlew rayon keshe ' +
     'ishek qutan qayǵı rámká jaziw sulıw zárúr tuman lampa taban báhár toqay jaqın músin toǵay saqal ' +
-    'tigiw qıyın tosap sızıw úlken tumba hápte kedei uqlıw súyek boran tutıw tarak túrme qawın altın ' +
+    'tigiw qıyın tosap sızıw úlken tumba hápte kedei uqlıw súyek boran tutıw taraq túrme qawın altın ' +
     'ashıq yubka saxna orbit máyek bilim parta rásim kúyew beket pikir waqıt jasıl dawıl polka kelin ' +
     'oshaq áwmet zebra biyik arzan jelim polat ushıw bilet júrek jeńil qalam sorpa súdyá kamin boǵaz ' +
     'tırna nawda gilem túyme sebet súyiw orman ziyan gońsı sirop pıste kishi soraw sopin tiyiw juwap ' +
