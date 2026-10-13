@@ -46,17 +46,21 @@
     'footer.tagline': 'Keeping the Karakalpak language alive, one word at a time.', 'footer.questions': 'Questions?',
     'footer.guide': 'Guide', 'footer.guideTitle': 'A quick tour of this page',
     // home
-    'hero.tag': 'Tili — your gateway to Karakalpak',
+    // v133 (the advisor): "Tili" alone means nothing — the full name. Two nowrap parts, so a narrow
+    // phone breaks the line only after the name
+    'hero.tag': '<span class="ht-tag">Qaraqalpaq Tili</span> <span class="ht-tag">— your gateway to Karakalpak</span>',
     'hero.title': '<span class="ht-l">Learn</span> <span class="hero-accent ht-l">Qaraqalpaq</span> <span class="ht-l">the modern way.</span>',
     'hero.sub': 'An instant translator, dictionary, flashcards and quizzes built for a new generation of learners — fast, bold, and actually fun.',
     'hero.try': 'Try the Translator', 'cta.exploreDict': 'Explore the Dictionary',
     'stat.words': 'Words', 'stat.categories': 'Categories', 'stat.languages': 'Languages',
-    'home.exploreAll': 'Explore all 1,249 words in the dictionary →',
+    'home.exploreAll': 'Explore all 1,251 words in the dictionary →',
     'home.sozle': "<strong>New — Sózle:</strong> the Karakalpak word game. Guess today's word in 6 tries →",
     'proof.caption': 'Just launched — be among the <strong>first learners</strong> of Qaraqalpaq online',
-    'proof.words': 'Real words, checked by a native speaker', 'proof.waiting': 'Waiting for your feedback', 'proof.tell': 'Tell us what you think —',
+    'proof.words': 'Real words, checked by a native speaker', 'proof.tell': 'Tell us what you think —',
+    // the rating (v133): "★ 4.8" + "12 ratings", or "Rate the site" while there is none
+    'proof.rate': 'Rate the site', 'proof.ratingCount': '{n} {ratings}', 'proof.ratings.one': 'rating', 'proof.ratings.many': 'ratings',
     'show.title': 'See it in action', 'show.sub': 'A quick look at the dictionary, flashcards and quiz.',
-    'show.dictTitle': 'Dictionary & Translator', 'show.dictSub': '1,249 words — instant translation both ways',
+    'show.dictTitle': 'Dictionary & Translator', 'show.dictSub': '1,251 words — instant translation both ways',
     'show.flashTitle': 'Flashcards', 'show.flashSub': 'Flip to memorize faster', 'show.quizTitle': 'Quiz', 'show.quizSub': 'Test yourself instantly',
     'phone.flashTitle': 'Master words with smart Flashcards',
     'phone.flashText': 'Flip through real Karakalpak vocabulary and build recall with instant English & Russian translations.',
@@ -64,7 +68,7 @@
     'phone.quizText': 'Four options, one right answer. Track your streak and score as you grow from beginner to fluent.',
     'feat.title': 'Everything you need to learn Qaraqalpaq', 'feat.sub': 'One simple toolkit, built for fast progress.',
     'feat.translator': 'Instant Translator', 'feat.translatorText': 'Auto-detects Qaraqalpaq, English or Russian.',
-    'feat.words': '1,249 Words', 'feat.wordsText': 'Karakalpak, English and Russian in one place.',
+    'feat.words': '1,251 Words', 'feat.wordsText': 'Karakalpak, English and Russian in one place.',
     'feat.flash': 'Smart Flashcards', 'feat.flashText': 'Flip cards to memorize faster.',
     'feat.quiz': 'Quick Quiz', 'feat.quizText': 'Test your knowledge instantly.',
     'cta.title': 'Ready to start learning?',
@@ -103,6 +107,13 @@
     'quiz.score': 'Score', 'quiz.streak': 'Streak', 'quiz.answered': 'Answered', 'quiz.start': 'Start Quiz',
     'quiz.whatMean': 'What does this mean?', 'quiz.next': 'Next Question',
     'quiz.correct': 'Correct!', 'quiz.wrong': 'Not quite — the answer is {answer}',
+    // quiz rounds (v133)
+    'quiz.question': 'Question', 'quiz.toResult': 'See the results',
+    'quiz.result': '{n} of {total}',
+    'quiz.perfect': 'Perfect round — every answer right!', 'quiz.good': 'Great round!',
+    'quiz.low': 'Every round makes the words stick — one more?',
+    'quiz.best': 'Best round: {n} of {total}', 'quiz.newBest': 'New record!',
+    'quiz.again': 'One more round', 'quiz.other': 'Another category',
     // Sózle
     'game.how': "Guess the Karakalpak word in 6 tries. Green = right spot, yellow = wrong spot. New word every day — and you learn its meaning when you're done.",
     'sozle.hint': 'Hint', 'sozle.random': 'Random word', 'a11y.board': 'Game board', 'a11y.keyboard': 'Keyboard',
@@ -113,6 +124,9 @@
     'tr.lang.kk': 'Qaraqalpaq', 'tr.lang.en': 'English', 'tr.lang.ru': 'Русский',
     'tr.to.kk': 'English · Русский',   // what a Karakalpak word is translated into
     'tr.find': 'Find in dictionary →', 'tr.more': 'More matches:', 'tr.didYouMean': 'Did you mean:',
+    // ⇄ (v133)
+    'tr.swap': 'Swap the languages', 'tr.swapSentence': "Whole sentences can't be swapped yet",
+    'tr.swapEmpty': 'Type a word first', 'tr.swapNone': 'Nothing to swap — this word is not in the dictionary',
     'tr.noMatch': "No exact match — this word isn't in the dictionary yet ({n} words and growing).",
     // dictionary, progress, flashcards, quiz
     'dict.count': 'Showing {n} of {total} {words}', 'dict.words.one': 'word', 'dict.words.many': 'words',
@@ -153,9 +167,10 @@
     'tip.flash.swipe': 'Swipe the card left or right — or tap the arrows — for another word.',
     'tip.quiz.lang': 'Choose the language of the answers: English or Русский.',
     'tip.quiz.cat': 'Pick one topic — or keep all categories.',
-    'tip.quiz.start': 'Every question gives you 4 options, one of them is right.',
+    'tip.quiz.start': 'A round is 10 questions with 4 options each — one of them is right.',
     'tip.quiz.options': 'Pick the right translation — one of the 4 is correct.',
-    'tip.quiz.top': 'Your score, and your streak of right answers in a row.',
+    'tip.quiz.top': 'Which question of the round this is, your score and your streak of right answers.',
+    'tip.quiz.result': 'Play one more round — or pick another category.',
     'tip.game.board': 'Six tries to guess the 5-letter word: <i class="tour-swatch is-correct"></i> right spot, <i class="tour-swatch is-present"></i> wrong spot.',
     'tip.game.keys': "Type on your own keyboard, in any layout — for á ǵ ı ń ó ú press the letter, then <kbd>'</kbd>.",
     'tip.game.keysTouch': 'Tap the letters — á ǵ ı ń ó ú have their own keys — then ENTER.',
@@ -179,7 +194,7 @@
     'footer.questions': 'Есть вопросы?',
     'footer.guide': 'Подсказки',
     'footer.guideTitle': 'Короткая экскурсия по странице',
-    'hero.tag': 'Tili — твой путь в каракалпакский',
+    'hero.tag': '<span class="ht-tag">Qaraqalpaq Tili</span> <span class="ht-tag">— твой путь в каракалпакский</span>',   // v133
     'hero.title': '<span class="ht-l">Учи</span> <span class="hero-accent ht-l">каракалпакский</span> <span class="ht-l">по-новому.</span>',
     'hero.sub': 'Мгновенный переводчик, словарь, карточки и квизы для нового поколения — быстро, ярко и по-настоящему весело.',
     'hero.try': 'Попробуй переводчик',
@@ -187,16 +202,20 @@
     'stat.words': 'Слова',
     'stat.categories': 'Категории',
     'stat.languages': 'Языки',
-    'home.exploreAll': 'Открой все 1 249 слов в словаре →',
+    'home.exploreAll': 'Открой все 1 251 слово в словаре →',
     'home.sozle': '<strong>Новое — Sózle:</strong> игра в каракалпакские слова. Угадай слово дня за 6 попыток →',
     'proof.caption': 'Мы только запустились — будь среди <strong>первых</strong>, кто учит каракалпакский онлайн',
     'proof.words': 'Настоящие слова, проверенные носителем языка',
-    'proof.waiting': 'Ждём твою оценку',
+    'proof.rate': 'Оцени сайт',                 // v133: the rating instead of «0/5 · Ждём твою оценку»
+    'proof.ratingCount': '{n} {ratings}',
+    'proof.ratings.one': 'оценка',
+    'proof.ratings.few': 'оценки',
+    'proof.ratings.many': 'оценок',
     'proof.tell': 'Расскажи, что думаешь —',
     'show.title': 'Посмотри в деле',
     'show.sub': 'Коротко: словарь, карточки и квиз.',
     'show.dictTitle': 'Словарь и переводчик',
-    'show.dictSub': '1 249 слов — мгновенный перевод в обе стороны',
+    'show.dictSub': '1 251 слово — мгновенный перевод в обе стороны',
     'show.flashTitle': 'Карточки',
     'show.flashSub': 'Переворачивай и запоминай быстрее',
     'show.quizTitle': 'Квиз',
@@ -209,7 +228,7 @@
     'feat.sub': 'Простой набор — для быстрого прогресса.',
     'feat.translator': 'Мгновенный переводчик',
     'feat.translatorText': 'Сам узнаёт каракалпакский, английский и русский.',
-    'feat.words': '1 249 слов',
+    'feat.words': '1 251 слово',
     'feat.wordsText': 'Каракалпакский, английский и русский в одном месте.',
     'feat.flash': 'Умные карточки',
     'feat.flashText': 'Переворачивай карточки и запоминай быстрее.',
@@ -285,12 +304,27 @@
     'card.tapBack': 'Нажми, чтобы вернуться',
     'btn.learned': 'Выучено',
     'quiz.wrong': 'Не совсем — правильный ответ: {answer}',
+    // раунды квиза (v133)
+    'quiz.question': 'Вопрос',
+    'quiz.toResult': 'Итоги раунда',
+    'quiz.result': '{n} из {total}',
+    'quiz.perfect': 'Идеальный раунд — все ответы верные!',
+    'quiz.good': 'Отличный раунд!',
+    'quiz.low': 'С каждым раундом слова запоминаются лучше — ещё один?',
+    'quiz.best': 'Лучший раунд: {n} из {total}',
+    'quiz.newBest': 'Новый рекорд!',
+    'quiz.again': 'Ещё раунд',
+    'quiz.other': 'Другая категория',
     // PORTION 3 (strings app.js builds), approved by Musa 2026-10-10 with edits (№6, №29, №47, №49, №51, №58, №66)
     'tr.lang.kk': 'Каракалпакский',
     'tr.lang.en': 'Английский',
     'tr.lang.ru': 'Русский',
     'tr.to.kk': 'Русский · Английский',
     'tr.find': 'Найти в словаре →',
+    'tr.swap': 'Поменять языки местами',                                   // ⇄ (v133)
+    'tr.swapSentence': 'Целые предложения поменять местами пока нельзя',
+    'tr.swapEmpty': 'Сначала напиши слово',
+    'tr.swapNone': 'Менять нечего — этого слова нет в словаре',
     'tr.more': 'Ещё варианты:',
     'tr.didYouMean': 'Может, имелось в виду:',
     'tr.noMatch': 'Этого слова в словаре пока нет — мы его постоянно пополняем.',   // №6: no number on purpose
@@ -370,9 +404,10 @@
     'tip.flash.swipe': 'Смахни карточку вбок или нажми на стрелку — будет другое слово.',   // №58
     'tip.quiz.lang': 'Выбери язык ответов: английский или русский.',
     'tip.quiz.cat': 'Выбери одну тему — или оставь все категории.',
-    'tip.quiz.start': 'В каждом вопросе 4 варианта, и только один верный.',
+    'tip.quiz.start': 'Раунд — 10 вопросов, в каждом 4 варианта, верный — один.',   // v133
     'tip.quiz.options': 'Выбери правильный перевод — верный только один из 4.',
-    'tip.quiz.top': 'Твой счёт и серия верных ответов подряд.',
+    'tip.quiz.top': 'Номер вопроса в раунде, твой счёт и серия верных ответов подряд.',   // v133
+    'tip.quiz.result': 'Сыграй ещё раунд — или выбери другую категорию.',
     'tip.game.board': 'Шесть попыток, чтобы угадать слово из 5 букв: <i class="tour-swatch is-correct"></i> буква на своём месте, <i class="tour-swatch is-present"></i> не на своём.',
     'tip.game.keys': "Печатай на своей клавиатуре, в любой раскладке: для á ǵ ı ń ó ú нажми букву, а потом <kbd>'</kbd> (в русской раскладке — Э).",   // v132, Musa
     'tip.game.keysTouch': 'Нажимай на буквы (у á ǵ ı ń ó ú свои клавиши), потом ВВОД.',   // №66
@@ -542,7 +577,7 @@
   }
   // one-shot classes leave again when their animation ends (keyed by keyframes name, so a
   // button's sheen ending never cuts a pop short) — keep in step with the mo- names in the CSS
-  const ONE_SHOT = { 'mo-bump': 'bump', 'mo-pop': 'pop', 'mo-badge': 'pop', 'mo-q-in': 'q-in', 'mo-opt-in': 'opt-in', 'mo-card-in': 'card-in', 'mo-in-next': 'in-next', 'mo-in-prev': 'in-prev', 'mo-shuffle': 'shuffled', 'mo-typed': 'just-typed', 'mo-shake': 'shake', 'mo-msg-in': 'msg-in', 'mo-panel-in': 'panel-in', 'mo-tr-new': 'tr-new' };
+  const ONE_SHOT = { 'mo-bump': 'bump', 'mo-pop': 'pop', 'mo-badge': 'pop', 'mo-q-in': 'q-in', 'mo-opt-in': 'opt-in', 'mo-card-in': 'card-in', 'mo-in-next': 'in-next', 'mo-in-prev': 'in-prev', 'mo-shuffle': 'shuffled', 'mo-typed': 'just-typed', 'mo-shake': 'shake', 'mo-msg-in': 'msg-in', 'mo-panel-in': 'panel-in', 'mo-tr-new': 'tr-new', 'mo-spring': 'spring' };
   document.addEventListener('animationend', e => {
     const cls = ONE_SHOT[e.animationName];
     if (cls && !e.pseudoElement && e.target.classList) e.target.classList.remove(cls);
@@ -559,7 +594,8 @@
   const PROGRESS_KEY = 'qaraqalpaq_progress';
 
   function defaultProgress() {
-    return { learned: {}, quizCorrect: {}, quizBestScore: 0, streak: 0, lastPracticeDate: null };
+    // quizBestRound {score, size} (v133) replaced quizBestScore (the best score of the old endless quiz, no longer read)
+    return { learned: {}, quizCorrect: {}, quizBestRound: null, streak: 0, lastPracticeDate: null };
   }
 
   function loadProgress() {
@@ -611,6 +647,9 @@
     "Adjectives::Issı": "Adjectives::Íssı",
     "Adjectives::Iǵal": "Adjectives::Íǵal",
     "Fruits, Vegetables & Produce::Írimshik": "Fruits, Vegetables & Produce::Irimshik",
+    // v133 (the advisor, by the Karakalpak Wikipedia)
+    "Adjectives::Álsiz": "Adjectives::Hálsiz",
+    "City & Transport::Emxana": "City & Transport::Emlewxana",
   };
   (function migrateIds() {
     let moved = 0;
@@ -692,13 +731,6 @@
     recordPractice();
   }
 
-  function updateQuizBestScore(score) {
-    if (score > (PROGRESS.quizBestScore || 0)) {
-      PROGRESS.quizBestScore = score;
-      saveProgress();
-    }
-  }
-
   function wordsLearnedToday() {
     const today = todayStr();
     return Object.entries(PROGRESS.learned)
@@ -710,7 +742,7 @@
   function renderProgressWidget() {
     const el = $('#progressWidget');
     if (!el) return;
-    const nums = [wordsLearnedToday(), totalWordsLearned(), currentStreak(), PROGRESS.quizBestScore || 0];
+    const nums = [wordsLearnedToday(), totalWordsLearned(), currentStreak(), (PROGRESS.quizBestRound && PROGRESS.quizBestRound.score) || 0];   // v133: the best ROUND
     // a number that went up since the last drawing gets a short bump (never on page load)
     const prev = renderProgressWidget.last;
     renderProgressWidget.last = nums;
@@ -927,6 +959,7 @@
     if ($('.stat-num')) LANG_REDRAW.push(() => $$('.stat-num').forEach(el => { if (el.dataset.done) el.textContent = fmtNum(+el.dataset.count) + (el.dataset.suffix || ''); }));
     initWordRequest();
     initFeedbackWidget();
+    initRating();
     // dictionary.html?q=word ("Find in dictionary" pressed on another page): search the
     // grid for it right away. Last on purpose — everything above the grid has its final
     // height by now, so the scroll lands on the search field.
@@ -1479,6 +1512,21 @@
     return t || String(s || '');
   }
 
+  // ⇄ (v133): for a WORD the translation goes into the field and is translated back (Sálem →
+  // «Привет» → ⇄ → «Привет» → Sálem); the languages in the bar follow by themselves. A sentence
+  // (not translated as a whole), a word that was not found and an empty field leave it off —
+  // aria-disabled, not disabled, so its title still shows on hover and a tap can explain why.
+  function trSetSwap(mode, text) {
+    const b = $('#trSwap');
+    if (!b) return;
+    b.dataset.mode = mode;
+    b.dataset.q = text || '';
+    const key = { word: 'tr.swap', sentence: 'tr.swapSentence', none: 'tr.swapNone' }[mode] || 'tr.swapEmpty';
+    b.setAttribute('aria-disabled', mode === 'word' ? 'false' : 'true');
+    b.setAttribute('aria-label', t(key));
+    b.title = t(key);
+  }
+
   function trSetLangs(src) {
     const srcEl = $('#trLangSrc');
     const dstEl = $('#trLangDst');
@@ -1537,6 +1585,7 @@
       results.hidden = true; results.innerHTML = '';
       out.innerHTML = trOutputHint();
       trSetLangs(null);
+      trSetSwap('empty');
       return;
     }
 
@@ -1552,6 +1601,7 @@
       const big = res.src === 'kk' ? primaryText(main[0]) : m.kk;
       const sub = res.src === 'kk' ? second[0] : (res.src === 'ru' ? primaryText(m.en) : m.ru);
       // a NEW translation rises in; typing on while the answer stays the same moves nothing
+      trSetSwap('word', big);
       const isNew = MOTION_OK && big !== renderTranslation.last;
       renderTranslation.last = big;
       out.innerHTML = `
@@ -1571,6 +1621,7 @@
       // below one by one, and the report button hands the WHOLE sentence to the form.
       const firstFound = res.parts.find(p => p.matches && p.matches.length);
       trSetLangs(firstFound ? firstFound.src : null);
+      trSetSwap('sentence');
       out.innerHTML = `
         <div class="tr-output-main">
           <span class="tr-output-big tr-output-note">${escapeHtml(t('tr.sentence'))}</span>
@@ -1580,6 +1631,7 @@
         <button class="tr-report" data-q="${escapeAttr(raw)}">${escapeHtml(t('tr.report'))}</button>`;
     } else {
       trSetLangs(res.lang);
+      trSetSwap('none');
       out.innerHTML = `<span class="tr-output-hint">${escapeHtml(t('tr.noMatch', { n: fmtNum(WORDS.length) }))}</span>
         <button class="tr-report" data-q="${escapeAttr(raw)}">${escapeHtml(t('tr.report'))}</button>`;
       if (res.suggestions.length) {
@@ -1664,6 +1716,7 @@
         results.hidden = true; results.innerHTML = '';
         out.innerHTML = trOutputHint();
         trSetLangs(null);
+        trSetSwap('empty');
         return;
       }
       if (!TRANS_INDEX) buildTranslatorIndex();
@@ -1682,8 +1735,33 @@
     clearBtn.addEventListener('click', () => { input.value = ''; run(); input.focus(); });
     LANG_REDRAW.push(run);
 
+    // ⇄: a word swaps; otherwise a small note under the button says why not (a tap on a phone
+    // has no hover title). The icon turns 180° per swap (transform only).
+    let turns = 0, tipTimer = 0;
+    const swapTip = document.createElement('span');
+    swapTip.className = 'tr-swap-tip';
+    swapTip.setAttribute('role', 'status');
+    const bar = $('#translator .tr-langbar');
+    if (bar && $('#trSwap')) bar.appendChild(swapTip);
+    const swapWord = btn => {
+      if (btn.dataset.mode !== 'word') {
+        swapTip.textContent = btn.title;
+        swapTip.classList.add('is-on');
+        clearTimeout(tipTimer);
+        tipTimer = setTimeout(() => swapTip.classList.remove('is-on'), 2600);
+        return;
+      }
+      swapTip.classList.remove('is-on');
+      btn.style.setProperty('--turn', ++turns);
+      input.value = btn.dataset.q;
+      clearTimeout(timer);
+      run();
+    };
+
     // One listener on the whole card: "Find in dictionary" now also lives in the output pane
     $('#translator').addEventListener('click', e => {
+      const swapBtn = e.target.closest('.tr-swap');
+      if (swapBtn) { swapWord(swapBtn); return; }
       const sugg = e.target.closest('.tr-sugg');
       if (sugg) { input.value = sugg.dataset.q; run(); return; }
       const find = e.target.closest('.tr-find');
@@ -1748,6 +1826,7 @@
   // and keeps its day (tarak → taraq #221, paltó → palto #120). Alqan became Alaqan — six
   // letters, it cannot be an answer — so 'alqan' stays as it was and, like the 17 deleted
   // words, finds no entry: its day takes the next word (see sozleAnswerFor).
+  // v133: Álsiz became Hálsiz (six letters) — 'álsiz' stays the same way.
   const SOZLE_ANSWERS = (
     'qulaq ásten tekst qızıq aǵash qızıl alsaq urlaw qaqpa qońır kútiw súlgi jótel qurıw dáliz qoyan ' +
     'tegis erkin vanna dárya tuxım uqsas bilek kórpe júzıq qırıq durıs sawaq bazar tamır sábiz toǵız ' +
@@ -2533,8 +2612,15 @@
     buildSelectOptions($('#quizCategory'));
     $('#quizStart').addEventListener('click', startQuiz);
     $('#quizNext').addEventListener('click', nextQuizQuestion);
+    $('#quizAgain').addEventListener('click', startQuiz);          // the same category again
+    $('#quizOther').addEventListener('click', () => {              // back to the start screen
+      $('#quizResult').hidden = true;
+      $('#quizIntro').hidden = false;
+      $('#quizIntro').scrollIntoView({ block: 'nearest' });
+      $('#quizCategory').focus({ preventScroll: true });
+    });
     setupQuizLangToggle();
-    LANG_REDRAW.push(() => { buildSelectOptions($('#quizCategory')); renderQuizFeedback(); });
+    LANG_REDRAW.push(() => { buildSelectOptions($('#quizCategory')); renderQuizFeedback(); if (!$('#quizResult').hidden) renderQuizResult(); });
   }
 
   // The language of the ANSWERS (not of the interface). Musa, 2026-10-09: with the Russian
@@ -2562,6 +2648,11 @@
 
   const QUIZ_LANG_FIELD = { en: 'en', ru: 'ru' };
 
+  // ROUNDS (v133, the advisor): a round is QUIZ_ROUND questions, each word at most once; a
+  // category with fewer words gives a shorter round (4 at least — four options are needed).
+  // After the last answer "See results" opens the end screen (score, a cheer that fits it,
+  // the best round). "Quiz Best" on the progress tiles = the best round (PROGRESS.quizBestRound).
+  const QUIZ_ROUND = 10;
   function startQuiz() {
     const cat = $('#quizCategory').value;
     state.quiz.category = cat;
@@ -2573,15 +2664,27 @@
       alert(t('quiz.tooFew'));
       return;
     }
+    const size = Math.min(QUIZ_ROUND, state.quiz.pool.length);
+    state.quiz.round = { size, order: shuffle(state.quiz.pool.slice()).slice(0, size), index: -1, result: null };
+    updateQuizScoreboard.last = null;   // a new round: nothing to bump from
     $('#quizIntro').hidden = true;
+    $('#quizResult').hidden = true;
+    $('#quizBurst').replaceChildren();
     $('#quizStage').hidden = false;
     updateQuizScoreboard();
     nextQuizQuestion();
   }
 
   function nextQuizQuestion() {
-    const pool = state.quiz.pool;
-    const correct = pool[Math.floor(Math.random() * pool.length)];
+    const round = state.quiz.round;
+    if (round.index + 1 >= round.size) { showQuizResult(); return; }
+    round.index++;
+    const correct = round.order[round.index];
+    renderQuizCount();
+    // the last question's button leads to the end screen
+    const label = $('#quizNext [data-i18n]');
+    label.dataset.i18n = round.index === round.size - 1 ? 'quiz.toResult' : 'quiz.next';
+    label.textContent = t(label.dataset.i18n);
     $('#quizQuestionWord').textContent = correct.kk;
     replay($('#quizQuestionWord'), 'q-in');
     $('#quizNext').hidden = true;
@@ -2651,7 +2754,6 @@
       state.quiz.streak = 0;
     }
     recordQuizAnswer(wordId(correct), isCorrect);
-    updateQuizBestScore(state.quiz.score);
     updateQuizScoreboard();
     $('#quizNext').hidden = false;
     // on a phone the line and "Next Question" can sit under the fold: bring them up, but only
@@ -2674,6 +2776,63 @@
       ? `${icon('check')} <span>${escapeHtml(t('quiz.correct'))}</span>`
       : `${icon('x')} <span>${escapeHtml(before)}<strong>${escapeHtml(f.answer)}</strong>${escapeHtml(after)}</span>`;
     el.hidden = false;
+  }
+
+  // "3 / 10" and the thin bar under it (the bar is scaled, so it slides)
+  function renderQuizCount() {
+    const r = state.quiz.round;
+    if (!r) return;
+    $('#quizCount').textContent = `${Math.max(1, r.index + 1)} / ${r.size}`;
+    $('#quizRoundFill').style.transform = `scaleX(${(r.index + 1) / r.size})`;
+  }
+
+  // the end of a round
+  function showQuizResult() {
+    const r = state.quiz.round, score = state.quiz.score;
+    const best = PROGRESS.quizBestRound;
+    const isNew = score > 0 && (!best || score > best.score);
+    if (isNew) { PROGRESS.quizBestRound = { score, size: r.size }; saveProgress(); }
+    r.result = { score, size: r.size, isNew, tier: score === r.size ? 'perfect' : score / r.size >= 0.7 ? 'good' : 'low' };
+    $('#quizStage').hidden = true;
+    $('#quizResult').hidden = false;
+    renderQuizResult();
+    const panel = $('#quizResult');
+    if (panel.getBoundingClientRect().top < 0 || panel.getBoundingClientRect().bottom > innerHeight) panel.scrollIntoView({ block: 'nearest' });
+    // the cheer: 10 of 10 — a burst of small tiles; 7–9 — the cup springs; less — words only.
+    // Only transform / opacity move; nothing at all under prefers-reduced-motion (MOTION_OK).
+    if (r.result.tier === 'perfect') quizConfetti($('#quizBurst'));
+    if (r.result.tier !== 'low') replay($('#quizResultIcon'), 'spring');
+    replay(panel, 'panel-in');
+  }
+  function renderQuizResult() {
+    const res = state.quiz.round && state.quiz.round.result;
+    if (!res) return;
+    const best = PROGRESS.quizBestRound;
+    const icon = $('#quizResultIcon');
+    icon.className = 'quiz-result-icon is-' + res.tier;
+    icon.innerHTML = res.tier === 'low' ? bigIcon('rocket') : TILE_ICONS.trophy;
+    $('#quizResultScore').textContent = t('quiz.result', { n: fmtNum(res.score), total: fmtNum(res.size) });
+    $('#quizResultMsg').textContent = t(res.tier === 'perfect' ? 'quiz.perfect' : res.tier === 'good' ? 'quiz.good' : 'quiz.low');
+    $('#quizResultBest').textContent = res.isNew ? t('quiz.newBest')
+      : best ? t('quiz.best', { n: fmtNum(best.score), total: fmtNum(best.size) }) : '';
+    $('#quizResultBest').classList.toggle('is-new', res.isNew);
+  }
+  // ~40 small tiles in the colours of the site fly out from the score and fall, 1.5 s, once
+  const CONFETTI_COLORS = ['#6366F1', '#818CF8', '#8b7af2', '#ab9bf5', '#34d399', '#fbbf24', '#5b9df0', '#c084fc'];
+  function quizConfetti(host) {
+    if (!host || !MOTION_OK) return;
+    host.replaceChildren();
+    const n = 40, frag = document.createDocumentFragment();
+    for (let i = 0; i < n; i++) {
+      const tile = document.createElement('i');
+      const a = (i / n) * Math.PI * 2 + (Math.random() - 0.5) * 0.5, d = 90 + Math.random() * 130;
+      tile.style.cssText = `--dx:${Math.round(Math.cos(a) * d)}px;--dy:${Math.round(Math.sin(a) * d * 0.75 - 40)}px;` +
+        `--r:${Math.round(Math.random() * 600 - 300)}deg;--d:${Math.round(Math.random() * 140)}ms;background:${CONFETTI_COLORS[i % CONFETTI_COLORS.length]}`;
+      frag.appendChild(tile);
+    }
+    host.appendChild(frag);
+    clearTimeout(quizConfetti.t);
+    quizConfetti.t = setTimeout(() => host.replaceChildren(), 1900);
   }
 
   function updateQuizScoreboard() {
@@ -2754,17 +2913,76 @@
     storageKey: 'qaraqalpaq_feedback',
   };
 
+  // ===== THE SITE'S RATING ON THE HOME PAGE (v133) =====
+  // The advisor publishes a summary of the feedback form's answers as CSV — ONE line,
+  // "average,count" (e.g. 4.8,12; a header line above it and "4,8" in quotes are fine too) —
+  // and sends its address: put it here. Until then RATING_CSV = null.
+  // Shown: "★ 4.8" and "12 ratings" (RU: оценка / оценки / оценок). With no address, count 0,
+  // a network error (also a blocked cross-site read), 5 s without an answer or anything that is
+  // not two numbers: the star and "Rate the site", which opens the feedback card. Never "0/5".
+  const RATING_CSV = null;
+  let RATING = null;   // { avg, count } once loaded
+  function parseRatingCsv(text) {
+    const lines = String(text || '').split(/\r?\n/).filter(l => l.trim());
+    for (let i = lines.length - 1; i >= 0; i--) {          // the last line that is two numbers
+      const cells = []; let cur = '', quoted = false;
+      for (const ch of lines[i]) {
+        if (ch === '"') quoted = !quoted;
+        else if (!quoted && (ch === ',' || ch === ';' || ch === '\t')) { cells.push(cur); cur = ''; }
+        else cur += ch;
+      }
+      cells.push(cur);
+      const avg = parseFloat(String(cells[0]).trim().replace(',', '.')), count = Number(String(cells[1]).trim());
+      if (cells.length >= 2 && avg >= 1 && avg <= 5 && Number.isInteger(count) && count >= 0) return { avg, count };
+    }
+    return null;
+  }
+  function renderRating() {
+    const box = $('#proofRating');
+    if (!box) return;
+    box.classList.remove('is-loading');
+    const has = RATING && RATING.count > 0;
+    box.classList.toggle('has-rating', !!has);
+    $('#proofRatingNum').textContent = has ? RATING.avg.toFixed(1) : '';
+    $('#proofRatingLabel').innerHTML = has
+      ? escapeHtml(t('proof.ratingCount', { n: fmtNum(RATING.count), ratings: plural(RATING.count, 'proof.ratings') }))
+      : `<button type="button" class="proof-rate">${escapeHtml(t('proof.rate'))}</button>`;
+  }
+  function initRating() {
+    const box = $('#proofRating');
+    if (!box) return;
+    box.addEventListener('click', e => { if (e.target.closest('.proof-rate')) openFeedbackCard(); });
+    LANG_REDRAW.push(renderRating);
+    if (!RATING_CSV) { renderRating(); return; }
+    box.classList.add('is-loading');   // the star only, until the answer (no "Rate the site" flashing first)
+    const ctrl = 'AbortController' in window ? new AbortController() : null;
+    const late = setTimeout(() => { if (ctrl) ctrl.abort(); }, 5000);
+    fetch(RATING_CSV, { cache: 'no-store', signal: ctrl ? ctrl.signal : undefined })
+      .then(r => (r.ok ? r.text() : Promise.reject(r.status)))
+      .then(text => { RATING = parseRatingCsv(text); })
+      .catch(() => { RATING = null; })
+      .finally(() => { clearTimeout(late); renderRating(); });
+  }
+
+  // "Rate the site" on the home page opens the card on purpose (v133), see initRating
+  let openFeedbackCard = () => {};
   function initFeedbackWidget() {
     let fb;
     try { fb = JSON.parse(localStorage.getItem(FEEDBACK.storageKey)) || {}; } catch (e) { fb = {}; }
-    if (fb.done || fb.dismissed) return;
-
     const save = () => { try { localStorage.setItem(FEEDBACK.storageKey, JSON.stringify(fb)); } catch (e) {} };
+    let current = null;   // the card on screen, if any
+    openFeedbackCard = () => {
+      if (current && current.isConnected) { const s = $('.feedback-star', current); if (s) s.focus(); return; }
+      if (fb.done) showThanks();   // rated already: say thanks instead of a second rating
+      else showFeedbackCard();
+    };
+    if (fb.done || fb.dismissed) return;   // the card never comes by itself again
 
     // Count time across visits/pages, pause while the tab is hidden
     const tick = 5;
     const timer = setInterval(() => {
       if (document.visibilityState !== 'visible') return;
+      if (fb.done || fb.dismissed || (current && current.isConnected)) { clearInterval(timer); return; }   // opened by hand meanwhile
       fb.seconds = (fb.seconds || 0) + tick;
       save();
       if (fb.seconds >= FEEDBACK.showAfterSeconds) {
@@ -2777,8 +2995,19 @@
       }
     }, tick * 1000);
 
+    function showThanks() {
+      const card = document.createElement('div');
+      card.className = 'feedback-card';
+      card.innerHTML = `<p class="feedback-title">${escapeHtml(t('fb.thanks'))} ${icon('heart', 'ico-love')}</p><p class="feedback-sub">${escapeHtml(t('fb.thanksSub'))}</p>`;
+      document.body.appendChild(card);
+      current = card;
+      requestAnimationFrame(() => card.classList.add('is-visible'));
+      setTimeout(() => { card.classList.remove('is-visible'); setTimeout(() => card.remove(), 400); }, 2500);
+    }
+
     function showFeedbackCard() {
       const card = document.createElement('div');
+      current = card;
       card.className = 'feedback-card';
       card.innerHTML = `
         <button class="feedback-close" aria-label="${escapeAttr(t('a11y.close'))}">${icon('x')}</button>
@@ -2901,6 +3130,7 @@
       ['#quizStart', 'tip.quiz.start'],
       ['#quizOptions', 'tip.quiz.options'],
       ['.quiz-top', 'tip.quiz.top'],
+      ['#quizResult .quiz-result-actions', 'tip.quiz.result'],   // the end of a round (v133)
     ],
     game: [
       ['#sozleBoard', 'tip.game.board'],

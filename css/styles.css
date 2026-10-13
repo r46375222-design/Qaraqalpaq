@@ -1230,7 +1230,18 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   font-size: clamp(1.8rem, 4vw, 2.4rem);
   color: var(--text);
 }
-.proof-rating-max { font-size: 1.1rem; color: var(--text-faint); font-weight: 700; }
+/* the rating (v133): a gold star + the average; "Rate the site" is a link-looking button */
+.proof-rating { display: inline-flex; align-items: center; gap: 8px; min-height: 1.2em; }
+.proof-rating .proof-star { width: 34px; height: 34px; color: #fbbf24; flex-shrink: 0; fill: currentColor; stroke: none; vertical-align: middle; }   /* filled, the size of the other icons in this row */
+.proof-rating-num { font-variant-numeric: tabular-nums; line-height: 1; }
+.proof-rating-num:empty { display: none; }
+/* the same face and size as the word count next to it (the hero's .stat-num rule reaches it) */
+.hero-b .proof-rating-num { font-family: var(--font-hero); font-weight: 700; font-size: clamp(2.4rem, 4.2vw, 3.8rem); letter-spacing: 0.5px; }
+@media (max-width: 768px) { .hero-b .proof-rating-num { font-size: 2rem; } }
+.proof-rate { background: none; border: 0; padding: 0; font: inherit; color: #A5B4FC; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(165, 180, 252, 0.45); }
+.proof-rate:hover { text-decoration-color: currentColor; }
+.proof-rate:focus-visible { outline: 2px solid var(--teal-light); outline-offset: 3px; border-radius: 4px; }
+.proof-rating-stat.is-loading .proof-label { visibility: hidden; }
 .proof-label {
   font-size: 0.8rem;
   font-weight: 600;
@@ -1958,6 +1969,14 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
 /* v131: "КАРАКАЛПАКСКИЙ" + "РУССКИЙ · АНГЛИЙСКИЙ" are wider than a phone (390px: 45px too
    much). Up to 440px the Russian interface names only the language of the big line. */
 @media (max-width: 440px) { html[lang="ru"] .tr-lang-also { display: none; } }
+/* v133: with ⇄ on phones the bar holds three things, so up to 480px the two language pills are
+   smaller, and up to 440px English too names only the language of the big line ("ENGLISH") */
+@media (max-width: 480px) {
+  .tr-langbar { gap: 6px; }
+  .tr-lang { font-size: 0.68rem; padding: 5px 10px; letter-spacing: 0.2px; }
+  .tr-langbar .tr-swap { width: 30px; height: 30px; }
+}
+@media (max-width: 440px) { .tr-lang-also { display: none; } }
 .tr-swap {
   font-size: 1.1rem;
   color: var(--text-dim);
@@ -1966,6 +1985,27 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   width: 34px; height: 34px;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
+}
+/* ⇄ IS A BUTTON since v133 (see trSetSwap in app.js): off (aria-disabled) for a sentence, a word
+   that was not found and an empty field; the icon turns 180° per swap — transform only */
+button.tr-swap { padding: 0; cursor: pointer; font: inherit; flex-shrink: 0; transition: border-color 0.2s, color 0.2s, opacity 0.2s; }
+.tr-swap[aria-disabled="true"] { opacity: 0.45; cursor: default; }
+@media (hover: hover) { .tr-swap[aria-disabled="false"]:hover { color: var(--text); border-color: var(--teal); } }
+.tr-swap:focus-visible { outline: 2px solid var(--teal-light); outline-offset: 2px; }
+.tr-swap .ico { transform: rotate(calc(var(--turn, 0) * 180deg)); }
+.tr-langbar { position: relative; }
+.tr-swap-tip {                     /* "why not": shown for a moment after a tap on the off button */
+  position: absolute; left: 50%; top: calc(100% + 6px); z-index: 5;
+  width: max-content; max-width: min(260px, 92%);
+  padding: 8px 12px; border-radius: 10px;
+  background: var(--bg-elevated-2); border: 1px solid var(--border-strong); box-shadow: var(--shadow-soft);
+  color: var(--text); font-size: 0.8rem; line-height: 1.4; text-align: center;
+  opacity: 0; transform: translate(-50%, -4px); pointer-events: none;
+}
+.tr-swap-tip.is-on { opacity: 1; transform: translate(-50%, 0); }
+@media (prefers-reduced-motion: no-preference) {
+  .tr-swap .ico { transition: transform 0.35s cubic-bezier(0.4, 0.2, 0.2, 1); }
+  .tr-swap-tip { transition: opacity 0.18s ease, transform 0.18s ease; }
 }
 .tr-panes {
   display: grid;
@@ -2024,8 +2064,8 @@ main { padding-top: 90px; background: var(--bg); padding-bottom: 110px; }
   .tr-pane-src { border-right: none; border-bottom: 1px solid var(--border); }
   .tr-pane, .tr-pane-src textarea { min-height: 96px; }
   .tr-output { min-height: 110px; }
-  .tr-langbar { grid-template-columns: auto auto; }
-  .tr-swap { display: none; }
+  /* v133: ⇄ works, so phones show it too — the three sit at their own widths, spread out */
+  .tr-langbar { grid-template-columns: auto auto auto; justify-content: space-between; }
 }
 /* Roomier translator from tablet up — everything scoped to ≥769px so the
    phone layout above stays exactly as it is */
@@ -2932,7 +2972,10 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
 
 .hero-b .hero-content { grid-column: 2; max-width: none; margin: 0; text-align: left; padding-bottom: 0; container-type: inline-size; }
 .hero-b .hero-tag {
-  display: inline-flex; align-items: center; gap: 12px;
+  /* v133: "Qaraqalpaq Tili — …" is wider than a phone: the two parts (.ht-tag) never break
+     inside, so it wraps only after the name; the short line stays at the FIRST line */
+  display: inline-flex; align-items: flex-start; gap: 12px;
+  line-height: 1.5;
   font-family: var(--font-mono);
   font-weight: 500; font-size: 0.8rem; letter-spacing: 1.2px;
   background: none; border: 0; border-radius: 0; padding: 0;
@@ -2940,7 +2983,8 @@ body.page-dictionary .wordreq-section { padding: 60px 0 0; }
   margin-bottom: 22px;
 }
 .hero-b .hero-tag .ico { display: none; }
-.hero-b .hero-tag::before { content: ''; width: 28px; height: 2px; background: var(--teal); flex-shrink: 0; }
+.hero-b .hero-tag::before { content: ''; width: 28px; height: 2px; background: var(--teal); flex-shrink: 0; margin-top: calc(0.75em - 1px); }
+.hero-b .hero-tag .ht-tag { white-space: nowrap; }
 .hero-b .hero-title {
   font-family: var(--font-hero);
   font-weight: 700;
@@ -3040,6 +3084,49 @@ html.hero-b[lang="ru"] .hero-title { font-size: clamp(2rem, 5.9vw, 5rem); font-s
   .hero-b .stat-icon .ph { width: 28px; height: 28px; }
   .hero-b .stat-num { font-size: 2rem; }
   .hero-b .stat-label { font-size: 11px; letter-spacing: 0.4px; }
+}
+
+/* ===== QUIZ ROUNDS (v133) =====
+   A round = 10 questions (fewer in a small category). "3 / 10" is the first box of .quiz-top,
+   the thin bar under it is scaled (transform), so it slides. The end screen #quizResult:
+   icon, "8 of 10", a line that fits the score, the best round, two buttons. The cheers
+   move ONLY transform and opacity, all inside prefers-reduced-motion: no-preference. */
+.quiz-count-box .score-num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.quiz-round-bar { height: 4px; border-radius: 4px; background: var(--overlay-soft); overflow: hidden; margin: -10px auto 22px; max-width: 360px; }
+.quiz-round-fill { height: 100%; width: 100%; background: var(--teal); transform-origin: 0 50%; transform: scaleX(0); }
+.quiz-result { position: relative; padding-top: 34px; }
+.quiz-result-icon { display: inline-flex; line-height: 0; margin-bottom: 10px; }
+.quiz-result-icon .ph { width: 64px; height: 64px; }
+.quiz-result-icon.is-perfect, .quiz-result-icon.is-good { color: #fbbf24; }
+.quiz-result-icon.is-low { color: var(--teal-light); }
+.quiz-result-score { font-family: var(--font-hero); font-weight: 700; font-size: clamp(3rem, 12vw, 4.6rem); line-height: 1; letter-spacing: 1px; font-variant-numeric: tabular-nums; }
+.quiz-result-msg { margin-top: 12px; font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; text-wrap: balance; }
+.quiz-result-best { margin-top: 8px; color: var(--text-dim); font-size: 0.92rem; min-height: 1.4em; }
+.quiz-result-best.is-new { color: #fbbf24; font-weight: 700; }
+.quiz-result-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+@media (max-width: 480px) {
+  .quiz-result-actions { flex-direction: column; }
+  .quiz-result-actions .btn { width: 100%; justify-content: center; }
+}
+/* the burst: a point at the middle of the score; each tile flies out (--dx, --dy), then falls */
+.quiz-burst { position: absolute; left: 50%; top: 150px; width: 0; height: 0; pointer-events: none; z-index: 2; }
+.quiz-burst i { position: absolute; left: -5px; top: -4px; width: 10px; height: 8px; border-radius: 2px; opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .quiz-burst i { animation: mo-confetti 1.5s cubic-bezier(0.2, 0.7, 0.35, 1) var(--d, 0ms) both; }
+  .quiz-result-icon.spring { animation: mo-spring 0.7s cubic-bezier(0.3, 1.5, 0.5, 1) both; }
+  .quiz-result.panel-in { animation: mo-panel-in 0.25s ease-out; }
+  .quiz-round-fill { transition: transform 0.3s ease; }
+}
+@keyframes mo-confetti {
+  0%   { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(0.5); }
+  40%  { opacity: 1; transform: translate(var(--dx), var(--dy)) rotate(calc(var(--r) * 0.4)) scale(1); }
+  100% { opacity: 0; transform: translate(calc(var(--dx) * 1.2), calc(var(--dy) + 150px)) rotate(var(--r)) scale(0.9); }
+}
+@keyframes mo-spring {
+  0%   { transform: scale(0.4) translateY(10px); opacity: 0; }
+  45%  { transform: scale(1.18) translateY(-6px); opacity: 1; }
+  70%  { transform: scale(0.94) translateY(0); }
+  100% { transform: none; }
 }
 
 /* ===== 404 PAGE (v132) =====

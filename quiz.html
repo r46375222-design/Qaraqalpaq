@@ -15,18 +15,18 @@
 <meta property="og:title" content="Quiz — Qaraqalpaq Tili">
 <meta property="og:description" content="Test your Karakalpak vocabulary with a quick multiple-choice quiz.">
 <meta property="og:url" content="https://qaraqalpaq.vercel.app/quiz.html">
-<meta property="og:image" content="https://qaraqalpaq.vercel.app/public/og-image.jpg">
+<meta property="og:image" content="https://qaraqalpaq.vercel.app/public/og-image.jpg?v=133">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Learn Qaraqalpaq — translator, dictionary, flashcards, quiz and Sózle">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Quiz — Qaraqalpaq Tili">
 <meta name="twitter:description" content="Test your Karakalpak vocabulary with a quick multiple-choice quiz.">
-<meta name="twitter:image" content="https://qaraqalpaq.vercel.app/public/og-image.jpg">
+<meta name="twitter:image" content="https://qaraqalpaq.vercel.app/public/og-image.jpg?v=133">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=132">
+<link rel="stylesheet" href="css/styles.css?v=133">
 <script>/* the tours of all five pages have been opened → no "?" in the nav (before the first paint; same list as GUIDE_PAGES in app.js) */try{if(['index','dictionary','flashcards','quiz','game'].every(function(p){return localStorage.getItem('qaraqalpaq_guide_'+p)==='seen'}))document.documentElement.className+=' guide-done'}catch(e){}/* the interface language, before the first paint (the EN / RU switch is drawn on the right side at once) */try{if(localStorage.getItem('qaraqalpaq_lang')==='ru')document.documentElement.lang='ru'}catch(e){}</script>
 </head>
 <body>
@@ -85,7 +85,11 @@
       </div>
 
       <div class="quiz-stage" id="quizStage" hidden>
+        <!-- a round of 10 questions (v133): which question it is, score, streak; a thin bar under them -->
         <div class="quiz-top">
+          <div class="score-box mini quiz-count-box">
+            <span class="score-num" id="quizCount">1 / 10</span><span class="score-label" data-i18n="quiz.question">Question</span>
+          </div>
           <div class="score-box mini">
             <span class="score-num" id="quizScoreLive">0</span><span class="score-label" data-i18n="quiz.score">Score</span>
           </div>
@@ -93,6 +97,7 @@
             <span class="score-num" id="quizStreakLive">0</span><span class="score-label" data-i18n="quiz.streak">Streak</span>
           </div>
         </div>
+        <div class="quiz-round-bar" aria-hidden="true"><div class="quiz-round-fill" id="quizRoundFill"></div></div>
         <div class="quiz-question-card">
           <span class="quiz-q-label" data-i18n="quiz.whatMean">What does this mean?</span>
           <span class="quiz-q-word" id="quizQuestionWord">Word</span>
@@ -100,6 +105,19 @@
         <div class="quiz-options" id="quizOptions"></div>
         <p class="quiz-feedback" id="quizFeedback" role="status" aria-live="polite" hidden></p>
         <button class="btn btn-primary btn-lg" id="quizNext" hidden><span data-i18n="quiz.next">Next Question</span> <span class="btn-arrow" aria-hidden="true">→</span></button>
+      </div>
+
+      <!-- the end of a round (v133): the score, a cheer that fits it, the best round, two ways on -->
+      <div class="quiz-panel quiz-result" id="quizResult" hidden>
+        <div class="quiz-burst" id="quizBurst" aria-hidden="true"></div>
+        <span class="quiz-result-icon" id="quizResultIcon" aria-hidden="true"></span>
+        <p class="quiz-result-score" id="quizResultScore" role="status"></p>
+        <p class="quiz-result-msg" id="quizResultMsg"></p>
+        <p class="quiz-result-best" id="quizResultBest"></p>
+        <div class="quiz-result-actions">
+          <button class="btn btn-primary btn-lg" id="quizAgain"><span data-i18n="quiz.again">One more round</span> <span class="btn-arrow" aria-hidden="true">→</span></button>
+          <button class="btn btn-outline btn-lg" id="quizOther" data-i18n="quiz.other">Another category</button>
+        </div>
       </div>
     </div>
   </section>

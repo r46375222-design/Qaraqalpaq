@@ -198,6 +198,12 @@
   "category": "Basic Phrases"
  },
  {
+  "kk": "Qaraqalpaqsha",
+  "ru": "По-каракалпакски",
+  "en": "In Karakalpak",
+  "category": "Basic Phrases"
+ },
+ {
   "kk": "Adam",
   "ru": "Человек",
   "en": "Person / Human",
@@ -549,6 +555,12 @@
   "kk": "Málimleme",
   "ru": "Информация",
   "en": "Information",
+  "category": "Education & IT"
+ },
+ {
+  "kk": "Awdarma",
+  "ru": "Перевод",
+  "en": "Translation",
   "category": "Education & IT"
  },
  {
@@ -1800,7 +1812,7 @@
   "category": "City & Transport"
  },
  {
-  "kk": "Emxana",
+  "kk": "Emlewxana",
   "ru": "Поликлиника",
   "en": "Clinic",
   "category": "City & Transport"
@@ -7434,7 +7446,7 @@
   "category": "Adjectives"
  },
  {
-  "kk": "Álsiz",
+  "kk": "Hálsiz",
   "ru": "Слабый",
   "en": "Weak",
   "category": "Adjectives"
