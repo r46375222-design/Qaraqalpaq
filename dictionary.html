@@ -6,14 +6,14 @@
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#07090d">
 <title>Dictionary — Qaraqalpaq Tili</title>
-<meta name="description" content="Search 1,251 Karakalpak words with English and Russian translations across 48 categories.">
+<meta name="description" content="Search 1,308 Karakalpak words with English and Russian translations across 48 categories.">
 <link rel="icon" type="image/png" sizes="32x32" href="public/assets/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="public/assets/apple-touch-icon.png">
 <!-- link previews (Telegram, WhatsApp, X …): the same title and description as above + one picture for all pages -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Qaraqalpaq Tili">
 <meta property="og:title" content="Dictionary — Qaraqalpaq Tili">
-<meta property="og:description" content="Search 1,251 Karakalpak words with English and Russian translations across 48 categories.">
+<meta property="og:description" content="Search 1,308 Karakalpak words with English and Russian translations across 48 categories.">
 <meta property="og:url" content="https://qaraqalpaq.vercel.app/dictionary.html">
 <meta property="og:image" content="https://qaraqalpaq.vercel.app/public/og-image.jpg?v=133">
 <meta property="og:image:width" content="1200">
@@ -21,12 +21,12 @@
 <meta property="og:image:alt" content="Learn Qaraqalpaq — translator, dictionary, flashcards, quiz and Sózle">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Dictionary — Qaraqalpaq Tili">
-<meta name="twitter:description" content="Search 1,251 Karakalpak words with English and Russian translations across 48 categories.">
+<meta name="twitter:description" content="Search 1,308 Karakalpak words with English and Russian translations across 48 categories.">
 <meta name="twitter:image" content="https://qaraqalpaq.vercel.app/public/og-image.jpg?v=133">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=134">
+<link rel="stylesheet" href="css/styles.css?v=135">
 <script>/* the tours of all five pages have been opened → no "?" in the nav (before the first paint; same list as GUIDE_PAGES in app.js) */try{if(['index','dictionary','flashcards','quiz','game'].every(function(p){return localStorage.getItem('qaraqalpaq_guide_'+p)==='seen'}))document.documentElement.className+=' guide-done'}catch(e){}/* the interface language, before the first paint (the EN / RU switch is drawn on the right side at once) */try{if(localStorage.getItem('qaraqalpaq_lang')==='ru')document.documentElement.lang='ru'}catch(e){}</script>
 </head>
 <body class="page-dictionary">
@@ -132,6 +132,10 @@
   </div>
 </footer>
 
+<!-- the sentence engine (v135, beta; the advisor's files, used by the translator in app.js) — morph → lexicon → sentence -->
+<script src="js/kaa-morph.js?v=135"></script>
+<script src="js/kaa-lexicon.js?v=135"></script>
+<script src="js/kaa-sentence.js?v=135"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

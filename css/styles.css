@@ -2057,6 +2057,25 @@ button.tr-swap { padding: 0; cursor: pointer; font: inherit; flex-shrink: 0; tra
 .tr-output-big .tr-lemma { font-size: 0.62em; }
 /* a whole sentence: the big line is a note, not a translation */
 .tr-output-big.tr-output-note { font-weight: 700; }
+/* v135: a sentence built by the engine — the sentence, a small "beta" beside it (it wraps under
+   the sentence when there is no room), one line of warning. Nothing here moves on its own: the
+   only motion is the pane's usual rise (.tr-new, transform / opacity, off under reduced motion). */
+.tr-sent-line { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 10px; row-gap: 2px; min-width: 0; }
+.tr-sent-line .tr-output-big { min-width: 0; }
+.tr-beta {
+  flex-shrink: 0;
+  font-family: var(--font-body);
+  font-size: 0.66rem; font-weight: 700; line-height: 1.5;
+  letter-spacing: 0.06em; text-transform: uppercase;   /* «БЕТА» / "BETA": no ı, caps are safe */
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  border-radius: 999px;
+  padding: 1px 8px;
+  white-space: nowrap;
+  position: relative; top: -0.15em;
+}
+.tr-sent-note { color: var(--text-faint); font-size: 0.8rem; line-height: 1.45; }
+.translator-section .tr-sent-note { font-size: 0.9rem; }
 /* the missed-query log note (v130), shown only while MISS_LOG is on */
 .tr-miss-note { margin-top: 14px; font-size: 0.76rem; color: var(--text-faint); text-align: center; }
 @media (max-width: 768px) {

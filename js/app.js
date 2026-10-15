@@ -54,14 +54,14 @@
     'hero.sub': 'An instant translator, dictionary, flashcards and quizzes built for a new generation of learners — fast, bold, and actually fun.',
     'hero.try': 'Try the Translator', 'cta.exploreDict': 'Explore the Dictionary',
     'stat.words': 'Words', 'stat.categories': 'Categories', 'stat.languages': 'Languages',
-    'home.exploreAll': 'Explore all 1,251 words in the dictionary →',
+    'home.exploreAll': 'Explore all 1,308 words in the dictionary →',
     'home.sozle': "<strong>New — Sózle:</strong> the Karakalpak word game. Guess today's word in 6 tries →",
     'proof.caption': 'Just launched — be among the <strong>first learners</strong> of Qaraqalpaq online',
     'proof.words': 'Real words, checked by a native speaker', 'proof.tell': 'Tell us what you think —',
     // the rating (v133): "★ 4.8" + "12 ratings", or "Rate the site" while there is none
     'proof.rate': 'Rate the site', 'proof.ratingCount': '{n} {ratings}', 'proof.ratings.one': 'rating', 'proof.ratings.many': 'ratings',
     'show.title': 'See it in action', 'show.sub': 'A quick look at the dictionary, flashcards and quiz.',
-    'show.dictTitle': 'Dictionary & Translator', 'show.dictSub': '1,251 words — instant translation both ways',
+    'show.dictTitle': 'Dictionary & Translator', 'show.dictSub': '1,308 words — instant translation both ways',
     'show.flashTitle': 'Flashcards', 'show.flashSub': 'Flip to memorize faster', 'show.quizTitle': 'Quiz', 'show.quizSub': 'Test yourself instantly',
     'phone.flashTitle': 'Master words with smart Flashcards',
     'phone.flashText': 'Flip through real Karakalpak vocabulary and build recall with instant English & Russian translations.',
@@ -69,7 +69,7 @@
     'phone.quizText': 'Four options, one right answer. Track your streak and score as you grow from beginner to fluent.',
     'feat.title': 'Everything you need to learn Qaraqalpaq', 'feat.sub': 'One simple toolkit, built for fast progress.',
     'feat.translator': 'Instant Translator', 'feat.translatorText': 'Auto-detects Qaraqalpaq, English or Russian.',
-    'feat.words': '1,251 Words', 'feat.wordsText': 'Karakalpak, English and Russian in one place.',
+    'feat.words': '1,308 Words', 'feat.wordsText': 'Karakalpak, English and Russian in one place.',
     'feat.flash': 'Smart Flashcards', 'feat.flashText': 'Flip cards to memorize faster.',
     'feat.quiz': 'Quick Quiz', 'feat.quizText': 'Test your knowledge instantly.',
     'cta.title': 'Ready to start learning?',
@@ -133,6 +133,8 @@
     // English sentence of a template and are read from STRINGS_EN whatever the interface
     // language is (the Russian one from STRINGS_RU) — see matchTemplate()
     'tr.phrasebook': 'From the phrasebook',
+    // a sentence built by the sentence engine (v135, beta)
+    'tr.beta': 'beta', 'tr.betaNote': 'Built from grammar rules — may contain mistakes', 'tr.byWord': 'Word by word',
     'tpl.name': 'My name is {x}.', 'tpl.age': "I'm {n} {years} old.", 'tpl.years.one': 'year', 'tpl.years.many': 'years',
     // dictionary, progress, flashcards, quiz
     'dict.count': 'Showing {n} of {total} {words}', 'dict.words.one': 'word', 'dict.words.many': 'words',
@@ -208,7 +210,7 @@
     'stat.words': 'Слова',
     'stat.categories': 'Категории',
     'stat.languages': 'Языки',
-    'home.exploreAll': 'Открой все 1 251 слово в словаре →',
+    'home.exploreAll': 'Открой все 1 308 слов в словаре →',
     'home.sozle': '<strong>Новое — Sózle:</strong> игра в каракалпакские слова. Угадай слово дня за 6 попыток →',
     'proof.caption': 'Мы только запустились — будь среди <strong>первых</strong>, кто учит каракалпакский онлайн',
     'proof.words': 'Настоящие слова, проверенные носителем языка',
@@ -221,7 +223,7 @@
     'show.title': 'Посмотри в деле',
     'show.sub': 'Коротко: словарь, карточки и квиз.',
     'show.dictTitle': 'Словарь и переводчик',
-    'show.dictSub': '1 251 слово — мгновенный перевод в обе стороны',
+    'show.dictSub': '1 308 слов — мгновенный перевод в обе стороны',
     'show.flashTitle': 'Карточки',
     'show.flashSub': 'Переворачивай и запоминай быстрее',
     'show.quizTitle': 'Квиз',
@@ -234,7 +236,7 @@
     'feat.sub': 'Простой набор — для быстрого прогресса.',
     'feat.translator': 'Мгновенный переводчик',
     'feat.translatorText': 'Сам узнаёт каракалпакский, английский и русский.',
-    'feat.words': '1 251 слово',
+    'feat.words': '1 308 слов',
     'feat.wordsText': 'Каракалпакский, английский и русский в одном месте.',
     'feat.flash': 'Умные карточки',
     'feat.flashText': 'Переворачивай карточки и запоминай быстрее.',
@@ -340,6 +342,9 @@
     'tr.report': 'Нет нужного слова? Напиши нам →',
     'tr.missNote': 'Слова, которых нет в словаре, сохраняются анонимно — так мы знаем, что добавить.',
     'tr.phrasebook': 'Из разговорника',                                    // v134
+    'tr.beta': 'бета',                                                     // v135: предложение от движка
+    'tr.betaNote': 'Собрано по правилам грамматики, возможны ошибки',
+    'tr.byWord': 'По словам',
     // the Russian sentence of a template, also in the English interface (see STRINGS_EN)
     'tpl.name': 'Меня зовут {x}.',
     'tpl.age': 'Мне {n} {years}.',
@@ -666,6 +671,33 @@
     // v133 (the advisor, by the Karakalpak Wikipedia)
     "Adjectives::Álsiz": "Adjectives::Hálsiz",
     "City & Transport::Emxana": "City & Transport::Emlewxana",
+    // v135 (advisor: corpus + Musa's book, KARAKALPAK_GRAMMAR.md §23, §27)
+    "Basic Verbs::Kırısıw": "Basic Verbs::Kiriw",
+    "Basic Verbs::Seniw": "Basic Verbs::Iseniw",
+    "Basic Verbs::Joqatıw": "Basic Verbs::Joǵaltıw",
+    "Advanced Verbs::Pısıriw": "Advanced Verbs::Pisiriw",
+    "Advanced Verbs::Qaldiriw": "Advanced Verbs::Qaldırıw",
+    "Advanced Verbs::Erıw": "Advanced Verbs::Eriw",
+    "Advanced Verbs::Orayıw": "Advanced Verbs::Oraw",
+    "Verbs::Jetisw": "Verbs::Jetisiw",
+    "Advanced Verbs::Iteklew": "Advanced Verbs::Iyteriw",
+    "Basic Verbs::Kúlimlew": "Basic Verbs::Kúlimsirew",
+    "Advanced Verbs::Shógıw": "Advanced Verbs::Shógiw",
+    "Basic Verbs::Apariw": "Basic Verbs::Aparıw",
+    "Verbs::Shadıw": "Verbs::Shadlanıw",
+    "Numbers::Alı": "Numbers::Altı",
+    "Numbers::Jıyırma": "Numbers::Jigirma",
+    "People & Family::Jeti": "People & Family::Ata-babalar",
+    "Surrounding World::Jańbır": "Surrounding World::Jawın",
+    "City & Transport::Dúken": "City & Transport::Dúkan",
+    "Surrounding World::Saát": "Surrounding World::Saat",
+    "Home, Furniture & Household Items::Jastıq": "Home, Furniture & Household Items::Dastıq",
+    "Home, Furniture & Household Items::Parde": "Home, Furniture & Household Items::Perde",
+    "Tools & Household::Pej": "Tools & Household::Pech",
+    "Anatomy & Human Body::Tıs": "Anatomy & Human Body::Tis",
+    "Home, Furniture & Household Items::Tıs shotkası": "Home, Furniture & Household Items::Tis shotkası",
+    "Home, Furniture & Household Items::Tıs pastası": "Home, Furniture & Household Items::Tis pastası",
+    "Medicine & Health::Tıs awırıwı": "Medicine & Health::Tis awırıwı",
   };
   (function migrateIds() {
     let moved = 0;
@@ -942,6 +974,9 @@
       CATEGORIES = Array.from(new Set(WORDS.map(w => w.category))).sort();
       WORD_IDS = new Set(WORDS.map(wordId));   // learned words that were deleted do not count (v132)
       init();
+      // the sentence engine (v135) builds its index once, when the browser is idle; a query
+      // typed before that starts it on the spot (see sentenceEngine)
+      if (window.KaaSentence) (window.requestIdleCallback || (f => setTimeout(f, 1)))(initSentenceEngine);
     })
     .catch(err => {
       console.error('Failed to load dictionary data', err);
@@ -1448,14 +1483,16 @@
   // the words of a sentence, one by one. Plain Latin is read as English when more of its
   // words are English than Qaraqalpaq ("I love it": "it" is the pronoun, not It = dog).
   // Right after a pronoun a word is looked up as a VERB first ("I love you": Súyiw, not Muhabbat).
+  // plain Latin is English when more of its words are English than Qaraqalpaq
+  function latinIsEnglish(keys) {
+    const en = keys.filter(k => EN_SKIP.has(k) || PRONOUNS.en.has(k) || TRANS_INDEX.en.has(k) || enVerbLookup(k)).length;
+    const kk = keys.filter(k => TRANS_INDEX.kk.has(k)).length;
+    return en > kk;
+  }
   function phraseParts(rawTokens, lang) {
     const keys = rawTokens.map(foldKey);
     let order = lang;
-    if (!lang) {
-      const en = keys.filter(k => EN_SKIP.has(k) || PRONOUNS.en.has(k) || TRANS_INDEX.en.has(k) || enVerbLookup(k)).length;
-      const kk = keys.filter(k => TRANS_INDEX.kk.has(k)).length;
-      order = en > kk ? 'en' : null;
-    }
+    if (!lang) order = latinIsEnglish(keys) ? 'en' : null;
     const pron = lang === 'ru' ? PRONOUNS.ru : PRONOUNS.en;
     let prevPron = false;
     return rawTokens.map((raw, i) => {
@@ -1514,7 +1551,7 @@
   }
 
   // ===== PHRASEBOOK (v134) =====
-  // public/data/phrases.json = 85 whole phrases Musa checked: { cat, kk, ru, en, ruKeys, enKeys }.
+  // public/data/phrases.json = 95 whole phrases Musa checked: { cat, kk, ru, en, ruKeys, enKeys }.
   // The texts are shown exactly as written there. Keys of a phrase: its kk / ru / en without
   // the part in brackets, each " / " variant on its own (like textVariants, but commas do NOT
   // split — "Повторите, пожалуйста." must not answer «пожалуйста»), plus ruKeys / enKeys, plus
@@ -1633,9 +1670,37 @@
     return out;
   }
 
+  // ===== SENTENCE ENGINE (v135, beta) =====
+  // js/kaa-morph.js + kaa-lexicon.js + kaa-sentence.js = the advisor's builder of simple Russian /
+  // English sentences in Karakalpak (KARAKALPAK_GRAMMAR.md §20–§27), loaded before app.js on the
+  // two pages with a translator. KaaSentence.translate(raw, 'ru' | 'en') → { kk } or null; null is
+  // its honest "I can't", and then the translator shows the words one by one as before. A missing
+  // or broken engine changes nothing else on the site.
+  let SENT_STATE = 0;   // 0 not started · 1 ready · -1 failed or not on this page
+  function initSentenceEngine() {
+    if (SENT_STATE) return SENT_STATE === 1;
+    try {
+      if (!window.KaaSentence || !WORDS.length) throw new Error('no engine');
+      window.KaaSentence.init(WORDS);
+      SENT_STATE = 1;
+    } catch (e) {
+      SENT_STATE = -1;
+      if (window.KaaSentence) console.warn('Sentence engine failed to start', e);
+    }
+    return SENT_STATE === 1;
+  }
+  function sentenceEngine(raw, lang) {
+    if (!initSentenceEngine()) return null;
+    try {
+      const r = window.KaaSentence.translate(raw, lang);
+      return r && r.kk ? r : null;
+    } catch (e) { return null; }
+  }
+
   // ORDER (v134): template → a whole phrase (2+ words) → a wrapper → the dictionary as before
   // (a 1-word query: the dictionary first, a phrase with the same words under it) → a
-  // 1-word phrase the dictionary does not know → word by word → "did you mean".
+  // 1-word phrase the dictionary does not know → [v135: a Russian / English sentence the
+  // engine builds] → word by word → "did you mean".
   // A phrase result: { type: 'phrasebook', src, items: [phrase…], words: [dictionary entries] }
   function translateQuery(raw, depth = 0) {
     const lang = detectLang(raw);
@@ -1680,6 +1745,11 @@
     const rawTokens = raw.split(/\s+/).filter(t => foldKey(t));
     if (rawTokens.length > 1) {
       const parts = phraseParts(rawTokens, lang);
+      // v135: a Russian / English sentence the engine can build (never a Karakalpak one) — the
+      // sentence big with «бета», the words one by one under it
+      const sLang = lang === 'ru' ? 'ru' : !lang && latinIsEnglish(rawTokens.map(foldKey)) ? 'en' : null;
+      const sent = sLang && sentenceEngine(raw, sLang);
+      if (sent) return { type: 'sentence', src: sLang, kk: sent.kk, parts };
       if (parts.some(p => p.matches && p.matches.length)) return { type: 'phrase', parts };
     }
     return { type: 'suggest', lang, suggestions: suggestWords(key, lang) };
@@ -1778,7 +1848,7 @@
     const results = $('#translatorResults');
     const out = $('#translatorOutput');
     const res = translateQuery(raw);
-    if (!res || (res.type !== 'exact' && res.type !== 'phrasebook')) renderTranslation.last = null;
+    if (!res || (res.type !== 'exact' && res.type !== 'phrasebook' && res.type !== 'sentence')) renderTranslation.last = null;
     if (!res) {
       results.hidden = true; results.innerHTML = '';
       out.innerHTML = trOutputHint();
@@ -1836,6 +1906,24 @@
         </div>`;
       const rest = res.items.slice(1).map(trPhraseMatchHtml).concat(res.words.map(trMatchHtml));
       html = rest.length ? `<p class="tr-note">${escapeHtml(t('tr.more'))}</p>` + rest.join('') : '';
+    } else if (res.type === 'sentence') {
+      // v135 beta: the sentence built by the engine, a small «бета» next to it and one line of
+      // warning; under it the same word-by-word rows as for a sentence the engine cannot build.
+      // ⇄ stays off, as for every sentence.
+      trSetLangs(res.src);
+      trSetSwap('sentence');
+      const isNew = MOTION_OK && res.kk !== renderTranslation.last;
+      renderTranslation.last = res.kk;
+      out.innerHTML = `
+        <div class="tr-output-main${isNew ? ' tr-new' : ''}">
+          <div class="tr-sent-line">
+            <span class="tr-output-big tr-output-sent">${escapeHtml(res.kk)}</span>
+            <span class="tr-beta">${escapeHtml(t('tr.beta'))}</span>
+          </div>
+          <span class="tr-sent-note">${escapeHtml(t('tr.betaNote'))}</span>
+        </div>`;
+      html = `<p class="tr-note">${escapeHtml(t('tr.byWord'))}</p>
+        <div class="tr-phrase">${res.parts.filter(p => !p.skip).map(trPhraseRowHtml).join('')}</div>`;
     } else if (res.type === 'phrase') {
       // Musa, 2026-10-10: a row of looked-up words in big type ("Men want to go home") read
       // like a translation and was not one. Now the big line says so plainly, the words come
@@ -1908,7 +1996,7 @@
     if (!q || !missWorthSending(q)) return;
     if (!TRANS_INDEX) buildTranslatorIndex();
     const res = translateQuery(q);
-    if (!res || res.type === 'exact' || res.type === 'phrasebook') return;   // found (also by its form, or as a phrase — v134)
+    if (!res || res.type === 'exact' || res.type === 'phrasebook' || res.type === 'sentence') return;   // found (also by its form, as a phrase — v134, or built by the engine — v135)
     let sent;
     try { sent = JSON.parse(sessionStorage.getItem(MISS.store) || '[]'); } catch (e) { return; }   // no storage → no log (it could not be kept to 20)
     const key = q.toLowerCase();
@@ -2050,6 +2138,7 @@
   // letters, it cannot be an answer — so 'alqan' stays as it was and, like the 17 deleted
   // words, finds no entry: its day takes the next word (see sozleAnswerFor).
   // v133: Álsiz became Hálsiz (six letters) — 'álsiz' stays the same way.
+  // v135: dúken → dúkan (#98) and parde → perde (#279) keep their days; Seniw became Iseniw (six letters) — 'seniw' stays the same way.
   const SOZLE_ANSWERS = (
     'qulaq ásten tekst qızıq aǵash qızıl alsaq urlaw qaqpa qońır kútiw súlgi jótel qurıw dáliz qoyan ' +
     'tegis erkin vanna dárya tuxım uqsas bilek kórpe júzıq qırıq durıs sawaq bazar tamır sábiz toǵız ' +
@@ -2057,7 +2146,7 @@
     'divan tuqım buwın qońsı jeyiw model pútin gitar nusqa qatal qarǵa tútin gáyka hárip muzey ketiw ' +
     'temir shosh taksı qayıs qısqa kúliw badam jaqsı tufli jipek ókshe gúreń jeńiw burın qaǵaz arqan ' +
     'tozań qatıq bawır tuwrı tsifr murın moyın shege juwan erteń samal filtr ǵarrı shiye poezd jiraf ' +
-    'qayıq dúken hayal eshek ústel minez jiyen mekan júriw mıyıq kesiw satıw pirog segiz qalta árman ' +
+    'qayıq dúkan hayal eshek ústel minez jiyen mekan júriw mıyıq kesiw satıw pirog segiz qalta árman ' +
     'limon tósek buzıw turıw qalas jáhán aqsha palto jıllı ashıw seziw qonaq túnde júziw keliw jalın ' +
     'boyaw seniw kamod xalat aspaz kóshe kitap qazan jılan semiz kedey kirpi qarjı beriw ertek jılǵa ' +
     'mápli gubka sıyır gúman balta bulaq palaw keste palız tenge qosıq gúmis tolıq oylaw tereń álsiz ' +
@@ -2068,7 +2157,7 @@
     'ashıq yubka saxna orbit máyek bilim parta rásim kúyew beket pikir waqıt jasıl dawıl polka kelin ' +
     'oshaq áwmet zebra biyik arzan jelim polat ushıw bilet júrek jeńil qalam sorpa súdyá kamin boǵaz ' +
     'tırna nawda gilem túyme sebet súyiw orman ziyan gońsı sirop pıste kishi soraw sopin tiyiw juwap ' +
-    'gúzar sabın júzim tabıs aspan krant parde uslaw alqan tabaq lazer jabıw sayız qálem papka sińli ' +
+    'gúzar sabın júzim tabıs aspan krant perde uslaw alqan tabaq lazer jabıw sayız qálem papka sińli ' +
     'qıyar jasaw mákke shash qobız ishiw qońız jazıw teńge baxıt bursh dutar álpis suwıq sınıf ayran ' +
     'áwlad sapar ańsat nomer asman mayka jaǵis jaqtı radio beton juwıw islew barıw tiyın qımız jigit ' +
     'qubbi qattı qızba doska minut dámli tawıq dawıs terek házir basqa paxta emlew oynaw bólme kúrek ' +

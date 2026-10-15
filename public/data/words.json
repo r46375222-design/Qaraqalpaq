@@ -43,8 +43,8 @@
  },
  {
   "kk": "Xosh",
-  "ru": "До свидания",
-  "en": "Goodbye",
+  "ru": "До свидания / Пока",
+  "en": "Goodbye / Bye",
   "category": "Basic Phrases"
  },
  {
@@ -217,8 +217,8 @@
  },
  {
   "kk": "Qız",
-  "ru": "Девочка / Девушка",
-  "en": "Girl",
+  "ru": "Девочка / Девушка / Дочь",
+  "en": "Girl / Daughter",
   "category": "People & Family"
  },
  {
@@ -247,8 +247,8 @@
  },
  {
   "kk": "Apa",
-  "ru": "Старшая сестра",
-  "en": "Elder sister",
+  "ru": "Старшая сестра (так дети зовут и маму)",
+  "en": "Elder sister (children also call Mom this)",
   "category": "People & Family"
  },
  {
@@ -259,7 +259,7 @@
  },
  {
   "kk": "Dos",
-  "ru": "Друг",
+  "ru": "Друг / Подруга",
   "en": "Friend",
   "category": "People & Family"
  },
@@ -308,7 +308,7 @@
  {
   "kk": "Kelin",
   "ru": "Невеста / Сноха",
-  "en": "Bride",
+  "en": "Bride / Daughter-in-law",
   "category": "People & Family"
  },
  {
@@ -354,8 +354,8 @@
   "category": "People & Family"
  },
  {
-  "kk": "Jeti",
-  "ru": "Семиречье / Предки",
+  "kk": "Ata-babalar",
+  "ru": "Предки",
   "en": "Ancestors",
   "category": "People & Family"
  },
@@ -571,7 +571,7 @@
  },
  {
   "kk": "Awıl",
-  "ru": "Село / Аул",
+  "ru": "Село / Деревня / Аул",
   "en": "Village",
   "category": "Surrounding World"
  },
@@ -666,7 +666,7 @@
   "category": "Surrounding World"
  },
  {
-  "kk": "Saát",
+  "kk": "Saat",
   "ru": "Час / Часы",
   "en": "Hour / Clock",
   "category": "Surrounding World"
@@ -685,8 +685,8 @@
  },
  {
   "kk": "Terek",
-  "ru": "Дерево",
-  "en": "Tree",
+  "ru": "Тополь",
+  "en": "Poplar",
   "category": "Surrounding World"
  },
  {
@@ -708,7 +708,7 @@
   "category": "Surrounding World"
  },
  {
-  "kk": "Jańbır",
+  "kk": "Jawın",
   "ru": "Дождь",
   "en": "Rain",
   "category": "Surrounding World"
@@ -798,7 +798,7 @@
   "category": "Verbs"
  },
  {
-  "kk": "Shadıw",
+  "kk": "Shadlanıw",
   "ru": "Радоваться",
   "en": "To rejoice",
   "category": "Verbs"
@@ -870,7 +870,7 @@
   "category": "Verbs"
  },
  {
-  "kk": "Jetisw",
+  "kk": "Jetisiw",
   "ru": "Достигать",
   "en": "To achieve",
   "category": "Verbs"
@@ -1123,8 +1123,8 @@
  },
  {
   "kk": "Jemis",
-  "ru": "Спецодежда / Одежда",
-  "en": "Clothes",
+  "ru": "Плод / Фрукт",
+  "en": "Fruit",
   "category": "Home & Household"
  },
  {
@@ -1309,7 +1309,7 @@
  },
  {
   "kk": "Kartoshka",
-  "ru": "Картофель",
+  "ru": "Картофель / Картошка",
   "en": "Potato",
   "category": "Food & Drinks"
  },
@@ -1830,7 +1830,7 @@
   "category": "City & Transport"
  },
  {
-  "kk": "Dúken",
+  "kk": "Dúkan",
   "ru": "Магазин",
   "en": "Shop / Store",
   "category": "City & Transport"
@@ -1920,9 +1920,15 @@
   "category": "Numbers"
  },
  {
-  "kk": "Alı",
+  "kk": "Altı",
   "ru": "Шесть",
   "en": "Six",
+  "category": "Numbers"
+ },
+ {
+  "kk": "Jeti",
+  "ru": "Семь",
+  "en": "Seven",
   "category": "Numbers"
  },
  {
@@ -1944,7 +1950,7 @@
   "category": "Numbers"
  },
  {
-  "kk": "Jıyırma",
+  "kk": "Jigirma",
   "ru": "Двадцать",
   "en": "Twenty",
   "category": "Numbers"
@@ -2796,7 +2802,7 @@
   "category": "Home, Furniture & Household Items"
  },
  {
-  "kk": "Parde",
+  "kk": "Perde",
   "ru": "Штора",
   "en": "Curtain",
   "category": "Home, Furniture & Household Items"
@@ -2814,7 +2820,7 @@
   "category": "Home, Furniture & Household Items"
  },
  {
-  "kk": "Jastıq",
+  "kk": "Dastıq",
   "ru": "Подушка",
   "en": "Pillow",
   "category": "Home, Furniture & Household Items"
@@ -2832,7 +2838,7 @@
   "category": "Home, Furniture & Household Items"
  },
  {
-  "kk": "Tıs shotkası",
+  "kk": "Tis shotkası",
   "ru": "Зубная щетка",
   "en": "Toothbrush",
   "category": "Home, Furniture & Household Items"
@@ -2952,7 +2958,7 @@
   "category": "Home, Furniture & Household Items"
  },
  {
-  "kk": "Tıs pastası",
+  "kk": "Tis pastası",
   "ru": "Зубная паста",
   "en": "Toothpaste",
   "category": "Home, Furniture & Household Items"
@@ -2982,7 +2988,7 @@
   "category": "Anatomy & Human Body"
  },
  {
-  "kk": "Tıs",
+  "kk": "Tis",
   "ru": "Зуб",
   "en": "Tooth",
   "category": "Anatomy & Human Body"
@@ -4098,7 +4104,7 @@
   "category": "Basic Verbs"
  },
  {
-  "kk": "Kırısıw",
+  "kk": "Kiriw",
   "ru": "Входить",
   "en": "To enter",
   "category": "Basic Verbs"
@@ -4110,7 +4116,7 @@
   "category": "Basic Verbs"
  },
  {
-  "kk": "Apariw",
+  "kk": "Aparıw",
   "ru": "Вести / Относить",
   "en": "To take to",
   "category": "Basic Verbs"
@@ -4134,7 +4140,7 @@
   "category": "Basic Verbs"
  },
  {
-  "kk": "Seniw",
+  "kk": "Iseniw",
   "ru": "Верить",
   "en": "To believe",
   "category": "Basic Verbs"
@@ -4152,7 +4158,7 @@
   "category": "Basic Verbs"
  },
  {
-  "kk": "Kúlimlew",
+  "kk": "Kúlimsirew",
   "ru": "Улыбаться",
   "en": "To smile",
   "category": "Basic Verbs"
@@ -4194,7 +4200,7 @@
   "category": "Basic Verbs"
  },
  {
-  "kk": "Joqatıw",
+  "kk": "Joǵaltıw",
   "ru": "Терять",
   "en": "To lose",
   "category": "Basic Verbs"
@@ -4759,7 +4765,7 @@
  },
  {
   "kk": "Haqıyqat",
-  "ru": "1",
+  "ru": "Правда / Истина",
   "en": "Truth",
   "category": "Abstract Concepts & Feelings"
  },
@@ -4891,8 +4897,8 @@
  },
  {
   "kk": "Aǵash",
-  "ru": "Дерево (материал)",
-  "en": "Wood",
+  "ru": "Дерево / Древесина",
+  "en": "Tree / Wood",
   "category": "Materials & Minerals"
  },
  {
@@ -5076,7 +5082,7 @@
   "category": "Tools & Household"
  },
  {
-  "kk": "Pej",
+  "kk": "Pech",
   "ru": "Печь (для отопления)",
   "en": "Stove / Furnace",
   "category": "Tools & Household"
@@ -5376,7 +5382,7 @@
   "category": "Medicine & Health"
  },
  {
-  "kk": "Tıs awırıwı",
+  "kk": "Tis awırıwı",
   "ru": "Зубная боль",
   "en": "Toothache",
   "category": "Medicine & Health"
@@ -5491,8 +5497,8 @@
  },
  {
   "kk": "Qosıq",
-  "ru": "Стихотворение",
-  "en": "Poem",
+  "ru": "Стихотворение / Песня",
+  "en": "Poem / Song",
   "category": "Culture & Entertainment"
  },
  {
@@ -5688,7 +5694,7 @@
   "category": "Advanced Verbs"
  },
  {
-  "kk": "Shógıw",
+  "kk": "Shógiw",
   "ru": "Тонуть",
   "en": "To drown / To sink",
   "category": "Advanced Verbs"
@@ -5724,7 +5730,7 @@
   "category": "Advanced Verbs"
  },
  {
-  "kk": "Iteklew",
+  "kk": "Iyteriw",
   "ru": "Толкать",
   "en": "To push",
   "category": "Advanced Verbs"
@@ -5784,7 +5790,7 @@
   "category": "Advanced Verbs"
  },
  {
-  "kk": "Pısıriw",
+  "kk": "Pisiriw",
   "ru": "Готовить (еду)",
   "en": "To cook",
   "category": "Advanced Verbs"
@@ -5826,7 +5832,7 @@
   "category": "Advanced Verbs"
  },
  {
-  "kk": "Orayıw",
+  "kk": "Oraw",
   "ru": "Заворачивать",
   "en": "To wrap",
   "category": "Advanced Verbs"
@@ -5844,7 +5850,7 @@
   "category": "Advanced Verbs"
  },
  {
-  "kk": "Erıw",
+  "kk": "Eriw",
   "ru": "Таять",
   "en": "To melt",
   "category": "Advanced Verbs"
@@ -6000,7 +6006,7 @@
   "category": "Advanced Verbs"
  },
  {
-  "kk": "Qaldiriw",
+  "kk": "Qaldırıw",
   "ru": "Оставлять",
   "en": "To leave (behind)",
   "category": "Advanced Verbs"
@@ -7393,7 +7399,7 @@
  },
  {
   "kk": "Pıshıq",
-  "ru": "Кошка",
+  "ru": "Кошка / Кот",
   "en": "Cat",
   "category": "Animal World"
  },
@@ -7504,5 +7510,341 @@
   "ru": "Деньги",
   "en": "Money",
   "category": "Economy & Money"
+ },
+ {
+  "kk": "Jumıs",
+  "ru": "Работа",
+  "en": "Work / Job",
+  "category": "Business & Analytics"
+ },
+ {
+  "kk": "Futbol",
+  "ru": "Футбол",
+  "en": "Football",
+  "category": "Culture & Entertainment"
+ },
+ {
+  "kk": "Film",
+  "ru": "Фильм",
+  "en": "Film / Movie",
+  "category": "Culture & Entertainment"
+ },
+ {
+  "kk": "Top",
+  "ru": "Мяч",
+  "en": "Ball",
+  "category": "Everyday Objects"
+ },
+ {
+  "kk": "Ul",
+  "ru": "Сын",
+  "en": "Son",
+  "category": "People & Family"
+ },
+ {
+  "kk": "Soraw",
+  "ru": "Вопрос",
+  "en": "Question",
+  "category": "Education & IT"
+ },
+ {
+  "kk": "Túslik",
+  "ru": "Обед",
+  "en": "Lunch",
+  "category": "Food & Drinks"
+ },
+ {
+  "kk": "Keshki awqat",
+  "ru": "Ужин",
+  "en": "Dinner",
+  "category": "Food & Drinks"
+ },
+ {
+  "kk": "Azanǵı awqat",
+  "ru": "Завтрак",
+  "en": "Breakfast",
+  "category": "Food & Drinks"
+ },
+ {
+  "kk": "Konfet",
+  "ru": "Конфета",
+  "en": "Candy",
+  "category": "Food & Drinks"
+ },
+ {
+  "kk": "Xabar",
+  "ru": "Сообщение / Новость",
+  "en": "Message / News",
+  "category": "Education & IT"
+ },
+ {
+  "kk": "Video",
+  "ru": "Видео",
+  "en": "Video",
+  "category": "Tech & Gadgets"
+ },
+ {
+  "kk": "Bayram",
+  "ru": "Праздник",
+  "en": "Holiday",
+  "category": "Culture & Entertainment"
+ },
+ {
+  "kk": "Sawǵa",
+  "ru": "Подарок",
+  "en": "Gift",
+  "category": "Culture & Entertainment"
+ },
+ {
+  "kk": "Sum",
+  "ru": "Сум",
+  "en": "Sum (money)",
+  "category": "Economy & Money"
+ },
+ {
+  "kk": "Kewilli",
+  "ru": "Весёлый",
+  "en": "Cheerful",
+  "category": "Descriptive Adjectives"
+ },
+ {
+  "kk": "Baxıtlı",
+  "ru": "Счастливый",
+  "en": "Happy",
+  "category": "Descriptive Adjectives"
+ },
+ {
+  "kk": "Erte",
+  "ru": "Рано",
+  "en": "Early",
+  "category": "Calendar & Time"
+ },
+ {
+  "kk": "Kvartira",
+  "ru": "Квартира",
+  "en": "Apartment",
+  "category": "Home & Household"
+ },
+ {
+  "kk": "Miywe",
+  "ru": "Фрукт",
+  "en": "Fruit",
+  "category": "Fruits, Vegetables & Produce"
+ },
+ {
+  "kk": "Ovosh",
+  "ru": "Овощ",
+  "en": "Vegetable",
+  "category": "Fruits, Vegetables & Produce"
+ },
+ {
+  "kk": "Shómish",
+  "ru": "Половник",
+  "en": "Ladle",
+  "category": "Home & Household"
+ },
+ {
+  "kk": "Ójire",
+  "ru": "Комната",
+  "en": "Room",
+  "category": "Home & Household"
+ },
+ {
+  "kk": "Áynek",
+  "ru": "Стекло / Окно",
+  "en": "Glass / Window pane",
+  "category": "Home & Household"
+ },
+ {
+  "kk": "Kempir",
+  "ru": "Старушка",
+  "en": "Old woman",
+  "category": "People & Family"
+ },
+ {
+  "kk": "Sheshe",
+  "ru": "Мать",
+  "en": "Mother",
+  "category": "People & Family"
+ },
+ {
+  "kk": "Aǵayin",
+  "ru": "Родственники",
+  "en": "Relatives",
+  "category": "People & Family"
+ },
+ {
+  "kk": "Jeńge",
+  "ru": "Женге (жена старшего брата)",
+  "en": "Elder brother's wife",
+  "category": "People & Family"
+ },
+ {
+  "kk": "Qarındas",
+  "ru": "Сестра / Младшая сестра",
+  "en": "Sister / Younger sister",
+  "category": "People & Family"
+ },
+ {
+  "kk": "Arba",
+  "ru": "Телега / Арба",
+  "en": "Cart",
+  "category": "Nature & Agriculture"
+ },
+ {
+  "kk": "Atız",
+  "ru": "Поле",
+  "en": "Field",
+  "category": "Nature & Agriculture"
+ },
+ {
+  "kk": "Otın",
+  "ru": "Дрова",
+  "en": "Firewood",
+  "category": "Nature & Agriculture"
+ },
+ {
+  "kk": "Ógiz",
+  "ru": "Бык / Вол",
+  "en": "Ox",
+  "category": "Animal World"
+ },
+ {
+  "kk": "Jayın",
+  "ru": "Сом (рыба)",
+  "en": "Catfish",
+  "category": "Animal World"
+ },
+ {
+  "kk": "Házirshe",
+  "ru": "Пока (что)",
+  "en": "For now",
+  "category": "Calendar & Time"
+ },
+ {
+  "kk": "Mudamı",
+  "ru": "Всегда",
+  "en": "Always",
+  "category": "Calendar & Time"
+ },
+ {
+  "kk": "Kiyim",
+  "ru": "Одежда",
+  "en": "Clothes",
+  "category": "Clothing & Footwear"
+ },
+ {
+  "kk": "Kinoteatr",
+  "ru": "Кинотеатр",
+  "en": "Cinema",
+  "category": "City & Transport"
+ },
+ {
+  "kk": "Shayxana",
+  "ru": "Чайхана",
+  "en": "Teahouse",
+  "category": "City & Transport"
+ },
+ {
+  "kk": "Jataqxana",
+  "ru": "Общежитие",
+  "en": "Dormitory",
+  "category": "City & Transport"
+ },
+ {
+  "kk": "Konvert",
+  "ru": "Конверт",
+  "en": "Envelope",
+  "category": "Everyday Objects"
+ },
+ {
+  "kk": "Qayda?",
+  "ru": "Где?",
+  "en": "Where?",
+  "category": "Basic Phrases"
+ },
+ {
+  "kk": "Qayaqqa?",
+  "ru": "Куда?",
+  "en": "Where to?",
+  "category": "Basic Phrases"
+ },
+ {
+  "kk": "Qaydan?",
+  "ru": "Откуда?",
+  "en": "Where from?",
+  "category": "Basic Phrases"
+ },
+ {
+  "kk": "Qansha?",
+  "ru": "Сколько?",
+  "en": "How much?",
+  "category": "Basic Phrases"
+ },
+ {
+  "kk": "Saǵınıw",
+  "ru": "Скучать (по кому-то)",
+  "en": "To miss (someone)",
+  "category": "Everyday Verbs"
+ },
+ {
+  "kk": "Sharshaw",
+  "ru": "Уставать",
+  "en": "To get tired",
+  "category": "Everyday Verbs"
+ },
+ {
+  "kk": "Tońıw",
+  "ru": "Мёрзнуть",
+  "en": "To be cold / To freeze",
+  "category": "Everyday Verbs"
+ },
+ {
+  "kk": "Keshigiw",
+  "ru": "Опаздывать",
+  "en": "To be late",
+  "category": "Everyday Verbs"
+ },
+ {
+  "kk": "Asıǵıw",
+  "ru": "Спешить",
+  "en": "To hurry",
+  "category": "Everyday Verbs"
+ },
+ {
+  "kk": "Shıdaw",
+  "ru": "Терпеть",
+  "en": "To endure / To be patient",
+  "category": "Everyday Verbs"
+ },
+ {
+  "kk": "Tanıw",
+  "ru": "Узнавать (кого-то)",
+  "en": "To recognize",
+  "category": "Everyday Verbs"
+ },
+ {
+  "kk": "Qashıw",
+  "ru": "Убегать",
+  "en": "To run away",
+  "category": "Everyday Verbs"
+ },
+ {
+  "kk": "Egiw",
+  "ru": "Сажать / Сеять",
+  "en": "To plant / To sow",
+  "category": "Everyday Verbs"
+ },
+ {
+  "kk": "Súńgiw",
+  "ru": "Нырять",
+  "en": "To dive",
+  "category": "Everyday Verbs"
+ },
+ {
+  "kk": "Dem alıw",
+  "ru": "Отдыхать",
+  "en": "To rest",
+  "category": "Everyday Verbs"
  }
 ]

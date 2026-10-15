@@ -201,6 +201,24 @@
  },
  {
   "cat": "greet",
+  "kk": "Qayırlı tún!",
+  "ru": "Спокойной ночи!",
+  "en": "Good night!",
+  "ruKeys": [
+   "доброй ночи",
+   "споки",
+   "спокойной",
+   "спокойной ночи"
+  ],
+  "enKeys": [
+   "good night",
+   "goodnight",
+   "night night",
+   "nighty night"
+  ]
+ },
+ {
+  "cat": "greet",
   "kk": "Xosh bol!",
   "ru": "До свидания! (другу)",
   "en": "Goodbye! (to a friend)",
@@ -248,6 +266,39 @@
    "see you",
    "see you later",
    "see you soon"
+  ]
+ },
+ {
+  "cat": "greet",
+  "kk": "Erteń kórisemiz!",
+  "ru": "Увидимся завтра!",
+  "en": "See you tomorrow!",
+  "ruKeys": [
+   "до завтра",
+   "завтра увидимся",
+   "увидимся завтра"
+  ],
+  "enKeys": [
+   "see u tomorrow",
+   "see you tomorrow",
+   "till tomorrow"
+  ]
+ },
+ {
+  "cat": "greet",
+  "kk": "Amanlıq pa?",
+  "ru": "Всё ли благополучно? (при встрече)",
+  "en": "All well? (greeting)",
+  "ruKeys": [
+   "все благополучно",
+   "все ли благополучно",
+   "все ли в порядке",
+   "все ли хорошо"
+  ],
+  "enKeys": [
+   "all well",
+   "is all well",
+   "is everything alright"
   ]
  },
  {
@@ -940,6 +991,37 @@
  },
  {
   "cat": "feel",
+  "kk": "Qapa bolma!",
+  "ru": "Не грусти!",
+  "en": "Don't be sad!",
+  "ruKeys": [
+   "не грусти",
+   "не печалься",
+   "не расстраивайся"
+  ],
+  "enKeys": [
+   "cheer up",
+   "dont be sad",
+   "dont be upset"
+  ]
+ },
+ {
+  "cat": "feel",
+  "kk": "Azmaz shıda.",
+  "ru": "Потерпи немного.",
+  "en": "Hang in there.",
+  "ruKeys": [
+   "немного потерпи",
+   "потерпи",
+   "потерпи немного"
+  ],
+  "enKeys": [
+   "be patient",
+   "hang in there"
+  ]
+ },
+ {
+  "cat": "feel",
   "kk": "Qutlıqlayman!",
   "ru": "Поздравляю!",
   "en": "Congratulations!",
@@ -1262,6 +1344,74 @@
    "come on lets go",
    "let us go",
    "lets go"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Úyge barayıq.",
+  "ru": "Пойдём домой.",
+  "en": "Let's go home.",
+  "ruKeys": [
+   "давай пойдем домой",
+   "идем домой",
+   "пойдем домой",
+   "пошли домой"
+  ],
+  "enKeys": [
+   "let us go home",
+   "lets go home"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Asıqpa!",
+  "ru": "Не спеши!",
+  "en": "Don't rush!",
+  "ruKeys": [
+   "не спеши",
+   "не торопись"
+  ],
+  "enKeys": [
+   "dont hurry",
+   "dont rush",
+   "no rush",
+   "take your time"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Esińde tut!",
+  "ru": "Запомни!",
+  "en": "Remember!",
+  "ruKeys": [
+   "запомни",
+   "запомни это",
+   "помни"
+  ],
+  "enKeys": [
+   "keep in mind",
+   "remember",
+   "remember this"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Keshigip qaldım.",
+  "ru": "Я опоздал.",
+  "en": "I'm late.",
+  "ruKeys": [
+   "извини я опоздал",
+   "извините я опоздал",
+   "опоздал",
+   "опоздала",
+   "я опоздал",
+   "я опоздала"
+  ],
+  "enKeys": [
+   "i am late",
+   "i was late",
+   "im late",
+   "sorry im late"
   ]
  },
  {
