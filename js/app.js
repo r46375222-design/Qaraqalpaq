@@ -4,6 +4,7 @@
   const PAGE_SIZE = 48;
   let WORDS = [];
   let CATEGORIES = [];
+  let PHRASES = [];   // public/data/phrases.json (v134): whole phrases for the translator, see PHRASEBOOK
 
   const state = {
     search: '',
@@ -128,6 +129,11 @@
     'tr.swap': 'Swap the languages', 'tr.swapSentence': "Whole sentences can't be swapped yet",
     'tr.swapEmpty': 'Type a word first', 'tr.swapNone': 'Nothing to swap — this word is not in the dictionary',
     'tr.noMatch': "No exact match — this word isn't in the dictionary yet ({n} words and growing).",
+    // the phrasebook in the translator (v134). tpl.* are NOT interface text: they are the
+    // English sentence of a template and are read from STRINGS_EN whatever the interface
+    // language is (the Russian one from STRINGS_RU) — see matchTemplate()
+    'tr.phrasebook': 'From the phrasebook',
+    'tpl.name': 'My name is {x}.', 'tpl.age': "I'm {n} {years} old.", 'tpl.years.one': 'year', 'tpl.years.many': 'years',
     // dictionary, progress, flashcards, quiz
     'dict.count': 'Showing {n} of {total} {words}', 'dict.words.one': 'word', 'dict.words.many': 'words',
     'dict.none': '0 results found', 'data.failed': 'Could not load dictionary data.',
@@ -333,6 +339,13 @@
     'tr.notFound': 'не нашлось',
     'tr.report': 'Нет нужного слова? Напиши нам →',
     'tr.missNote': 'Слова, которых нет в словаре, сохраняются анонимно — так мы знаем, что добавить.',
+    'tr.phrasebook': 'Из разговорника',                                    // v134
+    // the Russian sentence of a template, also in the English interface (see STRINGS_EN)
+    'tpl.name': 'Меня зовут {x}.',
+    'tpl.age': 'Мне {n} {years}.',
+    'tpl.years.one': 'год',
+    'tpl.years.few': 'года',
+    'tpl.years.many': 'лет',
     // "из 1 / 21 / 101 слова", "из 2 / 5 / 11 / 12 / 14 слов" (после «из» — родительный падеж)
     'dict.count': 'Показано {n} из {total} {words}',
     'dict.words.one': 'слова',
@@ -489,8 +502,11 @@
   let LANG = 'en';
   if (I18N_ON) try { const v = localStorage.getItem(LANG_KEY); if (STRINGS[v]) LANG = v; } catch (e) {}
 
-  function t(key, vars) {
-    let s = STRINGS[LANG][key] ?? STRINGS.en[key] ?? key;
+  function t(key, vars) { return tIn(LANG, key, vars); }
+  // the same in a given language — for the template sentences of the translator (v134), which
+  // are shown in English AND Russian whatever the interface language is
+  function tIn(lang, key, vars) {
+    let s = (STRINGS[lang] || STRINGS.en)[key] ?? STRINGS.en[key] ?? key;
     if (vars) s = s.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m));
     return s;
   }
@@ -504,13 +520,13 @@
   }
   // the form of a word after a number, from the keys base.one / base.few / base.many:
   // English 1 → one, else many; Russian 1, 21, 101 → one · 2–4, 22–24 → few · 0, 5–20, 25… → many
-  function plural(n, base) {
+  function plural(n, base, lang = LANG) {
     let form = n === 1 ? 'one' : 'many';
-    if (LANG === 'ru') {
+    if (lang === 'ru') {
       const d = n % 10, h = n % 100;
       form = d === 1 && h !== 11 ? 'one' : d >= 2 && d <= 4 && (h < 12 || h > 14) ? 'few' : 'many';
     }
-    return t(base + '.' + form);
+    return tIn(lang, base + '.' + form);
   }
   // numbers as the interface language writes them: 1,305 · 1 305 (no-break space)
   const fmtNum = n => Number(n).toLocaleString(LANG === 'ru' ? 'ru-RU' : 'en-US');
@@ -910,6 +926,15 @@
   }
 
   // ===== LOAD DATA =====
+  // The phrasebook (v134) is requested at the same moment as the words, but nothing waits
+  // for it: the page and the translator start as soon as words.json is here, and when the
+  // phrases arrive an open query is translated again (onPhrases). If the file is missing or
+  // broken there are simply no phrases — the dictionary works as before.
+  fetch('/public/data/phrases.json')
+    .then(r => (r.ok ? r.json() : []))
+    .then(list => { PHRASES = Array.isArray(list) ? list.filter(p => p && p.kk && p.ru && p.en) : []; })
+    .catch(() => { PHRASES = []; })
+    .then(() => { PHRASE_INDEX = null; if (onPhrases) onPhrases(); });
   fetch('/public/data/words.json')   // from the root: 404.html can be shown at any depth (v132)
     .then(r => r.json())
     .then(data => {
@@ -1488,15 +1513,170 @@
     return starts.concat(contains).slice(0, limit);
   }
 
-  function translateQuery(raw) {
+  // ===== PHRASEBOOK (v134) =====
+  // public/data/phrases.json = 85 whole phrases Musa checked: { cat, kk, ru, en, ruKeys, enKeys }.
+  // The texts are shown exactly as written there. Keys of a phrase: its kk / ru / en without
+  // the part in brackets, each " / " variant on its own (like textVariants, but commas do NOT
+  // split — "Повторите, пожалуйста." must not answer «пожалуйста»), plus ruKeys / enKeys, plus
+  // the whole text WITH its brackets (that is what ⇄ puts into the field: «Как дела? (вежливо)»
+  // must come back to Awhalıńız qalay?, not to the first «как дела»).
+  let PHRASE_INDEX = null;   // { kk, ru, en: Map(folded key → [phrase, …] in file order) }
+  let onPhrases = null;      // set by initTranslator: translate an open query again when the phrases arrive
+  const PHRASE_MAX = 3;      // at most three answers: phrases, or a dictionary word + phrases
+  // like foldKey, but an apostrophe is DROPPED, not turned into a space: what's → whats,
+  // don't → dont (the keys in phrases.json are written that way). Used for phrases only.
+  const phraseFold = s => foldKey(String(s || '').replace(/['’‘ʼ`´]/g, ''));
+
+  function buildPhraseIndex() {
+    PHRASE_INDEX = { kk: new Map(), ru: new Map(), en: new Map() };
+    const add = (lang, text, p) => {
+      const k = phraseFold(text);
+      if (!k) return;
+      const arr = PHRASE_INDEX[lang].get(k);
+      if (!arr) PHRASE_INDEX[lang].set(k, [p]);
+      else if (!arr.includes(p)) arr.push(p);
+    };
+    PHRASES.forEach(p => ['kk', 'ru', 'en'].forEach(lang => {
+      const text = String(p[lang] || '');
+      const noParen = text.replace(/\([^)]*\)/g, ' ');
+      add(lang, noParen, p);                                  // «Как дела? (другу)» → как дела
+      noParen.split('/').forEach(v => add(lang, v, p));       // «Счастливого пути! / В добрый путь!» → счастливого пути · в добрый путь
+      add(lang, text, p);                                     // → как дела другу (for ⇄)
+      (Array.isArray(p[lang + 'Keys']) ? p[lang + 'Keys'] : []).forEach(v => add(lang, v, p));
+    }));
+  }
+
+  // → { src, phrases } or null. Cyrillic → the Russian keys; á ǵ ı ń ó ú → Karakalpak; plain
+  // Latin → Karakalpak first, then English (like lookupExact)
+  function lookupPhrases(pkey, lang) {
+    if (!PHRASES.length || !pkey) return null;
+    if (!PHRASE_INDEX) buildPhraseIndex();
+    for (const l of lang === 'ru' ? ['ru'] : lang === 'kk' ? ['kk'] : ['kk', 'en']) {
+      const hit = PHRASE_INDEX[l].get(pkey);
+      if (hit) return { src: l, phrases: hit };
+    }
+    return null;
+  }
+
+  // items already shown, by their Karakalpak text: the same kk is shown once
+  // (the dictionary's «Raxmet» and the phrasebook's «Raxmet!» are one answer)
+  const sameKk = (list, kk) => list.some(x => foldKey(x.kk) === foldKey(kk));
+
+  // TEMPLATES, checked before the phrases. Name: «меня зовут X» / «моё имя X» / «my name is X» /
+  // «meniń atım X», X = 1–3 words as typed, each with a capital → «Meniń atım X.» · «Меня зовут
+  // X.» · «My name is X.» Age, digits 1–120 only: «мне N лет / год / года», «I am N», «I'm N
+  // (years old)», «men N jastaman» → «Men N jastaman.» · «Мне N лет.» (plural) · «I'm N years old.»
+  const TPL_KK = { name: 'Meniń atım {x}.', age: 'Men {n} jastaman.' };
+  const TPL_NAME = [['ru', 'меня зовут'], ['ru', 'мое имя'], ['en', 'my name is'], ['kk', 'menin atim']];   // folded
+  // the capital of ı is Í (KARAKALPAK_GRAMMAR.md §1) — toUpperCase() would give I
+  const capWord = w => (w.charAt(0) === 'ı' ? 'Í' : w.charAt(0).toUpperCase()) + w.slice(1);
+  function matchTemplate(raw) {
+    const words = String(raw).trim().replace(/[\s.!?…]+$/u, '').split(/\s+/).filter(Boolean);
+    const folded = words.map(phraseFold);
+    for (const [src, start] of TPL_NAME) {
+      const n = start.split(' ').length;
+      if (words.length <= n || folded.slice(0, n).join(' ') !== start) continue;
+      const name = words.slice(n).join(' ').replace(/^["'«»“”„(]+|["'«»“”„),;:]+$/gu, '').split(' ');
+      if (name.length > 3 || !name.every(w => /^\p{L}[\p{L}\p{M}'’ʼ-]*$/u.test(w))) return null;
+      const x = name.map(capWord).join(' ');
+      return { src, tpl: 'name', kk: TPL_KK.name.replace('{x}', x), ru: tIn('ru', 'tpl.name', { x }), en: tIn('en', 'tpl.name', { x }) };
+    }
+    const m = folded.join(' ').match(/^(?:мне (\d+) (?:лет|год|года)|(?:i am|im) (\d+)(?: years? old)?|men (\d+) jastaman)$/);
+    if (!m) return null;
+    const digits = m[1] || m[2] || m[3];
+    const n = Number(digits);
+    if (!/^[1-9]\d{0,2}$/.test(digits) || n > 120) return null;
+    return {
+      src: m[1] ? 'ru' : m[2] ? 'en' : 'kk', tpl: 'age',
+      kk: TPL_KK.age.replace('{n}', n),
+      ru: tIn('ru', 'tpl.age', { n, years: plural(n, 'tpl.years', 'ru') }),
+      en: tIn('en', 'tpl.age', { n, years: plural(n, 'tpl.years', 'en') }),
+    };
+  }
+
+  // WRAPPERS: «как по-каракалпакски X», «переведи X», «what does X mean» … → X, translated the
+  // usual way. Checked AFTER the whole-phrase lookup («Я немного говорю по-каракалпакски» is a
+  // phrase, not "X по-каракалпакски"). Nothing left → the whole input goes the usual way.
+  const KAR = 'по[\\s-]+каракалпакски';
+  const WRAPPERS = [
+    new RegExp(`^как\\s+(?:будет\\s+|сказать\\s+)?${KAR}[\\s:,—–-]+(.+)$`, 'iu'),
+    new RegExp(`^как\\s+(?:будет|сказать)\\s+(.+?)\\s+${KAR}$`, 'iu'),
+    new RegExp(`^(.+?)\\s+${KAR}$`, 'iu'),
+    /^переведи(?:те)?[\s:,—–-]+(.+)$/iu,
+    /^перевод[\s:,—–-]+(.+)$/iu,
+    /^что\s+значит[\s:,—–-]+(.+)$/iu,
+    /^how\s+(?:do\s+you|to)\s+say\s+(.+?)\s+in\s+(?:karakalpak|qaraqalpaq)$/iu,
+    /^(.+?)\s+in\s+(?:karakalpak|qaraqalpaq)$/iu,
+    /^translate[\s:,—–-]+(.+)$/iu,
+    /^what\s+does\s+(.+?)\s+mean$/iu,
+  ];
+  // what "X по-каракалпакски" / "X in Karakalpak" leaves when there was no X
+  const WRAP_EMPTY = new Set(['как', 'как будет', 'как сказать', 'how do you say', 'how to say']);
+  function unwrap(raw) {
+    const s = String(raw).trim().replace(/\s+/g, ' ').replace(/[\s?!.…]+$/u, '');
+    for (const re of WRAPPERS) {
+      const m = s.match(re);
+      if (!m) continue;
+      const rest = m[1].replace(/^[\s"'«»“”„:—–-]+|[\s"'«»“”„]+$/gu, '');
+      return rest && !WRAP_EMPTY.has(phraseFold(rest)) ? rest : null;
+    }
+    return null;
+  }
+
+  // up to PHRASE_MAX in all: the dictionary's words first, then phrases with another kk
+  function morePhrases(words, phrases) {
+    const out = [];
+    for (const p of phrases) {
+      if (words.length + out.length >= PHRASE_MAX) break;
+      if (!sameKk(words, p.kk) && !sameKk(out, p.kk)) out.push(p);
+    }
+    return out;
+  }
+
+  // ORDER (v134): template → a whole phrase (2+ words) → a wrapper → the dictionary as before
+  // (a 1-word query: the dictionary first, a phrase with the same words under it) → a
+  // 1-word phrase the dictionary does not know → word by word → "did you mean".
+  // A phrase result: { type: 'phrasebook', src, items: [phrase…], words: [dictionary entries] }
+  function translateQuery(raw, depth = 0) {
     const lang = detectLang(raw);
     const key = foldKey(raw);
     if (!key) return null;
+    const tpl = matchTemplate(raw);
+    if (tpl) return { type: 'phrasebook', src: tpl.src, items: [tpl], words: [] };
+    const pkey = phraseFold(raw);
+    const oneWord = !pkey.includes(' ');
+    if (!oneWord) {
+      const ph = lookupPhrases(pkey, lang);
+      if (ph) {
+        // the dictionary's own entry for the same words stays under the phrases, so nothing
+        // that was found before v134 disappears ("excuse me" → Keshirińiz!, then Keshiriń)
+        const items = ph.phrases.slice(0, PHRASE_MAX);
+        const words = [];
+        for (const w of lookupExact(key, lang).matches) {
+          if (items.length + words.length >= PHRASE_MAX) break;
+          if (!sameKk(items, w.kk) && !sameKk(words, w.kk)) words.push(w);
+        }
+        return { type: 'phrasebook', src: ph.src, items, words };
+      }
+      if (depth < 2) {
+        const rest = unwrap(raw);
+        const res = rest && translateQuery(rest, depth + 1);
+        if (res) return res;
+      }
+    }
+    const ph1 = oneWord ? lookupPhrases(pkey, lang) : null;
     const exact = lookupExact(key, lang);
-    if (exact.matches.length) return { type: 'exact', src: exact.src, matches: exact.matches.slice(0, 4) };
+    if (exact.matches.length) {
+      const matches = exact.matches.slice(0, 4);
+      return { type: 'exact', src: exact.src, matches, phrases: ph1 ? morePhrases(matches, ph1.phrases) : [] };
+    }
     // not in the dictionary as typed — maybe a form of a word that is ("go", "люблю", "тебя")
     const form = lookupForm(key, lang);
-    if (form) return { type: 'exact', src: form.src, matches: form.matches.slice(0, 4), lemma: form.lemma };
+    if (form) {
+      const matches = form.matches.slice(0, 4);
+      return { type: 'exact', src: form.src, matches, lemma: form.lemma, phrases: ph1 ? morePhrases(matches, ph1.phrases) : [] };
+    }
+    if (ph1) return { type: 'phrasebook', src: ph1.src, items: ph1.phrases.slice(0, PHRASE_MAX), words: [] };
     const rawTokens = raw.split(/\s+/).filter(t => foldKey(t));
     if (rawTokens.length > 1) {
       const parts = phraseParts(rawTokens, lang);
@@ -1556,6 +1736,24 @@
       </div>`;
   }
 
+  // a phrase under "More matches" (v134): like a word, with «Из разговорника» instead of a
+  // category and no "Find in dictionary" (phrases are not dictionary entries)
+  function trPhraseMatchHtml(p) {
+    const [[m1, l1], [m2, l2]] = meanings(p);
+    return `
+      <div class="tr-match tr-match-phrase" style="--accent:${categoryColor('Basic Phrases')}">
+        <span class="tr-match-icon">${bigIcon('chat-circle-dots')}</span>
+        <div class="tr-match-text">
+          <span class="tr-match-kk">${escapeHtml(p.kk)}</span>
+          <span class="tr-match-main" lang="${l1}">${escapeHtml(m1)}</span>
+          <span class="tr-match-second" lang="${l2}">${escapeHtml(m2)}</span>
+        </div>
+        <div class="tr-match-side">
+          <span class="tr-cat">${escapeHtml(t('tr.phrasebook'))}</span>
+        </div>
+      </div>`;
+  }
+
   // the dictionary word a form was found by: "люблю → Súyiw (любить)"
   const lemmaHtml = lemma => lemma ? ` <span class="tr-lemma">(${escapeHtml(lemma)})</span>` : '';
 
@@ -1580,7 +1778,7 @@
     const results = $('#translatorResults');
     const out = $('#translatorOutput');
     const res = translateQuery(raw);
-    if (!res || res.type !== 'exact') renderTranslation.last = null;
+    if (!res || (res.type !== 'exact' && res.type !== 'phrasebook')) renderTranslation.last = null;
     if (!res) {
       results.hidden = true; results.innerHTML = '';
       out.innerHTML = trOutputHint();
@@ -1613,8 +1811,31 @@
             <button class="tr-find" data-kk="${escapeAttr(m.kk)}">${escapeHtml(t('tr.find'))}</button>
           </div>
         </div>`;
-      const rest = res.matches.slice(1);
-      html = rest.length ? `<p class="tr-note">${escapeHtml(t('tr.more'))}</p>` + rest.map(trMatchHtml).join('') : '';
+      // under the words: a phrase with the same words («пожалуйста» → Marhamat, then Iltimas.)
+      const rest = res.matches.slice(1).map(trMatchHtml).concat((res.phrases || []).map(trPhraseMatchHtml));
+      html = rest.length ? `<p class="tr-note">${escapeHtml(t('tr.more'))}</p>` + rest.join('') : '';
+    } else if (res.type === 'phrasebook') {
+      // a whole phrase (or a template): Russian / English typed → the Karakalpak phrase big;
+      // Karakalpak typed → its Russian (RU interface) or English big. Small: the other texts
+      // (main language first) and «Из разговорника». ⇄ works as for a word.
+      const p = res.items[0];
+      trSetLangs(res.src);
+      const [main, second] = meanings(p);
+      const big = res.src === 'kk' ? main[0] : p.kk;
+      const subs = res.src === 'kk' ? [second] : [main, second];
+      trSetSwap('word', big);
+      const isNew = MOTION_OK && big !== renderTranslation.last;
+      renderTranslation.last = big;
+      out.innerHTML = `
+        <div class="tr-output-main tr-output-phrase${isNew ? ' tr-new' : ''}">
+          <span class="tr-output-big">${escapeHtml(big)}</span>
+          <span class="tr-output-sub">${subs.map(([text, l]) => `<span lang="${l}">${escapeHtml(text)}</span>`).join('<span class="tr-sub-dot" aria-hidden="true"> · </span>')}</span>
+          <div class="tr-output-meta">
+            <span class="tr-cat">${escapeHtml(t('tr.phrasebook'))}</span>
+          </div>
+        </div>`;
+      const rest = res.items.slice(1).map(trPhraseMatchHtml).concat(res.words.map(trMatchHtml));
+      html = rest.length ? `<p class="tr-note">${escapeHtml(t('tr.more'))}</p>` + rest.join('') : '';
     } else if (res.type === 'phrase') {
       // Musa, 2026-10-10: a row of looked-up words in big type ("Men want to go home") read
       // like a translation and was not one. Now the big line says so plainly, the words come
@@ -1687,7 +1908,7 @@
     if (!q || !missWorthSending(q)) return;
     if (!TRANS_INDEX) buildTranslatorIndex();
     const res = translateQuery(q);
-    if (!res || res.type === 'exact') return;                       // found (also by its form)
+    if (!res || res.type === 'exact' || res.type === 'phrasebook') return;   // found (also by its form, or as a phrase — v134)
     let sent;
     try { sent = JSON.parse(sessionStorage.getItem(MISS.store) || '[]'); } catch (e) { return; }   // no storage → no log (it could not be kept to 20)
     const key = q.toLowerCase();
@@ -1734,6 +1955,8 @@
     input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); clearTimeout(timer); run(); } });
     clearBtn.addEventListener('click', () => { input.value = ''; run(); input.focus(); });
     LANG_REDRAW.push(run);
+    // the phrasebook came after the words (v134): a query already typed is answered again
+    onPhrases = () => { if (input.value.trim()) run(); };
 
     // ⇄: a word swaps; otherwise a small note under the button says why not (a tap on a phone
     // has no hover title). The icon turns 180° per swap (transform only).

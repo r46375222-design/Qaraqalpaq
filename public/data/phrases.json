@@ -1,0 +1,1433 @@
+[
+ {
+  "cat": "greet",
+  "kk": "Assalawma áleykum!",
+  "ru": "Здравствуйте!",
+  "en": "Hello!",
+  "ruKeys": [
+   "ассалам алейкум",
+   "ассаляму алейкум",
+   "здравствуй",
+   "салам",
+   "салам алейкум"
+  ],
+  "enKeys": [
+   "assalamu alaikum",
+   "good day",
+   "hello",
+   "salam"
+  ]
+ },
+ {
+  "cat": "greet",
+  "kk": "Sálem!",
+  "ru": "Привет!",
+  "en": "Hi!",
+  "ruKeys": [
+   "привет",
+   "приветик",
+   "салют"
+  ],
+  "enKeys": [
+   "hello",
+   "hey",
+   "hi"
+  ]
+ },
+ {
+  "cat": "greet",
+  "kk": "Qayırlı tań!",
+  "ru": "Доброе утро!",
+  "en": "Good morning!",
+  "ruKeys": [
+   "доброе утро",
+   "с добрым утром"
+  ],
+  "enKeys": [
+   "good morning",
+   "morning"
+  ]
+ },
+ {
+  "cat": "greet",
+  "kk": "Qayırlı kún!",
+  "ru": "Добрый день!",
+  "en": "Good afternoon!",
+  "ruKeys": [
+   "добрый день"
+  ],
+  "enKeys": [
+   "good afternoon",
+   "have a good day"
+  ]
+ },
+ {
+  "cat": "greet",
+  "kk": "Qayırlı kesh!",
+  "ru": "Добрый вечер!",
+  "en": "Good evening!",
+  "ruKeys": [
+   "добрый вечер"
+  ],
+  "enKeys": [
+   "good evening"
+  ]
+ },
+ {
+  "cat": "greet",
+  "kk": "Qalaysań?",
+  "ru": "Как дела? (другу)",
+  "en": "How are you? (to a friend)",
+  "ruKeys": [
+   "как дела",
+   "как дела у тебя",
+   "как жизнь",
+   "как поживаешь",
+   "как сам",
+   "как ты",
+   "как у тебя дела"
+  ],
+  "enKeys": [
+   "how are you",
+   "how are you doing",
+   "how is it going",
+   "how r u",
+   "hows it going",
+   "whats up"
+  ]
+ },
+ {
+  "cat": "greet",
+  "kk": "Jaǵdayıń qalay?",
+  "ru": "Как дела? (другу)",
+  "en": "How are you doing? (to a friend)",
+  "ruKeys": [
+   "как дела",
+   "как дела у тебя",
+   "как жизнь",
+   "как у тебя дела"
+  ],
+  "enKeys": [
+   "how are things",
+   "how are you doing",
+   "hows life"
+  ]
+ },
+ {
+  "cat": "greet",
+  "kk": "Awhalıńız qalay?",
+  "ru": "Как дела? (вежливо)",
+  "en": "How are you? (polite)",
+  "ruKeys": [
+   "как ваши дела",
+   "как вы",
+   "как дела",
+   "как дела у вас",
+   "как поживаете",
+   "как у вас дела"
+  ],
+  "enKeys": [
+   "how are you",
+   "how do you do"
+  ]
+ },
+ {
+  "cat": "greet",
+  "kk": "Denińiz saw ma?",
+  "ru": "Как здоровье?",
+  "en": "How are you keeping?",
+  "ruKeys": [
+   "как ваше здоровье",
+   "как здоровье",
+   "как твое здоровье"
+  ],
+  "enKeys": [
+   "how are you keeping",
+   "how is your health",
+   "hows your health"
+  ]
+ },
+ {
+  "cat": "greet",
+  "kk": "Raxmet, jaqsıman.",
+  "ru": "Хорошо, спасибо.",
+  "en": "Fine, thank you.",
+  "ruKeys": [
+   "все хорошо спасибо",
+   "нормально спасибо",
+   "спасибо нормально",
+   "спасибо хорошо",
+   "хорошо спасибо"
+  ],
+  "enKeys": [
+   "fine thank you",
+   "fine thanks",
+   "good thanks",
+   "i am fine thank you",
+   "im fine thank you",
+   "im fine thanks",
+   "im good thanks"
+  ]
+ },
+ {
+  "cat": "greet",
+  "kk": "Xosh keldińiz!",
+  "ru": "Добро пожаловать!",
+  "en": "Welcome!",
+  "ruKeys": [
+   "добро пожаловать"
+  ],
+  "enKeys": [
+   "welcome"
+  ]
+ },
+ {
+  "cat": "greet",
+  "kk": "Tanısqanımnan quwanıshlıman.",
+  "ru": "Приятно познакомиться.",
+  "en": "Nice to meet you.",
+  "ruKeys": [
+   "очень приятно",
+   "приятно познакомиться",
+   "рад знакомству",
+   "рад познакомиться",
+   "рада познакомиться"
+  ],
+  "enKeys": [
+   "glad to meet you",
+   "nice to meet you",
+   "pleased to meet you"
+  ]
+ },
+ {
+  "cat": "greet",
+  "kk": "Xosh bol!",
+  "ru": "До свидания! (другу)",
+  "en": "Goodbye! (to a friend)",
+  "ruKeys": [
+   "до встречи",
+   "до свидания",
+   "пока",
+   "прощай"
+  ],
+  "enKeys": [
+   "bye",
+   "bye bye",
+   "good bye",
+   "goodbye"
+  ]
+ },
+ {
+  "cat": "greet",
+  "kk": "Xosh bolıń!",
+  "ru": "До свидания! (вежливо)",
+  "en": "Goodbye! (polite)",
+  "ruKeys": [
+   "всего доброго",
+   "всего хорошего",
+   "до свидания"
+  ],
+  "enKeys": [
+   "good bye",
+   "goodbye"
+  ]
+ },
+ {
+  "cat": "greet",
+  "kk": "Kóriskenshe!",
+  "ru": "Увидимся!",
+  "en": "See you!",
+  "ruKeys": [
+   "до встречи",
+   "до скорого",
+   "пока увидимся",
+   "увидимся"
+  ],
+  "enKeys": [
+   "see ya",
+   "see you",
+   "see you later",
+   "see you soon"
+  ]
+ },
+ {
+  "cat": "polite",
+  "kk": "Raxmet!",
+  "ru": "Спасибо!",
+  "en": "Thank you!",
+  "ruKeys": [
+   "благодарю",
+   "спасибо",
+   "спс"
+  ],
+  "enKeys": [
+   "thank you",
+   "thanks",
+   "thx",
+   "ty"
+  ]
+ },
+ {
+  "cat": "polite",
+  "kk": "Úlken raxmet!",
+  "ru": "Большое спасибо!",
+  "en": "Thank you very much!",
+  "ruKeys": [
+   "большое спасибо",
+   "огромное спасибо",
+   "спасибо большое",
+   "спасибо огромное"
+  ],
+  "enKeys": [
+   "many thanks",
+   "thank you so much",
+   "thank you very much",
+   "thanks a lot"
+  ]
+ },
+ {
+  "cat": "polite",
+  "kk": "Sizge raxmet!",
+  "ru": "Спасибо вам!",
+  "en": "Thank you! (polite)",
+  "ruKeys": [
+   "благодарю вас",
+   "спасибо вам"
+  ],
+  "enKeys": [
+   "thank you madam",
+   "thank you sir"
+  ]
+ },
+ {
+  "cat": "polite",
+  "kk": "Arzımaydı.",
+  "ru": "Не за что.",
+  "en": "You're welcome.",
+  "ruKeys": [
+   "не за что",
+   "не стоит благодарности",
+   "пожалуйста не за что"
+  ],
+  "enKeys": [
+   "dont mention it",
+   "no problem",
+   "not at all",
+   "you are welcome",
+   "youre welcome"
+  ]
+ },
+ {
+  "cat": "polite",
+  "kk": "Iltimas.",
+  "ru": "Пожалуйста (прошу).",
+  "en": "Please.",
+  "ruKeys": [
+   "пожалуйста прошу",
+   "прошу"
+  ],
+  "enKeys": [
+   "please"
+  ]
+ },
+ {
+  "cat": "polite",
+  "kk": "Keshirińiz!",
+  "ru": "Извините!",
+  "en": "Excuse me! / Sorry!",
+  "ruKeys": [
+   "извините",
+   "извините пожалуйста",
+   "простите",
+   "простите пожалуйста",
+   "прошу прощения"
+  ],
+  "enKeys": [
+   "excuse me",
+   "i am sorry",
+   "im sorry",
+   "pardon",
+   "sorry"
+  ]
+ },
+ {
+  "cat": "polite",
+  "kk": "Tınıshıńızdı alǵanım ushın keshirińiz.",
+  "ru": "Простите за беспокойство.",
+  "en": "Sorry to bother you.",
+  "ruKeys": [
+   "извините за беспокойство",
+   "простите за беспокойство"
+  ],
+  "enKeys": [
+   "sorry for bothering you",
+   "sorry for the trouble",
+   "sorry to bother you"
+  ]
+ },
+ {
+  "cat": "polite",
+  "kk": "Awa",
+  "ru": "Да",
+  "en": "Yes",
+  "ruKeys": [
+   "ага",
+   "да"
+  ],
+  "enKeys": [
+   "yeah",
+   "yep",
+   "yes"
+  ]
+ },
+ {
+  "cat": "polite",
+  "kk": "Yaq",
+  "ru": "Нет",
+  "en": "No",
+  "ruKeys": [
+   "неа",
+   "нет"
+  ],
+  "enKeys": [
+   "no",
+   "nope"
+  ]
+ },
+ {
+  "cat": "polite",
+  "kk": "Álbette",
+  "ru": "Конечно",
+  "en": "Of course",
+  "ruKeys": [
+   "конечно",
+   "конечно же",
+   "разумеется"
+  ],
+  "enKeys": [
+   "certainly",
+   "definitely",
+   "of course",
+   "sure"
+  ]
+ },
+ {
+  "cat": "meet",
+  "kk": "Atıń kim?",
+  "ru": "Как тебя зовут?",
+  "en": "What's your name?",
+  "ruKeys": [
+   "как твое имя",
+   "как тебя зовут",
+   "кто ты",
+   "твое имя"
+  ],
+  "enKeys": [
+   "what is your name",
+   "whats your name",
+   "your name"
+  ]
+ },
+ {
+  "cat": "meet",
+  "kk": "Atıńız kim?",
+  "ru": "Как вас зовут?",
+  "en": "What's your name? (polite)",
+  "ruKeys": [
+   "ваше имя",
+   "как вас зовут",
+   "как ваше имя"
+  ],
+  "enKeys": [
+   "may i know your name",
+   "what is your name"
+  ]
+ },
+ {
+  "cat": "meet",
+  "kk": "Siz qay jerdensiz?",
+  "ru": "Откуда вы?",
+  "en": "Where are you from?",
+  "ruKeys": [
+   "вы откуда",
+   "откуда вы",
+   "откуда ты",
+   "ты откуда"
+  ],
+  "enKeys": [
+   "where are you from",
+   "where do you come from",
+   "where r u from"
+  ]
+ },
+ {
+  "cat": "meet",
+  "kk": "Neshe jastasań?",
+  "ru": "Сколько тебе лет?",
+  "en": "How old are you?",
+  "ruKeys": [
+   "сколько тебе лет",
+   "тебе сколько лет"
+  ],
+  "enKeys": [
+   "how old are you",
+   "how old r u",
+   "whats your age"
+  ]
+ },
+ {
+  "cat": "meet",
+  "kk": "Neshe jastasız?",
+  "ru": "Сколько вам лет?",
+  "en": "How old are you? (polite)",
+  "ruKeys": [
+   "вам сколько лет",
+   "сколько вам лет"
+  ],
+  "enKeys": [
+   "how old are you"
+  ]
+ },
+ {
+  "cat": "meet",
+  "kk": "Qayda jasaysań?",
+  "ru": "Где ты живёшь?",
+  "en": "Where do you live?",
+  "ruKeys": [
+   "где живешь",
+   "где ты живешь",
+   "ты где живешь"
+  ],
+  "enKeys": [
+   "where do you live",
+   "where you live"
+  ]
+ },
+ {
+  "cat": "meet",
+  "kk": "Men Nókiste jasayman.",
+  "ru": "Я живу в Нукусе.",
+  "en": "I live in Nukus.",
+  "ruKeys": [
+   "живу в нукусе",
+   "я живу в нукусе"
+  ],
+  "enKeys": [
+   "i live in nukus"
+  ]
+ },
+ {
+  "cat": "meet",
+  "kk": "Men Nókistenmen.",
+  "ru": "Я из Нукуса.",
+  "en": "I'm from Nukus.",
+  "ruKeys": [
+   "я из нукуса"
+  ],
+  "enKeys": [
+   "i am from nukus",
+   "im from nukus"
+  ]
+ },
+ {
+  "cat": "meet",
+  "kk": "Men oqıwshıman.",
+  "ru": "Я ученик.",
+  "en": "I'm a pupil.",
+  "ruKeys": [
+   "я ученик",
+   "я ученица",
+   "я школьник",
+   "я школьница"
+  ],
+  "enKeys": [
+   "i am a pupil",
+   "im a pupil",
+   "im a schoolboy",
+   "im a schoolgirl"
+  ]
+ },
+ {
+  "cat": "meet",
+  "kk": "Men studentpen.",
+  "ru": "Я студент.",
+  "en": "I'm a student.",
+  "ruKeys": [
+   "я студент",
+   "я студентка"
+  ],
+  "enKeys": [
+   "i am a student",
+   "im a student"
+  ]
+ },
+ {
+  "cat": "meet",
+  "kk": "Men universitette oqıyman.",
+  "ru": "Я учусь в университете.",
+  "en": "I study at university.",
+  "ruKeys": [
+   "учусь в университете",
+   "я учусь в университете"
+  ],
+  "enKeys": [
+   "i go to university",
+   "i study at a university",
+   "i study at university"
+  ]
+ },
+ {
+  "cat": "lang",
+  "kk": "Túsinbeymen.",
+  "ru": "Я не понимаю.",
+  "en": "I don't understand.",
+  "ruKeys": [
+   "не понимаю",
+   "я вас не понимаю",
+   "я не понимаю",
+   "я тебя не понимаю"
+  ],
+  "enKeys": [
+   "dont understand",
+   "i do not understand",
+   "i dont understand"
+  ]
+ },
+ {
+  "cat": "lang",
+  "kk": "Túsinbedim.",
+  "ru": "Я не понял.",
+  "en": "I didn't get it.",
+  "ruKeys": [
+   "не понял",
+   "не поняла",
+   "не понятно",
+   "я не понял",
+   "я не поняла"
+  ],
+  "enKeys": [
+   "didnt get it",
+   "i didnt get it",
+   "i didnt understand"
+  ]
+ },
+ {
+  "cat": "lang",
+  "kk": "Túsindim.",
+  "ru": "Понял.",
+  "en": "Got it.",
+  "ruKeys": [
+   "понял",
+   "поняла",
+   "понятно",
+   "я понял",
+   "я поняла"
+  ],
+  "enKeys": [
+   "got it",
+   "i see",
+   "i understand",
+   "understood"
+  ]
+ },
+ {
+  "cat": "lang",
+  "kk": "Bilmeymen.",
+  "ru": "Не знаю.",
+  "en": "I don't know.",
+  "ruKeys": [
+   "не знаю",
+   "я не знаю"
+  ],
+  "enKeys": [
+   "dont know",
+   "i do not know",
+   "i dont know",
+   "idk"
+  ]
+ },
+ {
+  "cat": "lang",
+  "kk": "Ástenrek sóyleńiz.",
+  "ru": "Говорите медленнее.",
+  "en": "Speak more slowly.",
+  "ruKeys": [
+   "говори медленнее",
+   "говорите медленнее",
+   "говорите помедленнее",
+   "помедленнее пожалуйста"
+  ],
+  "enKeys": [
+   "please speak slowly",
+   "slow down please",
+   "speak more slowly",
+   "speak slowly"
+  ]
+ },
+ {
+  "cat": "lang",
+  "kk": "Iltimas, qaytalań.",
+  "ru": "Повторите, пожалуйста.",
+  "en": "Please repeat.",
+  "ruKeys": [
+   "еще раз пожалуйста",
+   "повтори пожалуйста",
+   "повторите",
+   "повторите пожалуйста"
+  ],
+  "enKeys": [
+   "can you repeat",
+   "please repeat",
+   "repeat please",
+   "say it again"
+  ]
+ },
+ {
+  "cat": "lang",
+  "kk": "Siz inglisshe sóyleysiz be?",
+  "ru": "Вы говорите по-английски?",
+  "en": "Do you speak English?",
+  "ruKeys": [
+   "вы говорите по английски",
+   "ты говоришь по английски"
+  ],
+  "enKeys": [
+   "can you speak english",
+   "do you speak english"
+  ]
+ },
+ {
+  "cat": "lang",
+  "kk": "Men azıraq qaraqalpaqsha sóyleymen.",
+  "ru": "Я немного говорю по-каракалпакски.",
+  "en": "I speak a little Karakalpak.",
+  "ruKeys": [
+   "я немного говорю по каракалпакски",
+   "я чуть чуть говорю по каракалпакски"
+  ],
+  "enKeys": [
+   "i speak a little karakalpak",
+   "i speak karakalpak a little"
+  ]
+ },
+ {
+  "cat": "lang",
+  "kk": "Bul qalay ataladı?",
+  "ru": "Как это называется?",
+  "en": "What is this called?",
+  "ruKeys": [
+   "как это называется",
+   "как это называется по каракалпакски"
+  ],
+  "enKeys": [
+   "what is it called",
+   "what is this called"
+  ]
+ },
+ {
+  "cat": "lang",
+  "kk": "Bul ne?",
+  "ru": "Что это?",
+  "en": "What is this?",
+  "ruKeys": [
+   "что это",
+   "что это такое",
+   "это что"
+  ],
+  "enKeys": [
+   "what is that",
+   "what is this",
+   "whats that",
+   "whats this"
+  ]
+ },
+ {
+  "cat": "lang",
+  "kk": "Bul kim?",
+  "ru": "Кто это?",
+  "en": "Who is this?",
+  "ruKeys": [
+   "кто это",
+   "это кто"
+  ],
+  "enKeys": [
+   "who is that",
+   "who is this",
+   "whos that"
+  ]
+ },
+ {
+  "cat": "feel",
+  "kk": "Seni jaqsı kóremen.",
+  "ru": "Я тебя люблю.",
+  "en": "I love you.",
+  "ruKeys": [
+   "люблю тебя",
+   "тебя люблю",
+   "я люблю тебя",
+   "я тебя люблю"
+  ],
+  "enKeys": [
+   "i love u",
+   "i love you",
+   "love u",
+   "love you"
+  ]
+ },
+ {
+  "cat": "feel",
+  "kk": "Seni saǵındım.",
+  "ru": "Я по тебе скучаю.",
+  "en": "I miss you.",
+  "ruKeys": [
+   "скучаю",
+   "скучаю по тебе",
+   "соскучился",
+   "я по тебе скучаю",
+   "я скучаю по тебе",
+   "я соскучилась",
+   "я соскучился"
+  ],
+  "enKeys": [
+   "i miss you",
+   "i missed you",
+   "miss you"
+  ]
+ },
+ {
+  "cat": "feel",
+  "kk": "Sharshadım.",
+  "ru": "Я устал.",
+  "en": "I'm tired.",
+  "ruKeys": [
+   "устал",
+   "устала",
+   "я устал",
+   "я устала"
+  ],
+  "enKeys": [
+   "i am tired",
+   "im tired",
+   "tired"
+  ]
+ },
+ {
+  "cat": "feel",
+  "kk": "Qarnım ash.",
+  "ru": "Я голоден.",
+  "en": "I'm hungry.",
+  "ruKeys": [
+   "есть хочу",
+   "хочу есть",
+   "я голоден",
+   "я голодна",
+   "я голодная",
+   "я голодный",
+   "я хочу есть"
+  ],
+  "enKeys": [
+   "hungry",
+   "i am hungry",
+   "im hungry"
+  ]
+ },
+ {
+  "cat": "feel",
+  "kk": "Tońıp turman.",
+  "ru": "Мне холодно.",
+  "en": "I'm cold.",
+  "ruKeys": [
+   "мне холодно",
+   "холодно мне",
+   "я замерз",
+   "я замерзла"
+  ],
+  "enKeys": [
+   "i am cold",
+   "im cold",
+   "im freezing"
+  ]
+ },
+ {
+  "cat": "feel",
+  "kk": "Júdá qorqıp turman.",
+  "ru": "Мне очень страшно.",
+  "en": "I'm very scared.",
+  "ruKeys": [
+   "мне очень страшно",
+   "мне страшно",
+   "мне так страшно",
+   "я боюсь"
+  ],
+  "enKeys": [
+   "i am scared",
+   "im afraid",
+   "im scared",
+   "im very scared"
+  ]
+ },
+ {
+  "cat": "feel",
+  "kk": "Quwanıshlıman.",
+  "ru": "Я рад.",
+  "en": "I'm glad.",
+  "ruKeys": [
+   "рад",
+   "рада",
+   "я рад",
+   "я рада",
+   "я счастлив",
+   "я счастлива"
+  ],
+  "enKeys": [
+   "i am glad",
+   "i am happy",
+   "im glad",
+   "im happy"
+  ]
+ },
+ {
+  "cat": "feel",
+  "kk": "Sizge júdá minnetdarman.",
+  "ru": "Я вам очень благодарен.",
+  "en": "I'm very grateful to you.",
+  "ruKeys": [
+   "очень благодарен",
+   "я благодарен",
+   "я благодарна",
+   "я вам очень благодарен",
+   "я вам очень благодарна"
+  ],
+  "enKeys": [
+   "i am very grateful to you",
+   "im grateful",
+   "im very grateful"
+  ]
+ },
+ {
+  "cat": "feel",
+  "kk": "Hámmesi jaqsı.",
+  "ru": "Всё хорошо.",
+  "en": "Everything is fine.",
+  "ruKeys": [
+   "все в порядке",
+   "все нормально",
+   "все ок",
+   "все хорошо"
+  ],
+  "enKeys": [
+   "all good",
+   "everything is fine",
+   "everything is ok",
+   "everything is okay",
+   "its all good"
+  ]
+ },
+ {
+  "cat": "feel",
+  "kk": "Qorıqpa!",
+  "ru": "Не бойся!",
+  "en": "Don't be afraid!",
+  "ruKeys": [
+   "не бойся",
+   "не бойтесь"
+  ],
+  "enKeys": [
+   "do not be afraid",
+   "dont be afraid",
+   "dont worry"
+  ]
+ },
+ {
+  "cat": "feel",
+  "kk": "Qutlıqlayman!",
+  "ru": "Поздравляю!",
+  "en": "Congratulations!",
+  "ruKeys": [
+   "мои поздравления",
+   "поздравляем",
+   "поздравляю"
+  ],
+  "enKeys": [
+   "congrats",
+   "congratulation",
+   "congratulations"
+  ]
+ },
+ {
+  "cat": "feel",
+  "kk": "Tuwılǵan kúniń menen qutlıqlayman!",
+  "ru": "С днём рождения!",
+  "en": "Happy birthday!",
+  "ruKeys": [
+   "поздравляю с днем рождения",
+   "с днем рождения",
+   "с днем рождения тебя",
+   "с др"
+  ],
+  "enKeys": [
+   "happy bday",
+   "happy birthday",
+   "hbd"
+  ]
+ },
+ {
+  "cat": "feel",
+  "kk": "Áwmet!",
+  "ru": "Удачи!",
+  "en": "Good luck!",
+  "ruKeys": [
+   "желаю тебе удачи",
+   "желаю удачи",
+   "удачи",
+   "удачи вам",
+   "удачи тебе"
+  ],
+  "enKeys": [
+   "best of luck",
+   "good luck",
+   "good luck to you",
+   "i wish you luck"
+  ]
+ },
+ {
+  "cat": "feel",
+  "kk": "Aq jol!",
+  "ru": "Счастливого пути! / В добрый путь!",
+  "en": "Have a good trip! / Safe travels!",
+  "ruKeys": [
+   "в добрый путь",
+   "доброго пути",
+   "счастливого пути",
+   "удачного пути",
+   "удачной дороги",
+   "хорошей дороги"
+  ],
+  "enKeys": [
+   "bon voyage",
+   "have a good trip",
+   "have a nice trip",
+   "have a safe trip",
+   "safe travels",
+   "safe trip"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Ne islep atırsań?",
+  "ru": "Что ты делаешь?",
+  "en": "What are you doing?",
+  "ruKeys": [
+   "ты что делаешь",
+   "чем занимаешься",
+   "чем ты занимаешься",
+   "что делаешь",
+   "что ты делаешь"
+  ],
+  "enKeys": [
+   "what are you doing",
+   "what are you up to",
+   "what r u doing",
+   "wyd"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Búgin ne isleyseń?",
+  "ru": "Что ты будешь делать сегодня?",
+  "en": "What will you do today?",
+  "ruKeys": [
+   "какие планы на сегодня",
+   "что будешь делать сегодня",
+   "что ты будешь делать сегодня"
+  ],
+  "enKeys": [
+   "what are you doing today",
+   "what are your plans for today",
+   "what will you do today"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Qayda baratırsań?",
+  "ru": "Куда ты идёшь?",
+  "en": "Where are you going?",
+  "ruKeys": [
+   "куда идешь",
+   "куда ты",
+   "куда ты идешь",
+   "ты куда",
+   "ты куда идешь"
+  ],
+  "enKeys": [
+   "where are you going",
+   "where r u going",
+   "where you going"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Úyge baratırman.",
+  "ru": "Я иду домой.",
+  "en": "I'm going home.",
+  "ruKeys": [
+   "иду домой",
+   "я иду домой"
+  ],
+  "enKeys": [
+   "going home",
+   "i am going home",
+   "im going home"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Mektepke baratırman.",
+  "ru": "Я иду в школу.",
+  "en": "I'm going to school.",
+  "ruKeys": [
+   "иду в школу",
+   "я иду в школу"
+  ],
+  "enKeys": [
+   "going to school",
+   "i am going to school",
+   "im going to school"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Úyge barǵım keledi.",
+  "ru": "Я хочу домой.",
+  "en": "I want to go home.",
+  "ruKeys": [
+   "хочу домой",
+   "я хочу домой"
+  ],
+  "enKeys": [
+   "i wanna go home",
+   "i want to go home",
+   "want to go home"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Men tez aylanıp kelemen.",
+  "ru": "Я сейчас вернусь.",
+  "en": "I'll be right back.",
+  "ruKeys": [
+   "сейчас вернусь",
+   "скоро вернусь",
+   "я сейчас вернусь",
+   "я скоро вернусь"
+  ],
+  "enKeys": [
+   "be right back",
+   "brb",
+   "i will be right back",
+   "ill be back soon",
+   "ill be right back"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Men sózsiz kelemen.",
+  "ru": "Я обязательно приду.",
+  "en": "I'll definitely come.",
+  "ruKeys": [
+   "обязательно приду",
+   "я обязательно приду",
+   "я точно приду"
+  ],
+  "enKeys": [
+   "i will come for sure",
+   "i will definitely come",
+   "ill definitely come"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Kele almayman.",
+  "ru": "Я не могу прийти.",
+  "en": "I can't come.",
+  "ruKeys": [
+   "не могу прийти",
+   "не смогу прийти",
+   "я не могу прийти",
+   "я не смогу прийти"
+  ],
+  "enKeys": [
+   "i can not come",
+   "i cannot come",
+   "i cant come",
+   "i wont be able to come"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Waqtım joq.",
+  "ru": "У меня нет времени.",
+  "en": "I don't have time.",
+  "ruKeys": [
+   "мне некогда",
+   "некогда",
+   "нет времени",
+   "у меня нет времени"
+  ],
+  "enKeys": [
+   "i dont have time",
+   "i have no time",
+   "no time"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Járdem beriń!",
+  "ru": "Помогите!",
+  "en": "Help!",
+  "ruKeys": [
+   "на помощь",
+   "помоги",
+   "помогите",
+   "помогите пожалуйста"
+  ],
+  "enKeys": [
+   "help",
+   "help me",
+   "help please",
+   "please help"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Maǵan járdem kerek.",
+  "ru": "Мне нужна помощь.",
+  "en": "I need help.",
+  "ruKeys": [
+   "мне нужна помощь",
+   "нужна помощь"
+  ],
+  "enKeys": [
+   "i need help",
+   "i need your help",
+   "need help"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Toqta!",
+  "ru": "Подожди!",
+  "en": "Wait!",
+  "ruKeys": [
+   "подожди",
+   "подожди пожалуйста",
+   "постой",
+   "стой"
+  ],
+  "enKeys": [
+   "hold on",
+   "stop",
+   "wait",
+   "wait a moment"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Toqtań!",
+  "ru": "Подождите!",
+  "en": "Wait! (polite)",
+  "ruKeys": [
+   "подождите",
+   "подождите пожалуйста",
+   "стойте"
+  ],
+  "enKeys": [
+   "please wait",
+   "wait please"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Kettik!",
+  "ru": "Пошли!",
+  "en": "Let's go!",
+  "ruKeys": [
+   "идем",
+   "погнали",
+   "поехали",
+   "пойдем",
+   "пошли"
+  ],
+  "enKeys": [
+   "come on lets go",
+   "let us go",
+   "lets go"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Kirińiz!",
+  "ru": "Заходите!",
+  "en": "Come in!",
+  "ruKeys": [
+   "входите",
+   "заходи",
+   "заходите",
+   "проходите"
+  ],
+  "enKeys": [
+   "come in",
+   "enter",
+   "please come in"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Bola ma?",
+  "ru": "Можно?",
+  "en": "May I?",
+  "ruKeys": [
+   "можно",
+   "можно ли",
+   "можно мне"
+  ],
+  "enKeys": [
+   "can i",
+   "may i"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Telefonıńızdan paydalansam bola ma?",
+  "ru": "Можно воспользоваться вашим телефоном?",
+  "en": "Can I use your phone?",
+  "ruKeys": [
+   "можно ваш телефон",
+   "можно воспользоваться вашим телефоном",
+   "можно позвонить с вашего телефона"
+  ],
+  "enKeys": [
+   "can i use your phone",
+   "may i use your phone"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Bahası qansha?",
+  "ru": "Сколько стоит?",
+  "en": "How much is it?",
+  "ruKeys": [
+   "какая цена",
+   "почем",
+   "сколько",
+   "сколько стоит",
+   "сколько это стоит"
+  ],
+  "enKeys": [
+   "how much",
+   "how much does it cost",
+   "how much is it",
+   "what is the price",
+   "whats the price"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Hájetxana qay jerde?",
+  "ru": "Где туалет?",
+  "en": "Where is the restroom?",
+  "ruKeys": [
+   "где здесь туалет",
+   "где туалет",
+   "туалет где"
+  ],
+  "enKeys": [
+   "where is the bathroom",
+   "where is the restroom",
+   "where is the toilet",
+   "where is the wc"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Miymanxana qay jerde?",
+  "ru": "Где гостиница?",
+  "en": "Where is the hotel?",
+  "ruKeys": [
+   "где гостиница",
+   "где здесь гостиница",
+   "где отель"
+  ],
+  "enKeys": [
+   "where is a hotel",
+   "where is the hotel"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Saat neshe boldı?",
+  "ru": "Который час?",
+  "en": "What time is it?",
+  "ruKeys": [
+   "который час",
+   "сколько времени",
+   "сколько сейчас времени"
+  ],
+  "enKeys": [
+   "what is the time",
+   "what time is it",
+   "whats the time"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Ne boldı?",
+  "ru": "Что случилось?",
+  "en": "What happened?",
+  "ruKeys": [
+   "что произошло",
+   "что случилось",
+   "что стряслось",
+   "что такое"
+  ],
+  "enKeys": [
+   "what happened",
+   "what is wrong",
+   "whats going on",
+   "whats wrong"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Kelisemen.",
+  "ru": "Я согласен.",
+  "en": "I agree.",
+  "ruKeys": [
+   "согласен",
+   "согласна",
+   "я согласен",
+   "я согласна"
+  ],
+  "enKeys": [
+   "agreed",
+   "i agree"
+  ]
+ },
+ {
+  "cat": "do",
+  "kk": "Kelispeymen.",
+  "ru": "Я не согласен.",
+  "en": "I disagree.",
+  "ruKeys": [
+   "не согласен",
+   "не согласна",
+   "я не согласен",
+   "я не согласна"
+  ],
+  "enKeys": [
+   "i disagree",
+   "i do not agree",
+   "i dont agree"
+  ]
+ }
+]

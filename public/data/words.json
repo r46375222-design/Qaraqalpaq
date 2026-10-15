@@ -1536,6 +1536,12 @@
   "category": "Adjectives"
  },
  {
+  "kk": "Hálsiz",
+  "ru": "Слабый",
+  "en": "Weak",
+  "category": "Adjectives"
+ },
+ {
   "kk": "Bas",
   "ru": "Голова",
   "en": "Head",
@@ -7443,12 +7449,6 @@
   "kk": "Ǵarrı",
   "ru": "Старый (о человеке)",
   "en": "Old (person)",
-  "category": "Adjectives"
- },
- {
-  "kk": "Hálsiz",
-  "ru": "Слабый",
-  "en": "Weak",
   "category": "Adjectives"
  },
  {
